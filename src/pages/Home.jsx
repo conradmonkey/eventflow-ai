@@ -130,6 +130,73 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* Events Gallery */}
+      <section className="py-16 px-6 bg-zinc-900/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative h-64 rounded-2xl overflow-hidden group"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800" 
+                alt="Outdoor event with stage"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="relative h-64 rounded-2xl overflow-hidden group"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800" 
+                alt="Concert with lighting"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="relative h-64 rounded-2xl overflow-hidden group"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800" 
+                alt="Festival with tents"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="relative h-64 rounded-2xl overflow-hidden group"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800" 
+                alt="Outdoor wedding event"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section id="services" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
