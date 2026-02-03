@@ -35,7 +35,8 @@ const services = [
     icon: Tent,
     title: "Tent Design",
     description: "Plan perfect temporary structures from elegant sailcloth to grand clear-span marquees.",
-    href: "TentDesign",
+    href: "https://tent-plan-ai.base44.app/",
+    external: true,
   },
   {
     icon: MonitorPlay,
