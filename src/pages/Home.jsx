@@ -117,6 +117,16 @@ export default function Home() {
                   Talk to a Human
                 </a>
               </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 h-14 px-8 rounded-xl text-lg"
+              >
+                <Link to={createPageUrl("EventPlannerProfile")}>
+                  Event Planner Login
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>
