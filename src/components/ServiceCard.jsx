@@ -3,15 +3,15 @@ import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-export default function ServiceCard({ icon: Icon, title, description, href, delay = 0 }) {
-  return (
+export default function ServiceCard({ icon: Icon, title, description, href, delay = 0, external = false }) {
+  const CardContent = () => (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
     >
-      <Link to={createPageUrl(href)}>
+      <div className="group relative h-full bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-500 hover:bg-zinc-900/80 cursor-pointer">
         <div className="group relative h-full bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-500 hover:bg-zinc-900/80">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
           
@@ -34,7 +34,21 @@ export default function ServiceCard({ icon: Icon, title, description, href, dela
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </motion.div>
+  );
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        <CardContent />
+      </a>
+    );
+  }
+
+  return (
+    <Link to={createPageUrl(href)}>
+      <CardContent />
+    </Link>
   );
 }

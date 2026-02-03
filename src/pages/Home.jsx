@@ -21,7 +21,8 @@ const services = [
     icon: Theater,
     title: "Stage Design",
     description: "Create stunning stage configurations with expert guidance on dimensions, materials, and aesthetics.",
-    href: "StageDesign",
+    href: "https://tiny-stage-craft-ai.base44.app/",
+    external: true,
   },
   {
     icon: FileCheck,
@@ -218,6 +219,7 @@ export default function Home() {
                 key={service.href}
                 {...service}
                 delay={index * 0.1}
+                external={service.external}
               />
             ))}
           </div>
