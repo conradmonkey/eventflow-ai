@@ -58,6 +58,11 @@ const services = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-950">
+      {/* Subtle Canada Flag */}
+      <div className="fixed top-6 right-6 z-20 opacity-30 hover:opacity-60 transition-opacity">
+        <div className="text-4xl">🇨🇦</div>
+      </div>
+      
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background gradient */}
