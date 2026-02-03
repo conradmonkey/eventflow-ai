@@ -15,6 +15,10 @@ export default function EventPlannerProfile() {
   const [formData, setFormData] = useState({
     business_name: "",
     description: "",
+    address: "",
+    city: "",
+    province: "",
+    postal_code: "",
     photos: [],
     services: {
       stages: false,
@@ -63,6 +67,10 @@ export default function EventPlannerProfile() {
       setFormData({
         business_name: profile.business_name || "",
         description: profile.description || "",
+        address: profile.address || "",
+        city: profile.city || "",
+        province: profile.province || "",
+        postal_code: profile.postal_code || "",
         photos: profile.photos || [],
         services: profile.services || {
           stages: false,
@@ -217,6 +225,48 @@ export default function EventPlannerProfile() {
                   className="bg-zinc-900 border-zinc-800 text-white min-h-48 rounded-xl resize-none"
                   placeholder="Describe your business, services, experience..."
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Address</Label>
+                <Input
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
+                  placeholder="123 Main Street"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <Label className="text-zinc-300">City</Label>
+                  <Input
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
+                    placeholder="Toronto"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-zinc-300">Province</Label>
+                  <Input
+                    value={formData.province}
+                    onChange={(e) => setFormData({ ...formData, province: e.target.value })}
+                    className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
+                    placeholder="ON"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-zinc-300">Postal Code</Label>
+                  <Input
+                    value={formData.postal_code}
+                    onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
+                    className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
+                    placeholder="M5H 2N2"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
