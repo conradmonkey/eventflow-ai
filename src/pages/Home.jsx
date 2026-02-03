@@ -28,7 +28,8 @@ const services = [
     icon: FileCheck,
     title: "Permit Investigation",
     description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
-    href: "PermitInvestigation",
+    href: "https://event-permit-pro.base44.app/",
+    external: true,
   },
   {
     icon: Tent,
