@@ -1,0 +1,199 @@
+import { motion } from "framer-motion";
+import { 
+  Theater, 
+  FileCheck, 
+  Tent, 
+  MonitorPlay, 
+  Volume2, 
+  Lightbulb,
+  Sparkles,
+  Users,
+  ArrowRight
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import ServiceCard from "@/components/ServiceCard";
+import ContactForm from "@/components/ContactForm";
+
+const services = [
+  {
+    icon: Theater,
+    title: "Stage Design",
+    description: "Create stunning stage configurations with expert guidance on dimensions, materials, and aesthetics.",
+    href: "StageDesign",
+  },
+  {
+    icon: FileCheck,
+    title: "Permit Investigation",
+    description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
+    href: "PermitInvestigation",
+  },
+  {
+    icon: Tent,
+    title: "Tent Design",
+    description: "Plan perfect temporary structures from elegant sailcloth to grand clear-span marquees.",
+    href: "TentDesign",
+  },
+  {
+    icon: MonitorPlay,
+    title: "Video Wall Design",
+    description: "Design impactful visual displays with LED walls, projection mapping, and IMAG screens.",
+    href: "VideoWallDesign",
+  },
+  {
+    icon: Volume2,
+    title: "Sound Design",
+    description: "Engineer pristine audio experiences with expert PA system and acoustic planning.",
+    href: "SoundDesign",
+  },
+  {
+    icon: Lightbulb,
+    title: "Lighting Design",
+    description: "Craft atmospheric lighting schemes that transform venues and captivate audiences.",
+    href: "LightingDesign",
+  },
+];
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-zinc-950">
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 via-transparent to-transparent" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-600/5 rounded-full blur-3xl" />
+        
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-8">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="text-sm text-amber-200">AI-Powered Event Planning</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+              Bring Your Event
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
+                Vision to Life
+              </span>
+            </h1>
+            
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+              Specialized AI assistants to help you plan every technical aspect of your event—from stage design to lighting, sound to permits.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                asChild
+                size="lg"
+                className="bg-amber-500 hover:bg-amber-600 text-black font-semibold h-14 px-8 rounded-xl text-lg"
+              >
+                <a href="#services">
+                  Explore AI Assistants
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="border-zinc-700 text-white hover:bg-zinc-800 h-14 px-8 rounded-xl text-lg"
+              >
+                <a href="#contact">
+                  <Users className="mr-2 w-5 h-5" />
+                  Talk to a Human
+                </a>
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 rounded-full border-2 border-zinc-700 flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-amber-400 rounded-full" />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-white mb-4">AI Planning Assistants</h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
+              Each assistant is specialized in their domain, ready to help you plan and optimize every detail.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <ServiceCard
+                key={service.href}
+                {...service}
+                delay={index * 0.1}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-24 px-6 bg-zinc-900/50">
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-800 mb-6">
+              <Users className="w-4 h-4 text-amber-400" />
+              <span className="text-sm text-zinc-300">Human Assistance</span>
+            </div>
+            
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Prefer to Talk to Someone?
+            </h2>
+            <p className="text-zinc-400 text-lg">
+              Our experienced event planners are ready to help you bring your vision to life and provide a detailed quote.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 md:p-10"
+          >
+            <ContactForm />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-zinc-800">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-zinc-500 text-sm">
+            © {new Date().getFullYear()} Event Planning AI. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
