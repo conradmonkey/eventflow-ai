@@ -47,23 +47,23 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Home from './pages/Home';
 import StageDesign from './pages/StageDesign';
 import PermitInvestigation from './pages/PermitInvestigation';
 import TentDesign from './pages/TentDesign';
 import VideoWallDesign from './pages/VideoWallDesign';
 import SoundDesign from './pages/SoundDesign';
 import LightingDesign from './pages/LightingDesign';
+import Home from './pages/Home';
 
 
 export const PAGES = {
-    "Home": Home,
     "StageDesign": StageDesign,
     "PermitInvestigation": PermitInvestigation,
     "TentDesign": TentDesign,
     "VideoWallDesign": VideoWallDesign,
     "SoundDesign": SoundDesign,
     "LightingDesign": LightingDesign,
+    "Home": Home,
 }
 
 export const pagesConfig = {

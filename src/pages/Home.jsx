@@ -60,6 +60,11 @@ export default function Home() {
     <div className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Canadian Flag */}
+        <div className="absolute top-8 right-8 text-4xl opacity-30 hover:opacity-100 transition-opacity">
+          🇨🇦
+        </div>
+        
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 via-transparent to-transparent" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
