@@ -42,7 +42,8 @@ const services = [
     icon: MonitorPlay,
     title: "Video Wall Design",
     description: "Design impactful visual displays with LED walls, projection mapping, and IMAG screens.",
-    href: "VideoWallDesign",
+    href: "https://video-wall-studio.base44.app",
+    external: true,
   },
   {
     icon: Volume2,
