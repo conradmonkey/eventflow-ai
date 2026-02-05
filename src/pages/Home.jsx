@@ -7,14 +7,14 @@ import {
   Volume2, 
   Lightbulb,
   Sparkles,
-  Users,
+
   ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ServiceCard from "@/components/ServiceCard";
-import ContactForm from "@/components/ContactForm";
+
 
 const services = [
   {
@@ -106,17 +106,7 @@ export default function Home() {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-zinc-700 text-white hover:bg-zinc-800 h-14 px-8 rounded-xl text-lg"
-              >
-                <a href="#contact">
-                  <Users className="mr-2 w-5 h-5" />
-                  Talk to a Human
-                </a>
-              </Button>
+
               <Button
                 asChild
                 variant="outline"
@@ -238,39 +228,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-24 px-6 bg-zinc-900/50">
-        <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-800 mb-6">
-              <Users className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-zinc-300">Human Assistance</span>
-            </div>
-            
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Prefer to Talk to Someone?
-            </h2>
-            <p className="text-zinc-400 text-lg">
-              Our experienced event planners are ready to help you bring your vision to life and provide a detailed quote.
-            </p>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 md:p-10"
-          >
-            <ContactForm />
-          </motion.div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="py-12 px-6 border-t border-zinc-800">
