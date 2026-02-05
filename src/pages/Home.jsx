@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { 
   Theater, 
   FileCheck, 
@@ -8,12 +7,10 @@ import {
   Volume2, 
   Lightbulb,
   Sparkles,
-  ArrowRight,
-  MapPin
+
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ServiceCard from "@/components/ServiceCard";
@@ -62,19 +59,6 @@ const services = [
 ];
 
 export default function Home() {
-  const [location, setLocation] = useState(() => {
-    const saved = localStorage.getItem('eventLocation');
-    return saved ? JSON.parse(saved) : { country: "", province: "", city: "" };
-  });
-  const [locationSaved, setLocationSaved] = useState(false);
-
-  const handleSaveLocation = (e) => {
-    e.preventDefault();
-    localStorage.setItem('eventLocation', JSON.stringify(location));
-    setLocationSaved(true);
-    setTimeout(() => setLocationSaved(false), 3000);
-  };
-
   return (
     <div className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
@@ -204,67 +188,6 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* Location Form Section */}
-      <section className="py-16 px-6 bg-zinc-900/50">
-        <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                  <MapPin className="w-6 h-6 text-amber-400" />
-                </div>
-                <h2 className="text-2xl font-semibold text-white">Location of Event</h2>
-              </div>
-              
-              <form onSubmit={handleSaveLocation} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-zinc-300">Country</Label>
-                    <Input
-                      value={location.country}
-                      onChange={(e) => setLocation({ ...location, country: e.target.value })}
-                      className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                      placeholder="Canada"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-zinc-300">Province/State</Label>
-                    <Input
-                      value={location.province}
-                      onChange={(e) => setLocation({ ...location, province: e.target.value })}
-                      className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                      placeholder="Ontario"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-zinc-300">City</Label>
-                    <Input
-                      value={location.city}
-                      onChange={(e) => setLocation({ ...location, city: e.target.value })}
-                      className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                      placeholder="Toronto"
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-xl"
-                >
-                  {locationSaved ? "Location Saved!" : "Save Location"}
-                </Button>
-              </form>
-            </div>
-          </motion.div>
         </div>
       </section>
 
