@@ -67,24 +67,11 @@ export default function Home() {
     return saved ? JSON.parse(saved) : { country: "", province: "", city: "" };
   });
   const [locationSaved, setLocationSaved] = useState(false);
-  const [showLocationRequired, setShowLocationRequired] = useState(false);
-
-  useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('locationRequired') === 'true') {
-      setShowLocationRequired(true);
-      // Scroll to location form
-      setTimeout(() => {
-        document.getElementById('location-form')?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }, []);
 
   const handleSaveLocation = (e) => {
     e.preventDefault();
     localStorage.setItem('eventLocation', JSON.stringify(location));
     setLocationSaved(true);
-    setShowLocationRequired(false);
     setTimeout(() => setLocationSaved(false), 3000);
   };
 
@@ -221,24 +208,19 @@ export default function Home() {
       </section>
 
       {/* Location Form Section */}
-      <section id="location-form" className="py-16 px-6 bg-zinc-900/50">
+      <section className="py-16 px-6 bg-zinc-900/50">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className={`bg-zinc-900/50 backdrop-blur-sm border ${showLocationRequired ? 'border-amber-500' : 'border-zinc-800'} rounded-3xl p-8`}>
+            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
                   <MapPin className="w-6 h-6 text-amber-400" />
                 </div>
-                <div>
-                  <h2 className="text-2xl font-semibold text-white">Location of Event</h2>
-                  {showLocationRequired && (
-                    <p className="text-amber-400 text-sm mt-1">Please enter location of the event</p>
-                  )}
-                </div>
+                <h2 className="text-2xl font-semibold text-white">Location of Event</h2>
               </div>
               
               <form onSubmit={handleSaveLocation} className="space-y-4">
