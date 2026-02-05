@@ -14,13 +14,11 @@ export default function ChatInterface({ agentName, title, icon: Icon, color }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversation, setConversation] = useState(null);
-  const [locationSet, setLocationSet] = useState(() => {
-    const saved = localStorage.getItem('eventLocation');
-    return !!saved;
-  });
-  const [location, setLocation] = useState(() => {
-    const saved = localStorage.getItem('eventLocation');
-    return saved ? JSON.parse(saved) : { country: "", province: "", city: "" };
+  const [locationSet, setLocationSet] = useState(false);
+  const [location, setLocation] = useState({
+    country: "",
+    province: "",
+    city: ""
   });
   const messagesEndRef = useRef(null);
 
@@ -162,10 +160,7 @@ export default function ChatInterface({ agentName, title, icon: Icon, color }) {
               </div>
 
               <Button
-                onClick={() => {
-                  localStorage.setItem('eventLocation', JSON.stringify(location));
-                  setLocationSet(true);
-                }}
+                onClick={() => setLocationSet(true)}
                 className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-14 rounded-xl text-lg mt-6"
               >
                 Continue to Chat
