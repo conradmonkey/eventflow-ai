@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Send, Loader2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -14,12 +13,6 @@ export default function ChatInterface({ agentName, title, icon: Icon, color }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversation, setConversation] = useState(null);
-  const [locationSet, setLocationSet] = useState(false);
-  const [location, setLocation] = useState({
-    country: "",
-    province: "",
-    city: ""
-  });
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -32,30 +25,14 @@ export default function ChatInterface({ agentName, title, icon: Icon, color }) {
 
   useEffect(() => {
     const initConversation = async () => {
-      if (!locationSet) return;
-      
       const newConversation = await base44.agents.createConversation({
         agent_name: agentName,
-        metadata: { 
-          name: title,
-          country: location.country,
-          province: location.province,
-          city: location.city
-        }
+        metadata: { name: title }
       });
       setConversation(newConversation);
-      
-      // Send initial message with location context
-      if (location.city || location.province || location.country) {
-        const locationParts = [location.city, location.province, location.country].filter(Boolean);
-        await base44.agents.addMessage(newConversation, {
-          role: "user",
-          content: `My event will be in ${locationParts.join(", ")}.`
-        });
-      }
     };
     initConversation();
-  }, [agentName, title, locationSet]);
+  }, [agentName, title]);
 
   useEffect(() => {
     if (!conversation?.id) return;
@@ -87,90 +64,6 @@ export default function ChatInterface({ agentName, title, icon: Icon, color }) {
       handleSend();
     }
   };
-
-  if (!locationSet) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col">
-        <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl sticky top-0 z-50">
-          <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-            <Link 
-              to={createPageUrl("Home")} 
-              className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5 text-zinc-400" />
-            </Link>
-            
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center`}>
-              <Icon className="w-5 h-5 text-amber-400" />
-            </div>
-            
-            <div>
-              <h1 className="text-lg font-semibold text-white">{title}</h1>
-              <p className="text-xs text-zinc-500">AI Assistant</p>
-            </div>
-          </div>
-        </header>
-
-        <div className="flex-1 flex items-center justify-center p-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 max-w-md w-full"
-          >
-            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center mx-auto mb-6`}>
-              <Icon className="w-8 h-8 text-amber-400" />
-            </div>
-            
-            <h2 className="text-2xl font-semibold text-white text-center mb-2">
-              Event Location
-            </h2>
-            <p className="text-zinc-400 text-center mb-8">
-              Where will your event take place?
-            </p>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label className="text-zinc-300">Country</Label>
-                <Input
-                  value={location.country}
-                  onChange={(e) => setLocation({ ...location, country: e.target.value })}
-                  className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                  placeholder="e.g., Canada"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-zinc-300">Province/State</Label>
-                <Input
-                  value={location.province}
-                  onChange={(e) => setLocation({ ...location, province: e.target.value })}
-                  className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                  placeholder="e.g., Ontario"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-zinc-300">City</Label>
-                <Input
-                  value={location.city}
-                  onChange={(e) => setLocation({ ...location, city: e.target.value })}
-                  className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                  placeholder="e.g., Toronto"
-                />
-              </div>
-
-              <Button
-                onClick={() => setLocationSet(true)}
-                className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-14 rounded-xl text-lg mt-6"
-              >
-                Continue to Chat
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-zinc-950 flex flex-col">
