@@ -21,6 +21,9 @@ export default function ContactForm() {
     phone: "",
     event_type: "",
     event_date: "",
+    country: "",
+    province: "",
+    city: "",
     budget_range: "",
     message: "",
   });
@@ -135,6 +138,36 @@ export default function ContactForm() {
               <SelectItem value="over_100k">Over $100,000</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-zinc-300">Country</Label>
+          <Input
+            value={formData.country}
+            onChange={(e) => handleChange("country", e.target.value)}
+            className="bg-zinc-900 border-zinc-800 text-white focus-visible:ring-amber-500/50 h-12 rounded-xl"
+            placeholder="Canada"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-zinc-300">Province/State</Label>
+          <Input
+            value={formData.province}
+            onChange={(e) => handleChange("province", e.target.value)}
+            className="bg-zinc-900 border-zinc-800 text-white focus-visible:ring-amber-500/50 h-12 rounded-xl"
+            placeholder="Ontario"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-zinc-300">City</Label>
+          <Input
+            value={formData.city}
+            onChange={(e) => handleChange("city", e.target.value)}
+            className="bg-zinc-900 border-zinc-800 text-white focus-visible:ring-amber-500/50 h-12 rounded-xl"
+            placeholder="Toronto"
+          />
         </div>
       </div>
 
