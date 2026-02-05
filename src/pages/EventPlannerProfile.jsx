@@ -16,6 +16,7 @@ export default function EventPlannerProfile() {
     business_name: "",
     description: "",
     address: "",
+    country: "",
     city: "",
     province: "",
     postal_code: "",
@@ -68,6 +69,7 @@ export default function EventPlannerProfile() {
         business_name: profile.business_name || "",
         description: profile.description || "",
         address: profile.address || "",
+        country: profile.country || "",
         city: profile.city || "",
         province: profile.province || "",
         postal_code: profile.postal_code || "",
@@ -237,7 +239,29 @@ export default function EventPlannerProfile() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label className="text-zinc-300">Country</Label>
+                  <Input
+                    value={formData.country}
+                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                    className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
+                    placeholder="Canada"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-zinc-300">Province/State</Label>
+                  <Input
+                    value={formData.province}
+                    onChange={(e) => setFormData({ ...formData, province: e.target.value })}
+                    className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
+                    placeholder="Ontario"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label className="text-zinc-300">City</Label>
                   <Input
@@ -245,16 +269,6 @@ export default function EventPlannerProfile() {
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
                     placeholder="Toronto"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-zinc-300">Province</Label>
-                  <Input
-                    value={formData.province}
-                    onChange={(e) => setFormData({ ...formData, province: e.target.value })}
-                    className="bg-zinc-900 border-zinc-800 text-white h-12 rounded-xl"
-                    placeholder="ON"
                   />
                 </div>
 
