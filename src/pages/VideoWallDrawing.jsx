@@ -168,7 +168,9 @@ ${formData.mounting_type === "truss" ? "- Slings hanging from the top truss bar 
 - Key measurements labeled
 - Ground level reference line
 - Clean visual style with clear shapes and colors
-- Easy to understand visual representation`;
+- Easy to understand visual representation
+- NO slings, ropes, bumper bars, or hanging connections - only direct clamp connections from video wall top to truss top
+- Clamps visible at connection points every 2ft along the width`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt: setupDescription
