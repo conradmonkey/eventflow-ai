@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText } from "lucide-react";
+import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function VideoWallDrawing() {
@@ -28,6 +28,8 @@ export default function VideoWallDrawing() {
   const [drawingUrl, setDrawingUrl] = useState(null);
   const [gearList, setGearList] = useState(null);
   const [isGeneratingGear, setIsGeneratingGear] = useState(false);
+  const [renderUrl, setRenderUrl] = useState(null);
+  const [isGeneratingRender, setIsGeneratingRender] = useState(false);
 
   const heightOffGroundInFeet = formData.height_off_ground ? parseFloat(formData.height_off_ground) * 3.28084 : 0;
   const showMountingOptions = heightOffGroundInFeet >= 2;
@@ -185,6 +187,73 @@ Draw this as a technical side-view elevation drawing showing:
     }, 500);
   };
 
+  const handleGenerate3DRender = async () => {
+    setIsGeneratingRender(true);
+    setRenderUrl(null);
+
+    try {
+      const height = parseFloat(formData.wall_height);
+      const width = parseFloat(formData.wall_width);
+      const heightOffGround = parseFloat(formData.height_off_ground);
+      const heightOffGroundFt = heightOffGround * 3.28084;
+
+      let renderPrompt = `Ultra realistic, cinematic 3D render of a stunning LED video wall display setup. 
+
+Video Wall:
+- Massive LED screen: ${width}m wide × ${height}m tall
+- Displaying vibrant, dynamic content with brilliant colors
+- Professional grade LED panels with seamless edges
+- Modern, sleek black bezels
+- Bottom of screen is ${heightOffGround}m off the ground
+
+`;
+
+      if (heightOffGroundFt < 2) {
+        renderPrompt += `- Mounted on a modern black support structure
+- Clean, minimalist design
+`;
+      } else if (formData.mounting_type === "stage") {
+        renderPrompt += `- Positioned on a professional stage platform
+- Industrial stage deck construction
+- Stage is ${heightOffGround}m high
+`;
+      } else if (formData.mounting_type === "truss") {
+        renderPrompt += `- Suspended from professional box truss rigging
+- Modern industrial truss framework visible
+- Dramatic lighting on the truss structure
+`;
+      }
+
+      renderPrompt += `
+Environment:
+- Dark, atmospheric venue setting with subtle ambient lighting
+- Cinematic lighting highlighting the video wall
+- Professional event production atmosphere
+- High-end, luxury aesthetic
+- Dramatic shadows and highlights
+- Premium, glamorous look
+
+Style:
+- Photorealistic 3D rendering
+- Cinematic camera angle
+- High contrast, dramatic lighting
+- Professional event production quality
+- Ultra high resolution details
+- Glamorous and impressive presentation`;
+
+      const response = await base44.integrations.Core.GenerateImage({
+        prompt: renderPrompt
+      });
+
+      setRenderUrl(response.url);
+    } catch (error) {
+      console.error("Error generating 3D render:", error);
+      alert("An error occurred while generating the 3D render. Please try again.");
+    } finally {
+      setIsGeneratingRender(false);
+    }
+  };
+
   const handleReset = () => {
     setFormData({
       country: "",
@@ -197,6 +266,7 @@ Draw this as a technical side-view elevation drawing showing:
     });
     setDrawingUrl(null);
     setGearList(null);
+    setRenderUrl(null);
   };
 
   return (
@@ -406,20 +476,52 @@ Draw this as a technical side-view elevation drawing showing:
               <img src={drawingUrl} alt="Video wall setup drawing" className="w-full h-auto" />
             </div>
 
-            {!gearList && (
+            <div className="flex gap-3 mt-6">
+              {!gearList && (
+                <Button
+                  onClick={handleGenerateGearList}
+                  disabled={isGeneratingGear}
+                  className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold h-12 rounded-lg"
+                >
+                  {isGeneratingGear ? (
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  ) : (
+                    <FileText className="w-5 h-5 mr-2" />
+                  )}
+                  Generate Equipment List
+                </Button>
+              )}
+              
               <Button
-                onClick={handleGenerateGearList}
-                disabled={isGeneratingGear}
-                className="mt-6 bg-amber-500 hover:bg-amber-600 text-white font-semibold h-12 rounded-lg"
+                onClick={handleGenerate3DRender}
+                disabled={isGeneratingRender}
+                className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold h-12 rounded-lg"
               >
-                {isGeneratingGear ? (
+                {isGeneratingRender ? (
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
                 ) : (
-                  <FileText className="w-5 h-5 mr-2" />
+                  <Box className="w-5 h-5 mr-2" />
                 )}
-                Generate Equipment List
+                Generate 3D Render
               </Button>
-            )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* 3D Render */}
+        {renderUrl && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
+          >
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+              <Box className="w-6 h-6 text-purple-400" />
+              3D Render
+            </h2>
+            <div className="bg-black rounded-lg overflow-hidden">
+              <img src={renderUrl} alt="3D render of video wall setup" className="w-full h-auto" />
+            </div>
           </motion.div>
         )}
 
