@@ -146,16 +146,13 @@ Video Wall Specifications:
         const totalHeightInFeet = (heightOffGround + height) * 3.28084; // Exactly at top of video wall
         const trussHeightFeet = Math.ceil(totalHeightInFeet); // Round up to nearest foot
         const trussHeight = trussHeightFeet * 0.3048; // Convert back to meters
-        const slingCount = Math.ceil(width / 0.6) + 1; // Every 2ft (0.6m)
         setupDescription += `Mounting: Suspended from truss
-- 12-inch box truss frame (NO top horizontal bar)
+- 12-inch box truss frame
 - Truss frame height: ${trussHeight.toFixed(2)}m tall (built in 1ft increments)
 - Truss frame width: ${trussWidth.toFixed(2)}m wide
-- CRITICAL: The top of the video wall TOUCHES the bottom of the truss frame - they are connected directly
-- CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall - NO MORE
-- Video wall is attached directly to the truss frame at the top
-- Connected using truss clamps every 2ft (0.6m) along the width
-- Clamps secure the bumper bar on top of the video wall directly to the bottom of the truss frame
+- CRITICAL: The top of the video wall connects directly to the top of the truss frame
+- CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall
+- Video wall is secured to the truss frame using truss clamps every 2ft (0.6m) along the width
 - Four truss legs with outriggers for support
 `;
       }
