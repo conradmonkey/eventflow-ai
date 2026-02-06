@@ -164,7 +164,6 @@ Video Wall Specifications:
       - If on stage: bottom of video wall rests on top of stage platform
       - If on ground: bottom of video wall rests directly on ground
       - All structural support (box/stage/truss) visible with clear proportions
-      - A 5'10" (1.78m) tall female stick figure standing next to the setup for scale reference
       - Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
       - Ground level reference line
       - Clean visual style with clear shapes and colors
