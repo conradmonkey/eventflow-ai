@@ -4,7 +4,6 @@ import {
   FileCheck, 
   Tent, 
   MonitorPlay, 
-  Volume2, 
   Lightbulb,
   Map,
   Sparkles,
@@ -45,12 +44,6 @@ const services = [
     description: "Design impactful visual displays with LED walls, projection mapping, and IMAG screens.",
     href: "https://video-wall-studio.base44.app",
     external: true,
-  },
-  {
-    icon: Volume2,
-    title: "Sound Design",
-    description: "Engineer pristine audio experiences with expert PA system and acoustic planning.",
-    href: "SoundDesign",
   },
   {
     icon: Lightbulb,
