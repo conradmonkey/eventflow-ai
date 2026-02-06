@@ -163,7 +163,7 @@ Draw this as a visual side-view diagram showing:
 - The video wall as a large flat rectangle (NO legs on the video wall itself)
 - All structural support (box/stage/truss) with clear proportions
 ${formData.mounting_type === "truss" ? "- Slings hanging from the top truss bar down to the bumper on top of the video wall (1ft gap between truss bottom and video wall top)\n- Show the slings clearly as lines connecting the truss to the video wall\n" : ""}
-- A 6ft (1.83m) tall human figure silhouette standing next to the setup for scale reference
+- A 5'10" (1.78m) tall woman silhouette standing next to the setup for scale reference
 - Key measurements labeled
 - Ground level reference line
 - Clean visual style with clear shapes and colors
@@ -221,9 +221,10 @@ Video Wall:
 - Stage is ${heightOffGround}m high
 `;
       } else if (formData.mounting_type === "truss") {
-        renderPrompt += `- Suspended from professional box truss rigging
-- Modern industrial truss framework visible
-- Dramatic lighting on the truss structure
+        renderPrompt += `- Suspended from professional rigging system
+- Truss structure completely hidden behind elegant black drape fabric
+- Clean, theatrical presentation with no visible rigging
+- Glamorous, polished look
 `;
       }
 
