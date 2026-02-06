@@ -150,12 +150,10 @@ Video Wall Specifications:
 - Truss dimensions: ${trussWidth.toFixed(2)}m wide x ${trussHeight.toFixed(2)}m tall
 - CRITICAL: The bottom of the top horizontal truss bar is EXACTLY 1ft (0.3m) above the top of the video wall - NO MORE
 - CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall - NO MORE
-- CRITICAL: The truss frame should be compact - only extending 1ft above the video wall top
 - The top of the truss frame is positioned at ${(height + heightOffGround + 0.3).toFixed(2)}m from ground
 - Suspended using ${slingCount} slings spaced every 2ft (0.6m) along the width
 - Slings attach to eyebolts on a bumper bar mounted on top of the video wall
 - Four truss legs with outriggers for support
-- NO pulley system - just direct sling connections
 `;
       }
 
