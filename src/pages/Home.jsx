@@ -6,6 +6,7 @@ import {
   MonitorPlay, 
   Lightbulb,
   Map,
+  Building2,
   Sparkles,
   ArrowRight
 } from "lucide-react";
@@ -56,6 +57,12 @@ const services = [
     description: "Plan festival layouts with AI-powered terrain analysis and site optimization.",
     href: "https://fest-map-pro.base44.app",
     external: true,
+  },
+  {
+    icon: Building2,
+    title: "Venue Scouting",
+    description: "Find perfect venues tailored to your event type, capacity, location, and budget requirements.",
+    href: "VenueScouting",
   },
 ];
 
