@@ -164,7 +164,7 @@ Video Wall Specifications:
       - If on stage: bottom of video wall rests on top of stage platform
       - If on ground: bottom of video wall rests directly on ground
       - All structural support (box/stage/truss) visible with clear proportions
-      - A VERTICAL measurement line on the left side showing the distance from ground level UP to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
+      - Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
       - Ground level reference line
       - Clean visual style with clear shapes and colors
       - Easy to understand visual representation`;
