@@ -143,16 +143,15 @@ Video Wall Specifications:
 `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
-        const trussHeight = height + 0.3;
+        const trussHeight = height;
         const slingCount = Math.ceil(width / 0.6) + 1; // Every 2ft (0.6m)
         setupDescription += `Mounting: Suspended from truss
-- 12-inch box truss frame around video wall
+- 12-inch box truss frame (NO top horizontal bar)
 - Truss dimensions: ${trussWidth.toFixed(2)}m wide x ${trussHeight.toFixed(2)}m tall
-- CRITICAL: The bottom of the top horizontal truss bar ALMOST TOUCHES the top of the video wall (only 0.05m / 2 inch gap) - NO MORE
+- CRITICAL: Video wall is directly suspended from slings - no top truss bar
 - CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall - NO MORE
-- The top of the truss frame is positioned at ${(height + heightOffGround + 0.05).toFixed(2)}m from ground
 - Suspended using ${slingCount} slings spaced every 2ft (0.6m) along the width
-- Slings attach to eyebolts on a bumper bar mounted on top of the video wall
+- Slings attach directly to eyebolts on a bumper bar mounted on top of the video wall
 - Four truss legs with outriggers for support
 `;
       }
