@@ -134,16 +134,12 @@ Video Wall Specifications:
 - Video wall rests on top of box
 `;
       } else if (formData.mounting_type === "stage") {
-        const trussWidth = width + 0.6;
-        setupDescription += `Mounting: Stage platform with hidden truss support
+        setupDescription += `Mounting: Stage platform
       - Stage: 1.2m (4ft) wide, minimum ${width}m long
       - Built with 4x8ft and 4x4ft stage deck platforms
       - Maximum one 4x8ft deck, remaining length with 4x4ft decks
       - Stage height: ${heightOffGround}m
-      - Video wall rests on stage
-      - 12-inch box truss frame behind the video wall for structural support (NOT VISIBLE)
-      - Truss frame width: ${trussWidth.toFixed(2)}m wide
-      - Truss provides stability and prevents video wall from tipping forward
+      - Video wall rests directly on stage
       `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
