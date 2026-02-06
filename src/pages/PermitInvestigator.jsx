@@ -11,6 +11,7 @@ import ReactMarkdown from "react-markdown";
 export default function PermitInvestigator() {
   const [formData, setFormData] = useState({
     event_name: "",
+    country: "",
     province: "",
     city: "",
     features: {
@@ -34,7 +35,7 @@ export default function PermitInvestigator() {
         .filter(([_, checked]) => checked)
         .map(([key, _]) => key.replace(/_/g, " "));
 
-      const prompt = `I'm planning an outdoor event in ${formData.city}, ${formData.province}. 
+      const prompt = `I'm planning an outdoor event in ${formData.city}, ${formData.province}, ${formData.country}. 
 ${formData.event_name ? `Event name: ${formData.event_name}` : ""}
 
 Event features:
@@ -117,7 +118,23 @@ Be thorough and specific to the location provided.`;
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <Label className="text-zinc-300 flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      Country *
+                    </Label>
+                    <Input
+                      required
+                      value={formData.country}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, country: e.target.value }))
+                      }
+                      className="bg-zinc-900 border-zinc-800 text-white focus-visible:ring-blue-500/50 h-12 rounded-xl mt-2"
+                      placeholder="e.g., Canada, USA"
+                    />
+                  </div>
+
                   <div>
                     <Label className="text-zinc-300 flex items-center gap-2">
                       <MapPin className="w-4 h-4" />
