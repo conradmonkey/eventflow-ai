@@ -143,7 +143,9 @@ Video Wall Specifications:
 `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
-        const trussHeight = height;
+        const heightInFeet = height * 3.28084;
+        const trussHeightFeet = Math.ceil(heightInFeet); // Round up to nearest foot
+        const trussHeight = trussHeightFeet * 0.3048; // Convert back to meters
         const slingCount = Math.ceil(width / 0.6) + 1; // Every 2ft (0.6m)
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame (NO top horizontal bar)
