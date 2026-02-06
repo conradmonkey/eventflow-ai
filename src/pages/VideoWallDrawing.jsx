@@ -154,12 +154,13 @@ Video Wall Specifications:
 
       setupDescription += `
 Draw this as a technical side-view elevation drawing showing:
-- The video wall as a large rectangle with LED panel grid
+- The video wall as a large flat rectangle with LED panel grid (NO legs on the video wall itself)
 - All structural support (box/stage/truss) with accurate proportions
 - Dimension lines and measurements clearly labeled
 - Ground level reference line
 - Clean, technical drawing style in black and white with blue accents
-- Professional engineering drawing aesthetic`;
+- Professional engineering drawing aesthetic
+- Important: The video wall should be a simple flat panel with no legs or stands attached to it`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt: setupDescription
