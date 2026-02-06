@@ -149,10 +149,10 @@ Video Wall Specifications:
 - 12-inch box truss frame around video wall
 - Truss dimensions: ${trussWidth.toFixed(2)}m wide x ${trussHeight.toFixed(2)}m tall
 - Video wall hangs 1ft (0.3m) below the bottom of the top horizontal truss bar
+- Approximately 1ft (0.3m) clearance between video wall sides and vertical truss bars
 - Suspended using ${slingCount} slings spaced every 2ft (0.6m) along the width
 - Slings attach to eyebolts on a bumper bar mounted on top of the video wall
 - Four truss legs with outriggers for support
-- 0.3m (1ft) clearance on sides
 `;
       }
 
