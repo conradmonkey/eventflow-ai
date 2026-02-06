@@ -10,6 +10,7 @@ import ReactMarkdown from "react-markdown";
 
 export default function VenueScouting() {
   const [formData, setFormData] = useState({
+    event_name: "",
     event_type: "",
     capacity: "",
     city: "",
@@ -28,6 +29,7 @@ export default function VenueScouting() {
 
     try {
       const prompt = `I'm looking for event venues for a ${formData.event_type} in ${formData.city}, ${formData.province}, ${formData.country}.
+${formData.event_name ? `Event name: ${formData.event_name}` : ""}
 
 Event Details:
 - Expected capacity: ${formData.capacity} guests
@@ -84,6 +86,18 @@ Format the response in a clear, organized manner with venue names as headers. Us
           className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <Label className="text-zinc-300">Event Name (Optional)</Label>
+              <Input
+                value={formData.event_name}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, event_name: e.target.value }))
+                }
+                className="bg-zinc-900 border-zinc-800 text-white focus-visible:ring-purple-500/50 h-12 rounded-xl mt-2"
+                placeholder="Summer Gala 2026"
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label className="text-zinc-300">Event Type *</Label>
