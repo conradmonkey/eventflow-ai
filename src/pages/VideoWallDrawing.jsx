@@ -143,12 +143,11 @@ Video Wall Specifications:
 `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
-        const totalHeightInFeet = (heightOffGround + height) * 3.28084; // Exactly at top of video wall
-        const trussHeightFeet = Math.ceil(totalHeightInFeet); // Round up to nearest foot
+        const trussHeightFeet = Math.ceil(height * 3.28084); // Video wall height in feet, rounded up
         const trussHeight = trussHeightFeet * 0.3048; // Convert back to meters
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame
-- Truss frame height: ${trussHeight.toFixed(2)}m tall (built in 1ft increments)
+- Truss frame height: ${trussHeight.toFixed(2)}m tall (${trussHeightFeet}ft, built in 1ft increments)
 - Truss frame width: ${trussWidth.toFixed(2)}m wide
 - CRITICAL: The top of the video wall connects directly to the top of the truss frame
 - CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall
