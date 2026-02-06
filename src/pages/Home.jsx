@@ -57,6 +57,12 @@ const services = [
     description: "Find perfect venues tailored to your event type, capacity, location, and budget requirements.",
     href: "VenueScouting",
   },
+  {
+    icon: MonitorPlay,
+    title: "Video Wall Drawing Generator",
+    description: "Generate technical drawings, 3D renders, and equipment lists for LED video wall installations.",
+    href: "VideoWallDrawing",
+  },
 ];
 
 export default function Home() {
