@@ -166,6 +166,7 @@ Video Wall Specifications:
       - All structural support (box/stage/truss) visible with clear proportions
       - Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
       - Ground level reference line
+      - A vertical measurement line from ground up to the bottom of the video wall showing the ${heightOffGround}m (${heightOffGroundFt.toFixed(1)}ft) clearance
       - Clean visual style with clear shapes and colors
       - Easy to understand visual representation`;
 
