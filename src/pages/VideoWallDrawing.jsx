@@ -160,6 +160,7 @@ Important: Video wall is built from LED panels that are 1m high × 0.5m wide eac
 Draw this as a technical side-view elevation drawing showing:
 - The video wall as a large flat rectangle with LED panel grid (each panel is 1m high × 0.5m wide, NO legs on the video wall itself)
 - All structural support (box/stage/truss) with accurate proportions
+- A 6ft (1.83m) tall human figure silhouette standing next to the setup for scale reference
 - Dimension lines and measurements clearly labeled
 - Ground level reference line
 - Clean, technical drawing style in black and white with blue accents
