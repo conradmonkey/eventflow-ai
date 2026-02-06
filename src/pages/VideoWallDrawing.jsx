@@ -143,14 +143,15 @@ Video Wall Specifications:
       `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
-        const trussTopHeight = heightOffGround + height;
+        const panelTopHeight = heightOffGround + height;
+        const trussTopHeight = panelTopHeight + 0.5; // 0.5m gap above panels
         const trussTopHeightFt = trussTopHeight * 3.28084;
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame
 - Truss top height: ${trussTopHeight.toFixed(2)}m (${trussTopHeightFt.toFixed(1)}ft) off ground
 - Truss frame width: ${trussWidth.toFixed(2)}m wide
 - Video wall (LED panels only) hangs from the bottom of the truss
-- Top of video wall panels attach directly to the bottom of the truss frame
+- Top of video wall panels are 0.5m below the bottom of the truss frame
 - Vertical truss sides are within 1ft (0.3m) from each side of the video wall
 - Four truss legs with outriggers for structural support
 `;
