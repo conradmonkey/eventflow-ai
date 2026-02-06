@@ -153,8 +153,10 @@ Video Wall Specifications:
       }
 
       setupDescription += `
+Important: Video wall is built from LED panels that are 1m high × 0.5m wide each.
+
 Draw this as a technical side-view elevation drawing showing:
-- The video wall as a large flat rectangle with LED panel grid (NO legs on the video wall itself)
+- The video wall as a large flat rectangle with LED panel grid (each panel is 1m high × 0.5m wide, NO legs on the video wall itself)
 - All structural support (box/stage/truss) with accurate proportions
 - Dimension lines and measurements clearly labeled
 - Ground level reference line
