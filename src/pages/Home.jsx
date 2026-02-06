@@ -6,6 +6,7 @@ import {
   MonitorPlay, 
   Volume2, 
   Lightbulb,
+  Map,
   Sparkles,
 
   ArrowRight
@@ -56,6 +57,13 @@ const services = [
     title: "Room Layout Design",
     description: "Create optimal room layouts with AI-powered spatial planning and design.",
     href: "https://lush-room-design-ai.base44.app",
+    external: true,
+  },
+  {
+    icon: Map,
+    title: "Outdoor Festival Topography Planner",
+    description: "Plan festival layouts with AI-powered terrain analysis and site optimization.",
+    href: "https://fest-map-pro.base44.app",
     external: true,
   },
 ];
