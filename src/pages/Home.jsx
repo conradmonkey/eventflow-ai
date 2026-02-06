@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { 
   Theater, 
+  FileCheck,
   Tent, 
   MonitorPlay, 
   Lightbulb,
@@ -21,6 +22,12 @@ const services = [
     description: "Create stunning stage configurations with expert guidance on dimensions, materials, and aesthetics.",
     href: "https://tiny-stage-craft-ai.base44.app/",
     external: true,
+  },
+  {
+    icon: FileCheck,
+    title: "Permit Investigation",
+    description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
+    href: "PermitInvestigator",
   },
   {
     icon: Tent,

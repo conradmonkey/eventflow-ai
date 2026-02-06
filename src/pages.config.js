@@ -55,6 +55,7 @@ import StageDesign from './pages/StageDesign';
 import TentDesign from './pages/TentDesign';
 import VideoWallDesign from './pages/VideoWallDesign';
 import Home from './pages/Home';
+import PermitInvestigator from './pages/PermitInvestigator';
 
 
 export const PAGES = {
@@ -66,6 +67,7 @@ export const PAGES = {
     "TentDesign": TentDesign,
     "VideoWallDesign": VideoWallDesign,
     "Home": Home,
+    "PermitInvestigator": PermitInvestigator,
 }
 
 export const pagesConfig = {
