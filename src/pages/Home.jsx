@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { 
   Theater, 
-  FileCheck, 
   Tent, 
   MonitorPlay, 
   Lightbulb,
