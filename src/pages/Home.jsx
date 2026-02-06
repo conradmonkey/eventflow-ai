@@ -53,9 +53,10 @@ const services = [
   },
   {
     icon: Lightbulb,
-    title: "Lighting Design",
-    description: "Craft atmospheric lighting schemes that transform venues and captivate audiences.",
-    href: "LightingDesign",
+    title: "Room Layout Design",
+    description: "Create optimal room layouts with AI-powered spatial planning and design.",
+    href: "https://lush-room-design-ai.base44.app",
+    external: true,
   },
 ];
 
