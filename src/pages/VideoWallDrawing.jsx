@@ -150,6 +150,7 @@ Video Wall Specifications:
 - Truss dimensions: ${trussWidth.toFixed(2)}m wide x ${trussHeight.toFixed(2)}m tall
 - CRITICAL: Video wall is directly suspended from slings - no top truss bar
 - CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall - NO MORE
+- The top of the truss frame is at ${(height + heightOffGround).toFixed(2)}m from ground (same height as top of video wall)
 - Suspended using ${slingCount} slings spaced every 2ft (0.6m) along the width
 - Slings attach directly to eyebolts on a bumper bar mounted on top of the video wall
 - Four truss legs with outriggers for support
