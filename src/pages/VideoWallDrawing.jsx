@@ -157,18 +157,17 @@ Video Wall Specifications:
       }
 
       setupDescription += `
-Important: Video wall is built from LED panels that are 1m high × 0.5m wide each.
+      Important: Video wall is built from LED panels that are 1m high × 0.5m wide each.
 
-Draw this as a visual side-view diagram showing:
-- The video wall as a large flat rectangle (NO legs on the video wall itself)
-- All structural support (box/stage/truss) with clear proportions
-- A simple stick figure representing a 5'10" (1.78m) tall woman standing next to the setup for scale reference
-- Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
-- Ground level reference line
-- Clean visual style with clear shapes and colors
-- Easy to understand visual representation
-- NO slings, ropes, bumper bars, or hanging connections - only direct clamp connections from video wall top to truss top
-- Clamps visible at connection points every 2ft along the width`;
+      Draw this as a visual side-view diagram showing:
+      - The video wall as a large flat rectangle (NO legs on the video wall itself)
+      - All structural support (box/stage/truss) with clear proportions
+      - A simple stick figure representing a 5'10" (1.78m) tall woman standing next to the setup for scale reference
+      - Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
+      - Ground level reference line
+      - Clean visual style with clear shapes and colors
+      - Easy to understand visual representation
+      ${formData.mounting_type === "truss" ? "- NO slings, ropes, bumper bars, or hanging connections - only direct clamp connections from video wall top to truss top\n- Clamps visible at connection points every 2ft along the width" : ""}`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt: setupDescription
