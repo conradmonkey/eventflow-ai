@@ -144,28 +144,30 @@ Video Wall Specifications:
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
         const trussHeight = height + 0.3;
+        const slingCount = Math.ceil(width / 0.6) + 1; // Every 2ft (0.6m)
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame around video wall
 - Truss dimensions: ${trussWidth.toFixed(2)}m wide x ${trussHeight.toFixed(2)}m tall
-- Video wall hangs 0.3m (1ft) from top truss bar
+- Video wall hangs 1ft (0.3m) below the bottom of the top horizontal truss bar
+- Suspended using ${slingCount} slings spaced every 2ft (0.6m) along the width
+- Slings attach to eyebolts on a bumper bar mounted on top of the video wall
+- Four truss legs with outriggers for support
 - 0.3m (1ft) clearance on sides
-- Attached with slings and eyebolts
-- Four legs with outriggers for support
 `;
       }
 
       setupDescription += `
 Important: Video wall is built from LED panels that are 1m high × 0.5m wide each.
 
-Draw this as a technical side-view elevation drawing showing:
-- The video wall as a large flat rectangle with LED panel grid (each panel is 1m high × 0.5m wide, NO legs on the video wall itself)
-- All structural support (box/stage/truss) with accurate proportions
+Draw this as a visual side-view diagram showing:
+- The video wall as a large flat rectangle (NO legs on the video wall itself)
+- All structural support (box/stage/truss) with clear proportions
+${formData.mounting_type === "truss" ? "- Slings hanging from the top truss bar down to the bumper on top of the video wall (1ft gap between truss bottom and video wall top)\n- Show the slings clearly as lines connecting the truss to the video wall\n" : ""}
 - A 6ft (1.83m) tall human figure silhouette standing next to the setup for scale reference
-- Dimension lines and measurements clearly labeled
+- Key measurements labeled
 - Ground level reference line
-- Clean, technical drawing style in black and white with blue accents
-- Professional engineering drawing aesthetic
-- Important: The video wall should be a simple flat panel with no legs or stands attached to it`;
+- Clean visual style with clear shapes and colors
+- Easy to understand visual representation`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt: setupDescription
