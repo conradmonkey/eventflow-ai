@@ -154,8 +154,8 @@ Video Wall Specifications:
 - CRITICAL: The top of the video wall TOUCHES the bottom of the truss frame - they are connected directly
 - CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall - NO MORE
 - Video wall is attached directly to the truss frame at the top
-- Suspended using ${slingCount} very short slings spaced every 2ft (0.6m) along the width
-- Slings attach to eyebolts on a bumper bar mounted on top of the video wall, connecting to the bottom of the truss frame
+- Connected using truss clamps every 2ft (0.6m) along the width
+- Clamps secure the bumper bar on top of the video wall directly to the bottom of the truss frame
 - Four truss legs with outriggers for support
 `;
       }
