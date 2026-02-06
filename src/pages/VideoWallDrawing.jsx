@@ -164,7 +164,7 @@ Draw this as a visual side-view diagram showing:
 - All structural support (box/stage/truss) with clear proportions
 ${formData.mounting_type === "truss" ? "- Slings hanging from the top truss bar down to the bumper on top of the video wall (1ft gap between truss bottom and video wall top)\n- Show the slings clearly as lines connecting the truss to the video wall\n" : ""}
 - A simple stick figure representing a 5'10" (1.78m) tall woman standing next to the setup for scale reference
-- Key measurements labeled
+- Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
 - Ground level reference line
 - Clean visual style with clear shapes and colors
 - Easy to understand visual representation
