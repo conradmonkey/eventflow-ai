@@ -149,10 +149,10 @@ Video Wall Specifications:
 - 12-inch box truss frame
 - Truss frame height: ${trussHeight.toFixed(2)}m tall (${trussHeightFeet}ft, built in 1ft increments)
 - Truss frame width: ${trussWidth.toFixed(2)}m wide
-- CRITICAL: The top of the video wall connects directly to the top of the truss frame
-- CRITICAL: Vertical truss bars are EXACTLY 1ft (0.3m) from each side of the video wall
-- Video wall is secured to the truss frame using truss clamps every 2ft (0.6m) along the width
-- Four truss legs with outriggers for support
+- Video wall (LED panels only) is attached to a bumper bar
+- Bumper bar is attached to the bottom of the truss frame
+- Vertical truss sides are within 1ft (0.3m) from each side of the video wall
+- Four truss legs with outriggers for structural support
 `;
       }
 
