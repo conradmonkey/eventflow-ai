@@ -6,7 +6,6 @@ import {
   Lightbulb,
   Map,
   Sparkles,
-
   ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,13 +20,6 @@ const services = [
     title: "Stage Design",
     description: "Create stunning stage configurations with expert guidance on dimensions, materials, and aesthetics.",
     href: "https://tiny-stage-craft-ai.base44.app/",
-    external: true,
-  },
-  {
-    icon: FileCheck,
-    title: "Permit Investigation",
-    description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
-    href: "https://event-permit-pro.base44.app/",
     external: true,
   },
   {
