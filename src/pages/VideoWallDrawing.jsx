@@ -143,11 +143,10 @@ Video Wall Specifications:
       `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
-        const trussTopHeight = heightOffGround + height;
-        const trussTopHeightFt = trussTopHeight * 3.28084;
+        const trussTopHeightFt = heightOffGroundFt;
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame
-- Truss top height: ${trussTopHeight.toFixed(2)}m (${trussTopHeightFt.toFixed(1)}ft) off ground
+- Truss top height: ${heightOffGround.toFixed(2)}m (${heightOffGroundFt.toFixed(1)}ft) off ground
 - Truss frame width: ${trussWidth.toFixed(2)}m wide
 - Video wall (LED panels only) is attached to a bumper bar
 - Bumper bar is attached to the bottom of the truss frame
