@@ -117,7 +117,7 @@ export default function VideoWallDrawing() {
       const heightOffGround = parseFloat(formData.height_off_ground);
       const heightOffGroundFt = heightOffGround * 3.28084;
 
-      let setupDescription = `Video Wall Setup Technical Drawing:
+      let setupDescription = `Video Wall Setup:
 
 Location: ${formData.city}, ${formData.province}, ${formData.country}
 
@@ -290,7 +290,7 @@ Style:
           </div>
           <h1 className="text-4xl font-bold text-white mb-4">Video Wall Setup Drawing Generator</h1>
           <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-            Generate technical drawings and equipment lists for your LED video wall installation
+            Generate setup drawings and equipment lists for your LED video wall installation
           </p>
         </motion.div>
 
@@ -477,7 +477,7 @@ Style:
           >
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
               <MonitorPlay className="w-6 h-6 text-cyan-400" />
-              Technical Drawing
+              Setup Drawing
             </h2>
             <div className="bg-white rounded-lg p-4">
               <img src={drawingUrl} alt="Video wall setup drawing" className="w-full h-auto" />
