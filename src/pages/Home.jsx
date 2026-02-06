@@ -3,6 +3,7 @@ import {
   Theater, 
   FileCheck,
   Tent, 
+  MonitorPlay,
   Lightbulb,
   Map,
   Building2,
@@ -35,6 +36,12 @@ const services = [
     description: "Plan perfect temporary structures from elegant sailcloth to grand clear-span marquees.",
     href: "https://tent-plan-ai.base44.app/",
     external: true,
+  },
+  {
+    icon: MonitorPlay,
+    title: "Video Wall Design",
+    description: "Design impactful visual displays with LED walls, projection mapping, and IMAG screens.",
+    href: "VideoWallDesigner",
   },
   {
     icon: Lightbulb,
