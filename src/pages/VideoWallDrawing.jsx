@@ -147,9 +147,9 @@ Video Wall Specifications:
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame around video wall
 - Truss dimensions: ${trussWidth.toFixed(2)}m wide x ${trussHeight.toFixed(2)}m tall
-- Video wall hangs 0.3m (1ft) from top truss bar
+- Video wall hangs 0.3m (1ft) below the bottom of the top truss bar
+- Attached with slings from top truss to video wall
 - 0.3m (1ft) clearance on sides
-- Attached with slings and eyebolts
 - Four legs with outriggers for support
 `;
       }
@@ -157,14 +157,15 @@ Video Wall Specifications:
       setupDescription += `
 Important: Video wall is built from LED panels that are 1m high × 0.5m wide each.
 
-Draw this as a technical side-view elevation drawing showing:
+Draw this as a clean visual side-view diagram showing:
 - The video wall as a large flat rectangle with LED panel grid (each panel is 1m high × 0.5m wide, NO legs on the video wall itself)
 - All structural support (box/stage/truss) with accurate proportions
+- If truss mounting: show slings connecting the top truss bar to the video wall, with the wall hanging 1ft below the bottom of the top truss
 - A 6ft (1.83m) tall human figure silhouette standing next to the setup for scale reference
-- Dimension lines and measurements clearly labeled
+- Simple dimension labels showing key measurements
 - Ground level reference line
-- Clean, technical drawing style in black and white with blue accents
-- Professional engineering drawing aesthetic
+- Clean visual style with black and white with blue accents
+- Clear and easy to understand visual interpretation
 - Important: The video wall should be a simple flat panel with no legs or stands attached to it`;
 
       const response = await base44.integrations.Core.GenerateImage({
