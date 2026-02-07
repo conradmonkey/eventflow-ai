@@ -226,6 +226,10 @@ ARTISTIC RENDER STYLE:
 - Not photorealistic, just clean simple 3D visualization
 - NO STAIRS, NO STEPS, NO STAIRCASES - do not include any connection elements between tiers`;
 
+      prompt += `
+
+${TENT_HARD_RULE}`;
+
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
       
