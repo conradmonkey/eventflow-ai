@@ -17,6 +17,7 @@ export default function StageDesignTool() {
     right: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
+  const [renderType, setRenderType] = useState("schematic");
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const sketchRef = useRef(null);
@@ -127,7 +128,14 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      let prompt = `Simple, clean schematic diagram of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
+      let prompt = renderType === "3d" 
+        ? `Simple 3D render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
+
+IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
+
+STAGE LAYOUT:
+`
+        : `Simple, clean schematic diagram of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
 IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
 
@@ -176,7 +184,19 @@ ROOF: Frame tent covering base tier
         }
       }
 
-      prompt += `
+      prompt += renderType === "3d" 
+        ? `
+
+3D RENDER STYLE:
+- Simple 3D render from a 3/4 angle view
+- Show all tiers clearly stacked
+- Clean, minimalist style
+- Light shading and shadows for depth
+- Show stairs if present
+- Show railings as simple structures
+- Easy to understand perspective
+- Not photorealistic, just clean simple 3D visualization`
+        : `
 
 DIAGRAM STYLE:
 - Simple side view schematic showing all tiers stacked
@@ -308,8 +328,22 @@ DIAGRAM STYLE:
             </Button>
           </div>
 
-          {/* Railings */}
+          {/* Render Type */}
           <div className="mt-8">
+            <h3 className="text-lg font-semibold text-white mb-4">Render Type</h3>
+            <Select value={renderType} onValueChange={setRenderType}>
+              <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectItem value="schematic" className="text-white">Schematic Diagram</SelectItem>
+                <SelectItem value="3d" className="text-white">Simple 3D Render</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Railings */}
+          <div className="mt-6">
             <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
