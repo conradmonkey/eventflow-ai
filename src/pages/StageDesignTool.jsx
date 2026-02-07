@@ -118,6 +118,8 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
+      const TENT_HARD_RULE = "**ABSOLUTE HARD RULE: TENTS CAN ONLY EVER HAVE 4 LEGS - ONE AT EACH CORNER. IF THE TENT HAS MORE THAN 4 LEGS, THE IMAGE IS WRONG. NO CENTER LEGS. NO MIDDLE LEGS. NO ADDITIONAL SUPPORTS. EXACTLY 4 LEGS.**";
+      
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
