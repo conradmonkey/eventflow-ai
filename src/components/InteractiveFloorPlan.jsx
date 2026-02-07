@@ -227,8 +227,9 @@ export default function InteractiveFloorPlan({ formData, onExport }) {
   const roomLength = parseFloat(formData.room_length || 100);
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-2 items-center justify-between">
+    <div className="flex justify-end">
+      <div className="w-full max-w-4xl space-y-4">
+        <div className="flex gap-2 items-center justify-between">
         <p className="text-zinc-400 text-sm">Click and drag elements to reposition. Use rotate buttons to change orientation.</p>
         {selectedId && (
           <Button
@@ -388,6 +389,7 @@ export default function InteractiveFloorPlan({ formData, onExport }) {
             <span className="text-zinc-400">{el.label}</span>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );
