@@ -241,21 +241,6 @@ ${TENT_HARD_RULE}`;
 
   return (
     <div className="min-h-screen bg-zinc-950">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center py-8 px-6"
-      >
-        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center mx-auto mb-4">
-          <Theater className="w-6 h-6 text-amber-400" />
-        </div>
-        <h1 className="text-3xl font-bold text-white mb-2">AI Stage Design Assistant</h1>
-        <p className="text-zinc-400">
-          Design multi-tier stages with optimized deck platforms, railings, and roof structures
-        </p>
-      </motion.div>
-
       {/* Split Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-[calc(100vh-200px)]">
         {/* Left Side - Form (1/3) */}
