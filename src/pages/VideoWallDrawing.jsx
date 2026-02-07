@@ -358,7 +358,7 @@ Style:
                       <SelectValue placeholder="Select height" />
                     </SelectTrigger>
                     <SelectContent className="bg-zinc-900 border-zinc-700">
-                      {[0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1, 2.4, 2.7, 3].map((h) => (
+                      {[0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8].map((h) => (
                         <SelectItem key={h} value={h.toString()} className="text-white">
                           {h}m ({(h * 3.28084).toFixed(1)}ft)
                         </SelectItem>
