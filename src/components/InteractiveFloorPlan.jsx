@@ -2,15 +2,7 @@ import { useState, useRef } from "react";
 import { GripVertical, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function InteractiveFloorPlan({ formData, onExport }) {
-  const [elements, setElements] = useState(() => initializeElements(formData));
-  const [selectedId, setSelectedId] = useState(null);
-  const [dragState, setDragState] = useState(null);
-  const containerRef = useRef(null);
-
-  const SCALE = 4; // pixels per foot
-
-  function initializeElements(data) {
+function initializeElements(data) {
     const roomWidth = parseFloat(data.room_width || 100);
     const roomLength = parseFloat(data.room_length || 100);
     const elements = [];
@@ -182,7 +174,15 @@ export default function InteractiveFloorPlan({ formData, onExport }) {
     }
 
     return elements;
-  }
+}
+
+export default function InteractiveFloorPlan({ formData, onExport }) {
+  const [elements, setElements] = useState(() => initializeElements(formData));
+  const [selectedId, setSelectedId] = useState(null);
+  const [dragState, setDragState] = useState(null);
+  const containerRef = useRef(null);
+
+  const SCALE = 4; // pixels per foot
 
   const handleMouseDown = (e, element) => {
     e.stopPropagation();
