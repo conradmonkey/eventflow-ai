@@ -63,6 +63,12 @@ const services = [
     description: "Create elegant room layouts with professional 2D floor plans and stunning 3D renders.",
     href: "RoomDesigner",
   },
+  {
+    icon: Grid3x3,
+    title: "Outdoor Layout Planner",
+    description: "Perfect for planning outdoor festivals—design 2D and 3D layouts with tents, stages, video walls, and more.",
+    href: "OutdoorLayoutPlanner",
+  },
 ];
 
 export default function Home() {
