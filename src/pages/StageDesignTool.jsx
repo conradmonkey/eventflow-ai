@@ -13,7 +13,9 @@ export default function StageDesignTool() {
   ]);
   const [railings, setRailings] = useState({
     back: false,
-    right: false
+    left_back: false,
+    right_back: false,
+    right_front: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
   const [renderType, setRenderType] = useState("technical");
@@ -167,12 +169,14 @@ STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColo
 
 
 
-      if (railings.back || railings.right) {
+      if (railings.back || railings.left_back || railings.right_back || railings.right_front) {
         prompt += `
 RAILINGS:
 `;
         if (railings.back) prompt += `- Back edge (rear of stage)\n`;
-        if (railings.right) prompt += `- Right side\n`;
+        if (railings.left_back) prompt += `- Left back corner\n`;
+        if (railings.right_back) prompt += `- Right back corner\n`;
+        if (railings.right_front) prompt += `- Right front area\n`;
         prompt += `- The LEFT SIDE (front of stage) MUST remain completely open with NO railings\n`;
       } else {
         prompt += `
@@ -403,19 +407,43 @@ ARTISTIC RENDER STYLE:
                   className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="back-railing" className="text-zinc-300 cursor-pointer">
-                  Back Railing (rear of stage)
+                  Back
                 </Label>
               </div>
               <div className="flex items-center space-x-3">
                 <input
                   type="checkbox"
-                  id="right-railing"
-                  checked={railings.right}
-                  onChange={(e) => setRailings({ ...railings, right: e.target.checked })}
+                  id="left-back-railing"
+                  checked={railings.left_back}
+                  onChange={(e) => setRailings({ ...railings, left_back: e.target.checked })}
                   className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
-                <Label htmlFor="right-railing" className="text-zinc-300 cursor-pointer">
-                  Right Side Railing
+                <Label htmlFor="left-back-railing" className="text-zinc-300 cursor-pointer">
+                  Left Back
+                </Label>
+              </div>
+              <div className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  id="right-back-railing"
+                  checked={railings.right_back}
+                  onChange={(e) => setRailings({ ...railings, right_back: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
+                />
+                <Label htmlFor="right-back-railing" className="text-zinc-300 cursor-pointer">
+                  Right Back
+                </Label>
+              </div>
+              <div className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  id="right-front-railing"
+                  checked={railings.right_front}
+                  onChange={(e) => setRailings({ ...railings, right_front: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
+                />
+                <Label htmlFor="right-front-railing" className="text-zinc-300 cursor-pointer">
+                  Right Front
                 </Label>
               </div>
             </div>
