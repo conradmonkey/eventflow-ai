@@ -16,7 +16,7 @@ export default function StageDesignTool() {
     right: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
-  const [renderType, setRenderType] = useState("3d");
+  const [renderType, setRenderType] = useState("technical");
   const [stageColor, setStageColor] = useState("black");
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -129,7 +129,14 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      let prompt = renderType === "artistic"
+      let prompt = renderType === "technical"
+        ? `Technical blueprint drawing of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
+
+CRITICAL INSTRUCTION - TIER COUNT: This stage has EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''}. DO NOT add any extra tiers, steps, or levels. DO NOT create additional platforms beyond the ${validTiers.length} specified below. Show ONLY the tiers listed.
+
+STAGE LAYOUT:
+`
+        : renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
 CRITICAL INSTRUCTION - TIER COUNT: This stage has EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''}. DO NOT add any extra tiers, steps, or levels. DO NOT create additional platforms beyond the ${validTiers.length} specified below. Show ONLY the tiers listed.
@@ -192,7 +199,21 @@ ROOF: White frame tent covering base tier
         }
       }
 
-      prompt += renderType === "artistic"
+      prompt += renderType === "technical"
+        ? `
+
+TECHNICAL DRAWING STYLE:
+- Top-down and front/side view technical blueprint
+- Clean lines with exact dimensions labeled
+- Grid background or blueprint paper style
+- Simple shapes (rectangles) to represent tiers
+- No perspective, schematic only
+- Show tier footprints and heights clearly
+- Minimal shading, focus on accuracy and clarity
+- Include dimension lines and measurements
+- NO DECORATIVE ELEMENTS - strict technical diagram only
+- NO STAIRS OR STAIRCASES - do not include any stairs`
+        : renderType === "artistic"
         ? `
 
 ARTISTIC RENDER STYLE:
@@ -345,6 +366,7 @@ ARTISTIC RENDER STYLE:
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectItem value="technical" className="text-white">Technical Drawing</SelectItem>
                 <SelectItem value="3d" className="text-white">Simple 3D Render</SelectItem>
                 <SelectItem value="artistic" className="text-white">Artistic Render</SelectItem>
               </SelectContent>
