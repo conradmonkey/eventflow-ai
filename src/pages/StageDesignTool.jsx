@@ -99,20 +99,10 @@ export default function StageDesignTool() {
   };
 
   const selectMarqueeTent = (stageLength, stageWidth) => {
-    const sizes = [
-      { name: "30'x30'", length: 30, width: 30 },
-      { name: "20'x20'", length: 20, width: 20 },
-      { name: "10'x30'", length: 30, width: 10 },
-      { name: "10'x20'", length: 20, width: 10 },
-      { name: "10'x10'", length: 10, width: 10 }
-    ];
-
-    for (const size of sizes) {
-      if (size.length <= stageLength && size.width <= stageWidth) {
-        return size;
-      }
-    }
-    return null;
+    // Scale tent to match stage dimensions (slightly smaller for visual margin)
+    const tentLength = Math.max(10, Math.round(stageLength * 0.95 / 5) * 5);
+    const tentWidth = Math.max(10, Math.round(stageWidth * 0.95 / 5) * 5);
+    return { name: `${tentLength}'x${tentWidth}'`, length: tentLength, width: tentWidth };
   };
 
   const handleGenerateSketch = async () => {
