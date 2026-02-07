@@ -116,7 +116,7 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      const TENT_HARD_RULE = "**⚠️ MANDATORY TENT CONSTRAINT ⚠️: ANY tent in this image MUST have exactly 4 legs and NOTHING more. Each leg is at a corner. Count the legs: 1 leg front-left, 1 leg front-right, 1 leg back-left, 1 leg back-right = 4 TOTAL. ZERO legs anywhere else. NOT 6. NOT 8. NOT MORE. EXACTLY 4. This is non-negotiable.**";
+      const TENT_HARD_RULE = "**CRITICAL TENT RULE: Any marquee or tent MUST have 4 legs ONLY - one at each corner. ABSOLUTELY NO middle leg. ABSOLUTELY NO center leg. ABSOLUTELY NO interior supports. Only 4 corner legs. Period.**";
       
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
