@@ -118,7 +118,7 @@ export default function OutdoorLayoutPlanner() {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-slate-900 mb-8">Outdoor Layout Planner</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
           {/* Controls Panel */}
           <div className="lg:col-span-1 space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
             {/* Image Upload */}
