@@ -239,7 +239,7 @@ export default function OutdoorLayoutPlanner() {
           </div>
 
           {/* Canvas Area */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <Canvas2DRenderer
               backgroundImage={backgroundImage}
               items={items}
