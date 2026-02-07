@@ -11,9 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box, User } from "lucide-react";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function VideoWallDrawing() {
@@ -295,25 +293,6 @@ Style:
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="flex justify-end mb-4">
-            {user ? (
-              <Link to={createPageUrl('Dashboard')}>
-                <Button variant="outline" className="bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800">
-                  <User className="w-4 h-4 mr-2" />
-                  My Dashboard
-                </Button>
-              </Link>
-            ) : (
-              <Button 
-                onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
-                variant="outline" 
-                className="bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800"
-              >
-                <User className="w-4 h-4 mr-2" />
-                Login to Save
-              </Button>
-            )}
-          </div>
           <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-6">
             <MonitorPlay className="w-8 h-8 text-cyan-400" />
           </div>

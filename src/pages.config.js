@@ -59,6 +59,7 @@ import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
 import Dashboard from './pages/Dashboard';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -79,4 +80,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };
