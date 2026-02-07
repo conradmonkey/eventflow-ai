@@ -189,7 +189,7 @@ ROOF: Truss frame roof structure - **CRITICAL: NO center legs or middle supports
       }
 
       prompt += `
-ORIENTATION: The left-front of the render is the FRONT of the stage (audience-facing side). The entire back of the render (left-back and right-back) is the BACK of the stage.
+ORIENTATION: The left-front of the render is the FRONT of the stage (audience-facing side). The right-back of the render is the BACK of the stage.
 `;
 
       prompt += renderType === "artistic"
