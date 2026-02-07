@@ -135,6 +135,13 @@ IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' :
 
 STAGE LAYOUT:
 `
+        : renderType === "artistic"
+        ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
+
+IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
+
+STAGE LAYOUT:
+`
         : `Simple, clean schematic diagram of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
 IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
@@ -196,6 +203,18 @@ ROOF: Frame tent covering base tier
 - Show railings as simple structures
 - Easy to understand perspective
 - Not photorealistic, just clean simple 3D visualization`
+        : renderType === "artistic"
+        ? `
+
+ARTISTIC RENDER STYLE:
+- Beautiful, artistic visualization of the stage
+- Photorealistic rendering with proper lighting
+- Dramatic angle showcasing the stage design
+- High-quality textures for wood decking
+- Professional event lighting atmosphere
+- Show all structural elements beautifully
+- Inspiring and visually appealing
+- Production-quality render`
         : `
 
 DIAGRAM STYLE:
@@ -338,6 +357,7 @@ DIAGRAM STYLE:
               <SelectContent className="bg-zinc-900 border-zinc-700">
                 <SelectItem value="schematic" className="text-white">Schematic Diagram</SelectItem>
                 <SelectItem value="3d" className="text-white">Simple 3D Render</SelectItem>
+                <SelectItem value="artistic" className="text-white">Artistic Render</SelectItem>
               </SelectContent>
             </Select>
           </div>
