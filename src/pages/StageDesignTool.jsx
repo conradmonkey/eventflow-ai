@@ -142,6 +142,10 @@ ${index === 0 ? '(Base tier)' : `(Stacked on back of Tier ${index})`}
       });
 
       prompt += `
+${TENT_HARD_RULE}
+`;
+
+      prompt += `
 **DO NOT INCLUDE**: Stairs, steps, ramps, additional platforms, intermediate levels, back walls, center legs, middle legs, interior poles, or any decorative elements. Show only the ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} specified above, stacked directly on top of each other.
 `;
 
