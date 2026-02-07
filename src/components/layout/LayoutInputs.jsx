@@ -48,50 +48,46 @@ export default function LayoutInputs({ onAddItems }) {
     const newItems = [];
 
     ['tent_10x10', 'tent_10x20', 'tent_15x15', 'tent_20x20', 'tent_20x30'].forEach(tent => {
-      if (inputs[tent] > 0) {
+      for (let i = 0; i < inputs[tent]; i++) {
         newItems.push({
           type: tent,
-          quantity: inputs[tent],
-          x: Math.random() * 200,
-          y: Math.random() * 200,
+          x: Math.random() * 300,
+          y: Math.random() * 300,
           rotation: 0
         });
       }
     });
 
-    if (inputs.video_wall.count > 0) {
+    for (let i = 0; i < inputs.video_wall.count; i++) {
       newItems.push({
         type: 'video_wall',
-        quantity: inputs.video_wall.count,
         width: inputs.video_wall.width,
         height: inputs.video_wall.height,
-        x: Math.random() * 200,
-        y: Math.random() * 200,
+        x: Math.random() * 300,
+        y: Math.random() * 300,
         rotation: 0
       });
     }
 
     ['toilet', 'handwash', 'sink'].forEach(item => {
-      if (inputs[item] > 0) {
+      for (let i = 0; i < inputs[item]; i++) {
         newItems.push({
           type: item,
-          quantity: inputs[item],
-          x: Math.random() * 200,
-          y: Math.random() * 200,
+          x: Math.random() * 300,
+          y: Math.random() * 300,
           rotation: 0
         });
       }
     });
 
-    if (inputs.stage.count > 0) {
+    for (let i = 0; i < inputs.stage.count; i++) {
       newItems.push({
         type: 'stage',
-        quantity: inputs.stage.count,
         width: inputs.stage.width,
         length: inputs.stage.length,
-        isSlage: inputs.stage.isSl100,
-        x: Math.random() * 200,
-        y: Math.random() * 200,
+        isSl100: inputs.stage.isSl100,
+        x: Math.random() * 300,
+        y: Math.random() * 300,
         rotation: 0
       });
     }
