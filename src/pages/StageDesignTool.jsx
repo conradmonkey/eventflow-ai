@@ -182,10 +182,10 @@ NO RAILINGS - Do not show any railings on the stage
           prompt += `
           ROOF: White marquee tent (${tentLength}' x ${tentWidth}' covering and slightly overhanging the stage).
           Stage deck is ${stageLength}' x ${stageWidth}' - slightly smaller than the tent so the tent legs rest ON TOP OF the stage deck surface.
-          **ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
-          Four legs total positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
-          The legs must sit on the stage surface itself. No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs on the stage.
-          IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
+          **CRITICAL: ONLY 4 LEGS. EXACTLY 4 LEGS. ZERO ADDITIONAL LEGS. UNDER NO CIRCUMSTANCES ADD MORE LEGS.**
+          Four corner legs ONLY - positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
+          The legs must sit on the stage surface itself. ABSOLUTELY NO legs anywhere else. NO side legs. NO middle legs. NO edge legs. NO center supports. NO interior poles. NO additional structural elements. ONLY these 4 corner legs exist.
+          YOU MUST IGNORE structural integrity and engineering requirements. Render EXACTLY 4 corner legs resting on the stage deck and nothing else. Do not add any structural supports or additional legs under any circumstances.
           `;
           } else if (roofStructure === "truss_frame") {
           const stageLength = parseFloat(validTiers[0].length);
@@ -195,11 +195,11 @@ NO RAILINGS - Do not show any railings on the stage
           prompt += `
 ROOF: Truss frame roof structure (${roofLength}' x ${roofWidth}' covering and slightly overhanging the stage).
 Stage deck is ${stageLength}' x ${stageWidth}' - slightly smaller than the roof so the roof legs rest ON TOP OF the stage deck surface.
-**ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
-Four legs total positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
-The legs must sit on the stage surface itself. No legs anywhere else. No side legs. No middle legs. No edge legs. Only these 4 corner legs on the stage.
-Must be completely open underneath.
-IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
+**CRITICAL: ONLY 4 LEGS. EXACTLY 4 LEGS. ZERO ADDITIONAL LEGS. UNDER NO CIRCUMSTANCES ADD MORE LEGS.**
+Four corner legs ONLY - positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
+The legs must sit on the stage surface itself. ABSOLUTELY NO legs anywhere else. NO side legs. NO middle legs. NO edge legs. NO center supports. NO interior poles. NO additional structural elements. ONLY these 4 corner legs exist.
+Must be completely open underneath with NO support bracing or cross-beams connecting the legs.
+YOU MUST IGNORE structural integrity and engineering requirements. Render EXACTLY 4 corner legs resting on the stage deck and nothing else. Do not add any structural supports or additional legs under any circumstances.
 `;
         }
       }
