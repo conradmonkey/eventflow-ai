@@ -111,7 +111,7 @@ Video Wall Specifications:
 - Box dimensions: ${boxWidth.toFixed(2)}m long x 0.3m wide x ${heightOffGround <= 0.3 ? '0.3' : '0.6'}m tall
 - Video wall rests on top of box
 `;
-      } else if (formData.mounting_type === "stage") {
+      } else {
         setupDescription += `Mounting: Stage platform
       - Stage: 1.2m (4ft) wide, minimum ${width}m long
       - Built with 4x8ft and 4x4ft stage deck platforms
@@ -119,20 +119,6 @@ Video Wall Specifications:
       - Stage height: ${heightOffGround}m
       - Video wall rests directly on stage
       `;
-      } else if (formData.mounting_type === "truss") {
-        const trussWidth = width + 0.6;
-        const trussBotHeight = heightOffGround + height; // panels hang from truss, so truss bottom is at top of panels
-        const trussTopHeight = trussBotHeight + 1.2; // ~4ft truss depth
-        setupDescription += `Mounting: Suspended from truss
-- 12-inch box truss frame
-- Truss frame width: ${trussWidth.toFixed(2)}m wide
-- Truss bottom: ${trussBotHeight.toFixed(2)}m off ground (where panels attach)
-- Truss top: ${trussTopHeight.toFixed(2)}m off ground
-- Video wall panels (${width}m × ${height}m) attach directly to bottom of truss via clamps
-- Bottom of video wall panels: ${heightOffGround}m (${heightOffGroundFt.toFixed(1)}ft) off ground
-- Vertical truss sides are within 1ft (0.3m) from each side of the video wall
-- Four truss legs with outriggers for structural support
-`;
       }
 
       setupDescription += `
@@ -142,7 +128,7 @@ Video Wall Specifications:
       - The LED panels (video wall) as a large flat rectangle with NO legs
       - If on stage: bottom of video wall rests on top of stage platform
       - If on ground: bottom of video wall rests directly on ground
-      - All structural support (box/stage/truss) visible with clear proportions
+      - All structural support (box/stage) visible with clear proportions
       - Key measurements labeled, including a clear measurement line showing the distance from ground to the BOTTOM of the video wall (${heightOffGround}m / ${heightOffGroundFt.toFixed(1)}ft)
       - Ground level reference line
       - A vertical measurement line from ground up to the bottom of the video wall showing the ${heightOffGround}m (${heightOffGroundFt.toFixed(1)}ft) clearance
