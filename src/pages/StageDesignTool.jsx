@@ -114,7 +114,6 @@ export default function StageDesignTool() {
 
   const handleGenerateSketch = async () => {
     setIsGenerating(true);
-    setSketchUrl(null);
 
     try {
       const validTiers = validateTiers();
@@ -124,6 +123,8 @@ export default function StageDesignTool() {
         setIsGenerating(false);
         return;
       }
+      
+      setSketchUrl(null);
 
       // Build detailed prompt
       let prompt = `Technical architectural sketch of a multi-tier stage design, side view and top-down view.
