@@ -140,7 +140,7 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
       });
 
       prompt += `
-**FINAL ABSOLUTE REQUIREMENT**: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. ABSOLUTELY NO STAIRS, NO STEPS, NO RAMPS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS, NO TRANSITIONAL ELEMENTS, NO BACK WALLS, NO CENTER SUPPORT LEGS, NO DECORATIVE ADDITIONS. Render EXACTLY what is listed above - nothing more, nothing less. Tiers stack directly on top of each other with no transitions or intermediates.
+**FINAL ABSOLUTE REQUIREMENT**: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. ABSOLUTELY NO STAIRS, NO STEPS, NO RAMPS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS, NO TRANSITIONAL ELEMENTS, NO BACK WALLS, NO CENTER SUPPORT LEGS, NO MIDDLE LEGS, NO INTERIOR POLES, NO DECORATIVE ADDITIONS. If there is a tent, it must be completely open underneath with ZERO supports inside. Render EXACTLY what is listed above - nothing more, nothing less. Tiers stack directly on top of each other with no transitions or intermediates.
 `;
 
       prompt += `
