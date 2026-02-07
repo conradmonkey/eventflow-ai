@@ -159,6 +159,10 @@ RAILINGS:
         if (railings.back) prompt += `- Back edge\n`;
         if (railings.left) prompt += `- Left side\n`;
         if (railings.right) prompt += `- Right side\n`;
+      } else {
+        prompt += `
+NO RAILINGS - Do not show any railings on the stage
+`;
       }
 
       if (roofStructure !== "none") {
