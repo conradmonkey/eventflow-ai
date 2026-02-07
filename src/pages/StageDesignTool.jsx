@@ -151,6 +151,10 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
       });
 
       prompt += `
+ABSOLUTE REQUIREMENT: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. NO STAIRS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS. Render ONLY what is listed above, nothing more.
+`;
+
+      prompt += `
 STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColor.charAt(0).toUpperCase() + stageColor.slice(1)} stage deck
 `;
 
