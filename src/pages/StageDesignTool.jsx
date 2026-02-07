@@ -342,49 +342,7 @@ ARTISTIC RENDER STYLE:
             </Select>
           </div>
 
-          {/* Railings */}
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
-            <p className="text-xs text-zinc-500 mb-3">Front of stage (left side) always remains open</p>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="left-back-railing"
-                  checked={railings.left_back}
-                  onChange={(e) => setRailings({ ...railings, left_back: e.target.checked })}
-                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
-                />
-                <Label htmlFor="left-back-railing" className="text-zinc-300 cursor-pointer">
-                  Left Back
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="right-back-railing"
-                  checked={railings.right_back}
-                  onChange={(e) => setRailings({ ...railings, right_back: e.target.checked })}
-                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
-                />
-                <Label htmlFor="right-back-railing" className="text-zinc-300 cursor-pointer">
-                  Right Back
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="right-front-railing"
-                  checked={railings.right_front}
-                  onChange={(e) => setRailings({ ...railings, right_front: e.target.checked })}
-                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
-                />
-                <Label htmlFor="right-front-railing" className="text-zinc-300 cursor-pointer">
-                  Right Front
-                </Label>
-              </div>
-            </div>
-          </div>
+
 
           <Button
             onClick={handleGenerateSketch}
