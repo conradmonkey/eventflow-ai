@@ -148,9 +148,18 @@ ABSOLUTE REQUIREMENT: There are ONLY ${validTiers.length} tier${validTiers.lengt
 STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColor.charAt(0).toUpperCase() + stageColor.slice(1)} stage deck
 `;
 
-      prompt += `
+      if (railings.back || railings.sides) {
+        prompt += `
+RAILINGS:
+`;
+        if (railings.back) prompt += `- Railing along the back\n`;
+        if (railings.sides) prompt += `- Railings along the sides\n`;
+        prompt += `- Front side (audience facing) has NO railing\n`;
+      } else {
+        prompt += `
 NO RAILINGS - Do not show any railings on the stage
 `;
+      }
 
       if (roofStructure !== "none") {
         if (roofStructure === "marquee") {
