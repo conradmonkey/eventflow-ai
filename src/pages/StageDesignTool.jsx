@@ -97,22 +97,7 @@ export default function StageDesignTool() {
     return validTiers;
   };
 
-  const selectMarqueeTent = (stageLength, stageWidth) => {
-    const sizes = [
-      { name: "30'x30'", length: 30, width: 30 },
-      { name: "20'x20'", length: 20, width: 20 },
-      { name: "10'x30'", length: 30, width: 10 },
-      { name: "10'x20'", length: 20, width: 10 },
-      { name: "10'x10'", length: 10, width: 10 }
-    ];
 
-    for (const size of sizes) {
-      if (size.length <= stageLength && size.width <= stageWidth) {
-        return size;
-      }
-    }
-    return null;
-  };
 
   const handleGenerateSketch = async () => {
     setIsGenerating(true);
@@ -171,19 +156,16 @@ NO RAILINGS - Do not show any railings on the stage
 
       if (roofStructure !== "none") {
         if (roofStructure === "marquee") {
-          const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
-          if (tent) {
-            prompt += `
-ROOF: White marquee tent (${tent.name}) on base tier
+          prompt += `
+ROOF: White marquee tent sized to cover the ${validTiers[0].length}' x ${validTiers[0].width}' base tier
 `;
-          }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure
+ROOF: Truss frame roof structure covering the ${validTiers[0].length}' x ${validTiers[0].width}' base tier
 `;
         } else if (roofStructure === "frame_tent") {
           prompt += `
-ROOF: White frame tent covering base tier
+ROOF: White frame tent sized to cover the ${validTiers[0].length}' x ${validTiers[0].width}' base tier
 `;
         }
       }
@@ -434,19 +416,8 @@ ARTISTIC RENDER STYLE:
 
                 {roofStructure === "marquee" && validTiers.length > 0 && (
                   <div className="bg-zinc-800/50 rounded-lg p-3 text-xs text-zinc-300">
-                    <p className="font-semibold text-white mb-1">Marquee Sizing:</p>
-                    <p>Sizes: 10'x10', 10'x20', 10'x30', 20'x20', 30'x30'</p>
-                    <p className="mt-1">
-                      {(() => {
-                        const tent = selectMarqueeTent(
-                          parseFloat(validTiers[0].length), 
-                          parseFloat(validTiers[0].width)
-                        );
-                        return tent 
-                          ? `✓ ${tent.name}`
-                          : '⚠️ No fit';
-                      })()}
-                    </p>
+                    <p className="font-semibold text-white mb-1">Tent Coverage:</p>
+                    <p>✓ Tent will scale to cover {validTiers[0].length}' x {validTiers[0].width}' base tier</p>
                   </div>
                 )}
 
