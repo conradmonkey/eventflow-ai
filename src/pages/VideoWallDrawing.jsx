@@ -240,7 +240,6 @@ Style:
       wall_height: "",
       wall_width: "",
       height_off_ground: "",
-      mounting_type: "",
     });
     setDrawingUrl(null);
     setGearList(null);
