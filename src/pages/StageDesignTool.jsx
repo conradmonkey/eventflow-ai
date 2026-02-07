@@ -13,7 +13,6 @@ export default function StageDesignTool() {
   ]);
   const [railings, setRailings] = useState({
     back: false,
-    left: false,
     right: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
@@ -157,14 +156,13 @@ STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColo
 
 
 
-      if (railings.back || railings.left || railings.right) {
+      if (railings.back || railings.right) {
         prompt += `
-RAILINGS (Maximum 3 sides only):
+RAILINGS:
 `;
-        if (railings.back) prompt += `- Back edge\n`;
-        if (railings.left) prompt += `- Left side\n`;
+        if (railings.back) prompt += `- Back edge (rear of stage)\n`;
         if (railings.right) prompt += `- Right side\n`;
-        prompt += `- The front edge MUST remain open with NO railings\n`;
+        prompt += `- The LEFT SIDE (front of stage) MUST remain completely open with NO railings\n`;
       } else {
         prompt += `
 NO RAILINGS - Do not show any railings on the stage
@@ -368,6 +366,7 @@ ARTISTIC RENDER STYLE:
           {/* Railings */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
+            <p className="text-xs text-zinc-500 mb-3">Front of stage (left side) always remains open</p>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <input
@@ -378,19 +377,7 @@ ARTISTIC RENDER STYLE:
                   className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="back-railing" className="text-zinc-300 cursor-pointer">
-                  Back Railing (full length across back)
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="left-railing"
-                  checked={railings.left}
-                  onChange={(e) => setRailings({ ...railings, left: e.target.checked })}
-                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
-                />
-                <Label htmlFor="left-railing" className="text-zinc-300 cursor-pointer">
-                  Left Side Railing
+                  Back Railing (rear of stage)
                 </Label>
               </div>
               <div className="flex items-center space-x-3">
@@ -402,7 +389,7 @@ ARTISTIC RENDER STYLE:
                   className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="right-railing" className="text-zinc-300 cursor-pointer">
-                  Right Side Railing (full length)
+                  Right Side Railing
                 </Label>
               </div>
             </div>
