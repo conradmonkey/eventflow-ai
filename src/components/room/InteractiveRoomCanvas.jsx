@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { useDrag } from "@hello-pangea/dnd";
 
 export default function InteractiveRoomCanvas({ formData }) {
   const canvasRef = useRef(null);
