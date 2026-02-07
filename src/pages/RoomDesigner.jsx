@@ -438,13 +438,14 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
           </form>
         </motion.div>
 
-        {/* Gear List */}
-        {gearList && (
+        {/* Gear List - Move to Left Column */}
+        {gearList && showLayout && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
           >
+            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Equipment List & Costs</h2>
             <div className="space-y-4">
               {gearList.costs.tables_8ft.count > 0 && (
@@ -511,35 +512,44 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 *Prices do not include labour or pickup and delivery
               </p>
             </div>
+            <div></div>
           </motion.div>
         )}
 
-        {/* Interactive 2D Layout */}
+        {/* Two Column Layout */}
         {showLayout && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8"
           >
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              <Layout className="w-6 h-6 text-amber-400" />
-              Interactive Floor Plan
-            </h2>
-            
-            <InteractiveFloorPlan formData={formData} />
-            
-            <Button
-              onClick={handleGenerate3D}
-              disabled={isLoading3D}
-              className="w-full mt-6 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
-            >
-              {isLoading3D ? (
-                <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              ) : (
-                <Box className="w-5 h-5 mr-2" />
-              )}
-              Generate 3D Render
-            </Button>
+            {/* Left Side - Generate Button */}
+            <div className="space-y-8">
+              <motion.div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
+                <Button
+                  onClick={handleGenerate3D}
+                  disabled={isLoading3D}
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
+                >
+                  {isLoading3D ? (
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  ) : (
+                    <Box className="w-5 h-5 mr-2" />
+                  )}
+                  Generate 3D Render
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Right Side - Interactive Floor Plan */}
+            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <Layout className="w-6 h-6 text-amber-400" />
+                Interactive Floor Plan
+              </h2>
+              
+              <InteractiveFloorPlan formData={formData} />
+            </div>
           </motion.div>
         )}
 
