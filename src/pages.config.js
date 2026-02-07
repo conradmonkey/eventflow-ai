@@ -55,7 +55,6 @@ import PermitInvestigator from './pages/PermitInvestigator';
 import RoomDesigner from './pages/RoomDesigner';
 import SoundDesign from './pages/SoundDesign';
 import StageDesign from './pages/StageDesign';
-import StageDesignTool from './pages/StageDesignTool';
 import TentDesign from './pages/TentDesign';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
@@ -71,7 +70,6 @@ export const PAGES = {
     "RoomDesigner": RoomDesigner,
     "SoundDesign": SoundDesign,
     "StageDesign": StageDesign,
-    "StageDesignTool": StageDesignTool,
     "TentDesign": TentDesign,
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
