@@ -100,6 +100,7 @@ export default function StageDesignTool() {
   const selectMarqueeTent = (stageLength, stageWidth) => {
     const sizes = [
       { name: "30'x30'", length: 30, width: 30 },
+      { name: "20'x20'", length: 20, width: 20 },
       { name: "10'x30'", length: 30, width: 10 },
       { name: "10'x20'", length: 20, width: 10 },
       { name: "10'x10'", length: 10, width: 10 }
@@ -438,7 +439,7 @@ DIAGRAM STYLE:
                 {roofStructure === "marquee" && validTiers.length > 0 && (
                   <div className="bg-zinc-800/50 rounded-lg p-3 text-xs text-zinc-300">
                     <p className="font-semibold text-white mb-1">Marquee Sizing:</p>
-                    <p>Sizes: 10'x10', 10'x20', 10'x30', 30'x30'</p>
+                    <p>Sizes: 10'x10', 10'x20', 10'x30', 20'x20', 30'x30'</p>
                     <p className="mt-1">
                       {(() => {
                         const tent = selectMarqueeTent(
