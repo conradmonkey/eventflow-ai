@@ -26,31 +26,6 @@ export default function Canvas2DRenderer({
   const [draggingItem, setDraggingItem] = useState(null);
   const [dragStart, setDragStart] = useState(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || !containerRef.current) return;
-
-    const container = containerRef.current;
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
-
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#E0E7FF';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Draw background image
-    if (backgroundImage) {
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0);
-        drawItems(ctx, canvas);
-      };
-      img.src = backgroundImage;
-    } else {
-      drawItems(ctx, canvas);
-    }
-  }, [backgroundImage, items, scale, zoom, selectedItem, canvasRef]);
-
   const drawItems = (ctx, canvas) => {
     items.forEach((item, idx) => {
       const size = ITEM_SIZES[item.type];
