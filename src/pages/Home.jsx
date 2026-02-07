@@ -8,7 +8,8 @@ import {
   Map,
   Building2,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Grid3x3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
