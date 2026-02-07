@@ -178,13 +178,19 @@ NO RAILINGS - Do not show any railings on the stage
           const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
           if (tent) {
             prompt += `
-ROOF: White marquee tent covering the ENTIRE stage - dimensions ${tent.name}, must be the maximum size that fits on the stage deck.
-Tent structure: **ABSOLUTELY CRITICAL - EXACTLY 4 LEGS ONLY.** One leg at front-left corner. One leg at front-right corner. One leg at back-left corner. One leg at back-right corner. DO NOT render any legs on the sides. DO NOT render any legs in the middle. DO NOT render any legs along the edges except at corners. ONLY 4 legs total, one per corner. Nothing else.
+ROOF: White marquee tent covering the entire stage.
+**ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
+Four legs total: front-left corner, front-right corner, back-left corner, back-right corner.
+No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs.
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure - **ABSOLUTELY CRITICAL - EXACTLY 4 LEGS ONLY.** One leg at front-left corner. One leg at front-right corner. One leg at back-left corner. One leg at back-right corner. DO NOT render any legs on the sides. DO NOT render any legs in the middle. DO NOT render any legs along edges except at corners. ONLY 4 legs total. Must be completely open underneath.
+ROOF: Truss frame roof structure.
+**ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
+Four legs total: front-left corner, front-right corner, back-left corner, back-right corner.
+No legs anywhere else. No side legs. No middle legs. No edge legs. Only these 4 corner legs.
+Must be completely open underneath.
 `;
         }
       }
