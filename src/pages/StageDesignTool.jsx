@@ -182,6 +182,7 @@ ROOF: White marquee tent covering the entire stage.
 **ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
 Four legs total: front-left corner, front-right corner, back-left corner, back-right corner.
 No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs.
+IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
 `;
           }
         } else if (roofStructure === "truss_frame") {
@@ -191,6 +192,7 @@ ROOF: Truss frame roof structure.
 Four legs total: front-left corner, front-right corner, back-left corner, back-right corner.
 No legs anywhere else. No side legs. No middle legs. No edge legs. Only these 4 corner legs.
 Must be completely open underneath.
+IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
 `;
         }
       }
