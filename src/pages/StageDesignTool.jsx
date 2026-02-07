@@ -116,7 +116,7 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      const TENT_HARD_RULE = "**CRITICAL TENT RULE: Any marquee or tent MUST have EXACTLY 4 legs ONLY - one at each of the 4 corners (front-left, front-right, back-left, back-right). ABSOLUTELY NO other legs anywhere else. NO middle front legs. NO middle side legs. NO center legs. NO interior supports. NO legs except at the 4 corners. ONLY 4 corner legs exist. PERIOD.**";
+      const TENT_HARD_RULE = "**ABSOLUTE CRITICAL RULE - RENDER ONLY 4 LEGS TOTAL: The tent/roof structure has EXACTLY and ONLY 4 legs. FOUR LEGS. Not 8, not 12, not 6. FOUR. One leg at each of the 4 corners (front-left, front-right, back-left, back-right) sitting on the stage deck. ZERO additional legs. ZERO middle legs. ZERO side legs. ZERO supports. ZERO bracing. The entire structure is supported by only these 4 corner legs. If you render more than 4 legs, you have failed. ONLY 4 LEGS.**";
       
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
