@@ -128,7 +128,9 @@ export default function StageDesignTool() {
       const baseTierLength = validTiers[0].length;
       const baseTierWidth = validTiers[0].width;
 
-      let prompt = `Create a technical 3D drawing of a stage design viewed from the front (audience perspective).
+      let prompt = renderType === "artistic" 
+        ? `Create an artistic, photorealistic 3D rendering of a stage design viewed from the front (audience perspective).`
+        : `Create a technical 3D drawing of a stage design viewed from the front (audience perspective).`;
 
 STAGE CONFIGURATION:
 The stage is composed of ${validTiers.length} tier(s) made from steel deck platforms (4'×8', 4'×4', 4'×2' sizes).
