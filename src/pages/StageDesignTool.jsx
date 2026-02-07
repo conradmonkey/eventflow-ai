@@ -178,6 +178,10 @@ ROOF: White frame tent covering base tier - **CRITICAL: ABSOLUTELY ZERO center s
         }
       }
 
+      prompt += `
+ORIENTATION: The left-front of the render is the FRONT of the stage (audience-facing side). The back-right is the back of the stage.
+`;
+
       prompt += renderType === "artistic"
         ? `
 
