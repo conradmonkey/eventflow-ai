@@ -27,8 +27,10 @@ export default function Canvas2DRenderer({
   const [dragStart, setDragStart] = useState(null);
 
   const drawItems = useCallback((ctx, canvas) => {
+    console.log('drawItems called with', items.length, 'items', items);
     items.forEach((item, idx) => {
       const size = ITEM_SIZES[item.type];
+      console.log('Drawing item', idx, item.type, size);
       if (!size) return;
 
       let width = (size.width / scale) * zoom;
