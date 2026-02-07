@@ -58,6 +58,7 @@ import TentDesign from './pages/TentDesign';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
+import Dashboard from './pages/Dashboard';
 
 
 export const PAGES = {
@@ -72,6 +73,7 @@ export const PAGES = {
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
     "VideoWallDrawing": VideoWallDrawing,
+    "Dashboard": Dashboard,
 }
 
 export const pagesConfig = {

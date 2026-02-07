@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box } from "lucide-react";
+import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box, User } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "./utils";
 import { motion } from "framer-motion";
 
 export default function VideoWallDrawing() {
@@ -29,6 +31,12 @@ export default function VideoWallDrawing() {
   const [isGeneratingGear, setIsGeneratingGear] = useState(false);
   const [renderUrl, setRenderUrl] = useState(null);
   const [isGeneratingRender, setIsGeneratingRender] = useState(false);
+  const [currentProject, setCurrentProject] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {});
+  }, []);
 
   const heightOffGroundInFeet = formData.height_off_ground ? parseFloat(formData.height_off_ground) * 3.28084 : 0;
 
@@ -90,6 +98,22 @@ export default function VideoWallDrawing() {
     setGearList(null);
 
     try {
+      // Create or update project
+      if (user) {
+        const projectData = {
+          name: `Video Wall - ${formData.city}, ${formData.province}`,
+          bot_type: "video_wall",
+          specifications: formData,
+          last_modified: new Date().toISOString()
+        };
+        
+        if (currentProject) {
+          await base44.entities.Project.update(currentProject.id, projectData);
+        } else {
+          const newProject = await base44.entities.Project.create(projectData);
+          setCurrentProject(newProject);
+        }
+      }
       const height = parseFloat(formData.wall_height);
       const width = parseFloat(formData.wall_width);
       const heightOffGround = parseFloat(formData.height_off_ground);
@@ -140,6 +164,16 @@ Video Wall Specifications:
       });
 
       setDrawingUrl(response.url);
+      
+      // Save output
+      if (user && currentProject) {
+        await base44.entities.SavedOutput.create({
+          project_id: currentProject.id,
+          output_type: "drawing",
+          file_url: response.url,
+          file_name: `video-wall-drawing-${Date.now()}.png`
+        });
+      }
     } catch (error) {
       console.error("Error generating drawing:", error);
       alert("An error occurred while generating the drawing. Please try again.");
@@ -148,12 +182,22 @@ Video Wall Specifications:
     }
   };
 
-  const handleGenerateGearList = () => {
+  const handleGenerateGearList = async () => {
     setIsGeneratingGear(true);
-    setTimeout(() => {
-      setGearList(calculateGearList());
-      setIsGeneratingGear(false);
-    }, 500);
+    const gear = calculateGearList();
+    setGearList(gear);
+    
+    // Save gear list
+    if (user && currentProject) {
+      await base44.entities.SavedOutput.create({
+        project_id: currentProject.id,
+        output_type: "gear_list",
+        file_name: `gear-list-${Date.now()}.json`,
+        data: gear
+      });
+    }
+    
+    setIsGeneratingGear(false);
   };
 
   const handleGenerate3DRender = async () => {
@@ -210,6 +254,16 @@ Style:
       });
 
       setRenderUrl(response.url);
+      
+      // Save 3D render
+      if (user && currentProject) {
+        await base44.entities.SavedOutput.create({
+          project_id: currentProject.id,
+          output_type: "3d_render",
+          file_url: response.url,
+          file_name: `3d-render-${Date.now()}.png`
+        });
+      }
     } catch (error) {
       console.error("Error generating 3D render:", error);
       alert("An error occurred while generating the 3D render. Please try again.");
@@ -241,6 +295,25 @@ Style:
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
+          <div className="flex justify-end mb-4">
+            {user ? (
+              <Link to={createPageUrl('Dashboard')}>
+                <Button variant="outline" className="bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800">
+                  <User className="w-4 h-4 mr-2" />
+                  My Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
+                variant="outline" 
+                className="bg-zinc-900 border-zinc-700 text-white hover:bg-zinc-800"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Login to Save
+              </Button>
+            )}
+          </div>
           <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-6">
             <MonitorPlay className="w-8 h-8 text-cyan-400" />
           </div>
