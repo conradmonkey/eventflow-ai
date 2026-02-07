@@ -159,6 +159,7 @@ RAILINGS:
         if (railings.back) prompt += `- Back edge\n`;
         if (railings.left) prompt += `- Left side\n`;
         if (railings.right) prompt += `- Right side\n`;
+        prompt += `- NEVER add railings on the front edge of the stage\n`;
       } else {
         prompt += `
 NO RAILINGS - Do not show any railings on the stage
