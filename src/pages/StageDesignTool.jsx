@@ -363,23 +363,11 @@ ARTISTIC RENDER STYLE:
                   type="checkbox"
                   id="back-railing"
                   checked={railings.back}
-                  onChange={(e) => setRailings({ ...railings, back: e.target.checked })}
+                  onChange={(e) => setRailings({ back: e.target.checked })}
                   className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="back-railing" className="text-zinc-300 cursor-pointer">
                   Back Railing
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="sides-railing"
-                  checked={railings.sides}
-                  onChange={(e) => setRailings({ ...railings, sides: e.target.checked })}
-                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
-                />
-                <Label htmlFor="sides-railing" className="text-zinc-300 cursor-pointer">
-                  Side Railings
                 </Label>
               </div>
             </div>
