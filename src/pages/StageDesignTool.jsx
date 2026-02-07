@@ -17,7 +17,7 @@ export default function StageDesignTool() {
     right: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
-  const [renderType] = useState("artistic");
+  const [renderType, setRenderType] = useState("artistic");
   const [stageColor, setStageColor] = useState("black");
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -128,19 +128,34 @@ export default function StageDesignTool() {
       const baseTierLength = validTiers[0].length;
       const baseTierWidth = validTiers[0].width;
 
-      let prompt = renderType === "artistic" 
-        ? `Create an artistic, photorealistic 3D rendering of a stage design viewed from the front (audience perspective).
-
-STAGE CONFIGURATION:
-The stage is composed of ${validTiers.length} tier(s) made from steel deck platforms (4'×8', 4'×4', 4'×2' sizes).
-
-`
-        : `Create a technical 3D drawing of a stage design viewed from the front (audience perspective).
+      let prompt = '';
+      
+      if (renderType === "artistic") {
+        prompt = `Create an artistic, photorealistic 3D rendering of a stage design viewed from the front (audience perspective).
 
 STAGE CONFIGURATION:
 The stage is composed of ${validTiers.length} tier(s) made from steel deck platforms (4'×8', 4'×4', 4'×2' sizes).
 
 `;
+      } else if (renderType === "wireframe") {
+        prompt = `Create a wireframe/structural view of a stage design showing the framework and platform structure as if viewing a skeleton or blueprint render.
+
+STAGE CONFIGURATION:
+The stage is composed of ${validTiers.length} tier(s) made from steel deck platforms (4'×8', 4'×4', 4'×2' sizes).
+
+`;
+      } else if (renderType === "multiple_angles") {
+        prompt = `Create a composite image showing a stage design from THREE different angles in one view:
+- Front view (audience perspective)
+- Top-down view (bird's eye)
+- Side profile view
+Arrange them clearly so all three angles are visible simultaneously.
+
+STAGE CONFIGURATION:
+The stage is composed of ${validTiers.length} tier(s) made from steel deck platforms (4'×8', 4'×4', 4'×2' sizes).
+
+`;
+      }
 
       validTiers.forEach((tier, index) => {
         const platforms = calculateDeckPlatforms(tier.length, tier.width);
@@ -245,6 +260,26 @@ ARTISTIC RENDER STYLE:
 - Atmospheric lighting and shadows
 - Inspiring and visually compelling
 - Show the stage as clients would see it at an event
+` : ""}
+${renderType === "wireframe" ? `
+
+WIREFRAME RENDER STYLE:
+- Show structural framework with lines and edges
+- Transparent or semi-transparent materials
+- Focus on platform structure and support
+- Clear visibility of all platform seams
+- Grid/measurement overlay for scale
+- Clean technical presentation
+` : ""}
+${renderType === "multiple_angles" ? `
+
+MULTI-ANGLE VIEW:
+- Arrange three orthographic views in one image
+- Front view: 35-degree angle showing depth
+- Top view: Direct overhead perspective
+- Side view: Shows tier heights clearly
+- Label each view clearly
+- Use consistent styling across all angles
 ` : ""}`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
@@ -349,6 +384,21 @@ ARTISTIC RENDER STYLE:
               <Plus className="w-5 h-5 mr-2" />
               Add Another Tier
             </Button>
+          </div>
+
+          {/* Render Type */}
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-white mb-4">Render Style</h3>
+            <Select value={renderType} onValueChange={setRenderType}>
+              <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectItem value="artistic" className="text-white">Artistic</SelectItem>
+                <SelectItem value="wireframe" className="text-white">Wireframe</SelectItem>
+                <SelectItem value="multiple_angles" className="text-white">Multiple Angles</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Stage Color */}
