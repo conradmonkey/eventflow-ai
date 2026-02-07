@@ -426,7 +426,13 @@ ${TENT_HARD_RULE}`;
               
               <div className="space-y-3">
                 <Label className="text-zinc-400 text-sm">Select type</Label>
-                <Select value={roofStructure} onValueChange={setRoofStructure}>
+                <Select value={roofStructure} onValueChange={(value) => {
+                  setRoofStructure(value);
+                  if (value === "none") {
+                    setIsGenerating(true);
+                    setTimeout(() => handleGenerateSketch().finally(() => setIsGenerating(false)), 100);
+                  }
+                }}>
                   <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
                     <SelectValue />
                   </SelectTrigger>
