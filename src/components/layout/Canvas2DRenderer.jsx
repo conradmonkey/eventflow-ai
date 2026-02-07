@@ -26,7 +26,7 @@ export default function Canvas2DRenderer({
   const [draggingItem, setDraggingItem] = useState(null);
   const [dragStart, setDragStart] = useState(null);
 
-  const drawItems = (ctx, canvas) => {
+  const drawItems = React.useCallback((ctx, canvas) => {
     items.forEach((item, idx) => {
       const size = ITEM_SIZES[item.type];
       if (!size) return;
@@ -34,7 +34,6 @@ export default function Canvas2DRenderer({
       const pixelWidth = (size.width / scale) * zoom;
       const pixelHeight = (size.height / scale) * zoom;
 
-      // Handle video wall custom dimensions
       let width = pixelWidth;
       let height = pixelHeight;
       if (item.type === 'video_wall' && item.width && item.height) {
@@ -49,16 +48,13 @@ export default function Canvas2DRenderer({
       ctx.translate(item.x * zoom, item.y * zoom);
       ctx.rotate((item.rotation * Math.PI) / 180);
 
-      // Draw rectangle
       ctx.fillStyle = selectedItem === idx ? '#00FF00' : size.color;
       ctx.fillRect(-width / 2, -height / 2, width, height);
 
-      // Draw border
       ctx.strokeStyle = selectedItem === idx ? '#00AA00' : '#000000';
       ctx.lineWidth = 2;
       ctx.strokeRect(-width / 2, -height / 2, width, height);
 
-      // Draw label
       ctx.fillStyle = '#000000';
       ctx.font = 'bold 10px Arial';
       ctx.textAlign = 'center';
@@ -67,7 +63,31 @@ export default function Canvas2DRenderer({
 
       ctx.restore();
     });
-  };
+  }, [items, scale, zoom, selectedItem]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !containerRef.current) return;
+
+    const container = containerRef.current;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#E0E7FF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (backgroundImage) {
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0);
+        drawItems(ctx, canvas);
+      };
+      img.src = backgroundImage;
+    } else {
+      drawItems(ctx, canvas);
+    }
+  }, [backgroundImage, items, scale, zoom, selectedItem, drawItems]);
 
   const getItemAtPoint = (x, y) => {
     for (let i = items.length - 1; i >= 0; i--) {
