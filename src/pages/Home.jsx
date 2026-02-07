@@ -59,7 +59,7 @@ const services = [
   },
   {
     icon: Grid3x3,
-    title: "Outdoor Layout Planner",
+    title: "Outdoor Event Planner",
     description: "Perfect for planning outdoor festivals—design 2D and 3D layouts with tents, stages, video walls, and more.",
     href: "OutdoorLayoutPlanner",
   },
