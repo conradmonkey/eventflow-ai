@@ -156,12 +156,7 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
 `;
       });
 
-      const firstTier = validTiers[0];
-      if (parseFloat(firstTier.height) > 1) {
-        prompt += `
-- Stairs on left side
-`;
-      }
+
 
       if (railings.back || railings.left || railings.right) {
         prompt += `
@@ -385,7 +380,7 @@ DIAGRAM STYLE:
                   className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="left-railing" className="text-zinc-300 cursor-pointer">
-                  Left Side Railing (won't block stairs)
+                  Left Side Railing
                 </Label>
               </div>
               <div className="flex items-center space-x-3">
@@ -519,11 +514,7 @@ DIAGRAM STYLE:
                   })}
                 </div>
 
-                {parseFloat(validTiers[0].height) > 1 && (
-                  <p className="text-zinc-400 text-sm mt-4">
-                    • Stairs required on left side (stage height {'>'} 1 ft)
-                  </p>
-                )}
+
               </div>
             </motion.div>
           ) : (
