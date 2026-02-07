@@ -55,11 +55,11 @@ import PermitInvestigator from './pages/PermitInvestigator';
 import RoomDesigner from './pages/RoomDesigner';
 import SoundDesign from './pages/SoundDesign';
 import StageDesign from './pages/StageDesign';
-import StageDesignTool from './pages/StageDesignTool';
 import TentDesign from './pages/TentDesign';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
+import StageDesignTool from './pages/StageDesignTool';
 
 
 export const PAGES = {
@@ -71,11 +71,11 @@ export const PAGES = {
     "RoomDesigner": RoomDesigner,
     "SoundDesign": SoundDesign,
     "StageDesign": StageDesign,
-    "StageDesignTool": StageDesignTool,
     "TentDesign": TentDesign,
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
     "VideoWallDrawing": VideoWallDrawing,
+    "StageDesignTool": StageDesignTool,
 }
 
 export const pagesConfig = {
