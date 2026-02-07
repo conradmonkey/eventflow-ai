@@ -19,6 +19,12 @@ import { base44 } from "@/api/base44Client";
 
 const services = [
   {
+    icon: Theater,
+    title: "Stage Design Assistant",
+    description: "Design multi-tier stages with optimized deck platforms, railings, and roof structures.",
+    href: "StageDesignTool",
+  },
+  {
     icon: FileCheck,
     title: "Permit Investigation",
     description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
