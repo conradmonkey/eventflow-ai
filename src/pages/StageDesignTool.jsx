@@ -197,7 +197,8 @@ ROOF: Frame tent covering base tier
 - Light shading and shadows for depth
 - Show railings as simple structures
 - Easy to understand perspective
-- Not photorealistic, just clean simple 3D visualization`
+- Not photorealistic, just clean simple 3D visualization
+- NO STAIRS OR STAIRCASES - do not include any stairs`
         : renderType === "artistic"
         ? `
 
@@ -209,7 +210,8 @@ ARTISTIC RENDER STYLE:
 - Professional event lighting atmosphere
 - Show all structural elements beautifully
 - Inspiring and visually appealing
-- Production-quality render`
+- Production-quality render
+- NO STAIRS OR STAIRCASES - do not include any stairs`
         : `
 
 DIAGRAM STYLE:
@@ -219,7 +221,8 @@ DIAGRAM STYLE:
 - Easy to understand layout
 - Minimal colors: black outlines, light gray fills
 - Show railings as simple lines
-- Professional but simple diagram style`;
+- Professional but simple diagram style
+- NO STAIRS OR STAIRCASES - do not include any stairs`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
