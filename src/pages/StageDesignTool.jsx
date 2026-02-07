@@ -158,7 +158,7 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
       });
 
       prompt += `
-ABSOLUTE REQUIREMENT: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. NO STAIRS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS. Render ONLY what is listed above, nothing more.
+ABSOLUTE REQUIREMENT: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. NO STAIRS, NO STEPS, NO RAMPS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS, NO TRANSITIONAL ELEMENTS. Render ONLY what is listed above, nothing more. Tiers stack directly on top of each other.
 `;
 
       prompt += `
