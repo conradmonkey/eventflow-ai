@@ -175,8 +175,8 @@ NO RAILINGS - Do not show any railings on the stage
 `;
       }
 
-      if (roofStructure !== "none") {
-        if (roofStructure === "marquee") {
+      if (currentRoof !== "none") {
+        if (currentRoof === "marquee") {
           const stageLength = parseFloat(validTiers[0].length);
           const stageWidth = parseFloat(validTiers[0].width);
           const tentLength = stageLength + 2; // Make stage 2ft bigger than tent
