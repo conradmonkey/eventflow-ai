@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,13 @@ export default function StageDesignTool() {
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const sketchRef = useRef(null);
+  const hasGenerated = useRef(false);
+
+  useEffect(() => {
+    if (sketchUrl && roofStructure !== "none" && hasGenerated.current) {
+      handleGenerateSketch(roofStructure);
+    }
+  }, [roofStructure]);
 
   const addTier = () => {
     setTiers([...tiers, { id: Date.now(), length: "", width: "", height: "" }]);
@@ -288,6 +295,7 @@ MULTI-ANGLE VIEW:
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
+      hasGenerated.current = true;
       
       setTimeout(() => {
         sketchRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
