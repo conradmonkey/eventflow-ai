@@ -11,11 +11,6 @@ export default function StageDesignTool() {
   const [tiers, setTiers] = useState([
     { id: 1, length: "", width: "", height: "" }
   ]);
-  const [railings, setRailings] = useState({
-    left_back: false,
-    right_back: false,
-    right_front: false
-  });
   const [roofStructure, setRoofStructure] = useState("none");
   const [renderType, setRenderType] = useState("3d");
   const [stageColor, setStageColor] = useState("black");
