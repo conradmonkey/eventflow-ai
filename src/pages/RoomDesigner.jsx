@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
+    project_name: "",
     country: "",
     province: "",
     city: "",
@@ -206,6 +207,18 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
           className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
         >
           <form onSubmit={handleGenerate2D} className="space-y-8">
+            {/* Project Name */}
+            <div>
+              <Label className="text-zinc-400 text-sm">Project Name</Label>
+              <Input
+                required
+                value={formData.project_name}
+                onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
+                className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-11 rounded-lg mt-2"
+                placeholder="e.g., Smith Wedding Reception"
+              />
+            </div>
+
             {/* Location */}
             <div>
               <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
