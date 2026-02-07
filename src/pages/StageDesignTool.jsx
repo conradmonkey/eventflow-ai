@@ -170,16 +170,16 @@ NO RAILINGS - Do not show any railings on the stage
           const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
           if (tent) {
             prompt += `
-ROOF: White marquee tent (${tent.name}) on base tier - NO center support legs or poles
+ROOF: White marquee tent (${tent.name}) on base tier - ABSOLUTELY NO center support legs, poles, or middle structures whatsoever
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure
+ROOF: Truss frame roof structure - NO center legs or middle supports
 `;
         } else if (roofStructure === "frame_tent") {
           prompt += `
-ROOF: White frame tent covering base tier
+ROOF: White frame tent covering base tier - ABSOLUTELY NO center support legs or middle structures
 `;
         }
       }
