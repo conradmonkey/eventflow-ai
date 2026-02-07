@@ -182,7 +182,12 @@ NO RAILINGS - Do not show any railings on the stage
             prompt += `
 ${TENT_HARD_RULE}
 
-ROOF: White marquee tent (${tent.name}) positioned ON TOP of the base stage deck platform - The tent has EXACTLY 4 legs at the 4 corners only. NO other legs, supports, poles, or interior structures anywhere. The tent sits directly on the stage deck. The space underneath is completely open with zero vertical supports in the middle, center, or anywhere else.
+ROOF: White marquee tent (${tent.name}) positioned ON TOP of the base stage deck platform.
+- Render 4 legs ONLY: one at each corner of the tent base
+- DO NOT render 6, 8, or any number other than 4 legs
+- The tent roof stretches between these 4 corner legs only
+- Empty space underneath - completely open
+- No center poles, no middle supports, no interior structures of any kind
 `;
           }
         } else if (roofStructure === "truss_frame") {
