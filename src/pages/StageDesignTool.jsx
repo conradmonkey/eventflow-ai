@@ -147,13 +147,12 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
 STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColor.charAt(0).toUpperCase() + stageColor.slice(1)} stage deck
 `;
 
-      if (railings.back || railings.sides) {
+      if (railings.back) {
         prompt += `
 RAILINGS:
+- Railing along the back
+- Front and sides (audience facing) have NO railing
 `;
-        if (railings.back) prompt += `- Railing along the back\n`;
-        if (railings.sides) prompt += `- Railings along the sides\n`;
-        prompt += `- Front side (audience facing) has NO railing\n`;
       } else {
         prompt += `
 NO RAILINGS - Do not show any railings on the stage
