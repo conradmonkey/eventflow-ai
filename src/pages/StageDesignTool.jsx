@@ -191,7 +191,7 @@ RAILINGS:
       }
 
       if (currentRoof === "none") {
-        prompt += "\nROOF: NO ROOF - Stage has NO overhead covering or structure. Render open-air stage only.\n";
+        prompt += "\n*** ABSOLUTELY NO ROOF - Stage is COMPLETELY OPEN-AIR ***\nDO NOT render any overhead covering, tent, frame, truss, or structure of any kind. The sky must be visible above the stage platforms. This is an open-air performance space with zero overhead coverage.\n";
       } else {
         prompt += "\n*** ROOF STRUCTURE IS ESSENTIAL - MUST BE CLEARLY VISIBLE IN THE RENDERING ***\n";
 
