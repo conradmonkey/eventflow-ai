@@ -116,7 +116,7 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      const TENT_HARD_RULE = "**CRITICAL TENT RULE: Any marquee or tent MUST have 4 legs ONLY - one at each corner. ABSOLUTELY NO middle leg. ABSOLUTELY NO center leg. ABSOLUTELY NO interior supports. Only 4 corner legs. Period.**";
+      const TENT_HARD_RULE = "**CRITICAL TENT RULE: Any marquee or tent MUST have 4 legs ONLY - one at each corner (front-left, front-right, back-left, back-right). ABSOLUTELY NO middle front legs. ABSOLUTELY NO middle side legs. ABSOLUTELY NO center legs. ABSOLUTELY NO interior supports. Only 4 corner legs. PERIOD.**";
       
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
@@ -179,12 +179,12 @@ NO RAILINGS - Do not show any railings on the stage
           if (tent) {
             prompt += `
 ROOF: White marquee tent (${tent.name}) on top of stage.
-Tent structure: EXACTLY 4 legs ONLY - one at each corner. ZERO legs on the sides. ZERO middle legs. ZERO center legs. ZERO interior supports. ONLY the 4 corner legs (front-left, front-right, back-left, back-right).
+Tent structure: EXACTLY 4 legs ONLY - one at each corner (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center legs. ZERO interior supports. ONLY the 4 corner legs.
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY. One leg at each corner. ZERO middle legs, ZERO center supports, ZERO interior legs, ZERO poles anywhere else. Must be open underneath with no supports in the middle.**
+ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY at corners (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center supports. ZERO interior legs. Must be completely open underneath.**
 `;
         }
       }
