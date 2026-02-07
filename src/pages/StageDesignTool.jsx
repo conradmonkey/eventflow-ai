@@ -180,7 +180,9 @@ NO RAILINGS - Do not show any railings on the stage
           const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
           if (tent) {
             prompt += `
-ROOF: White marquee tent (${tent.name}) positioned ON TOP of the base stage deck platform - **CRITICAL: The tent has EXACTLY 4 legs at the 4 corners only. NO other legs, supports, poles, or interior structures anywhere. The tent sits directly on the stage deck. The space underneath is completely open with zero vertical supports in the middle, center, or anywhere else. 4 LEGS AT CORNERS. NOTHING ELSE.**
+${TENT_HARD_RULE}
+
+ROOF: White marquee tent (${tent.name}) positioned ON TOP of the base stage deck platform - The tent has EXACTLY 4 legs at the 4 corners only. NO other legs, supports, poles, or interior structures anywhere. The tent sits directly on the stage deck. The space underneath is completely open with zero vertical supports in the middle, center, or anywhere else.
 `;
           }
         } else if (roofStructure === "truss_frame") {
