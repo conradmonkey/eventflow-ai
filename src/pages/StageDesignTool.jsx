@@ -179,7 +179,7 @@ NO RAILINGS - Do not show any railings on the stage
           if (tent) {
             prompt += `
 ROOF: White marquee tent (${tent.name}) on top of stage.
-Tent structure: EXACTLY 4 legs and NOTHING else. One leg at front-left corner, one at front-right corner, one at back-left corner, one at back-right corner. ZERO middle legs, ZERO center supports, ZERO interior legs. Only these 4 corner legs support the entire tent roof.
+Tent structure: EXACTLY 4 legs ONLY - one at each corner. ZERO legs on the sides. ZERO middle legs. ZERO center legs. ZERO interior supports. ONLY the 4 corner legs (front-left, front-right, back-left, back-right).
 `;
           }
         } else if (roofStructure === "truss_frame") {
