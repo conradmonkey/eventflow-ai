@@ -4,7 +4,6 @@ import {
   FileCheck,
   Tent, 
   MonitorPlay,
-  Lightbulb,
   Map,
   Building2,
   Sparkles,
@@ -35,13 +34,6 @@ const services = [
     title: "Tent Design",
     description: "Plan perfect temporary structures from elegant sailcloth to grand clear-span marquees.",
     href: "https://tent-plan-ai.base44.app/",
-    external: true,
-  },
-  {
-    icon: Lightbulb,
-    title: "Room Layout Design",
-    description: "Create optimal room layouts with AI-powered spatial planning and design.",
-    href: "https://lush-room-design-ai.base44.app",
     external: true,
   },
   {
