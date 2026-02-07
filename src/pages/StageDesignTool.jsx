@@ -177,9 +177,13 @@ NO RAILINGS - Do not show any railings on the stage
 
       if (roofStructure !== "none") {
         if (roofStructure === "marquee") {
-          prompt += `
-ROOF: White canopy covering the stage. 4 support poles only - one at front-left, one at front-right, one at back-left, one at back-right. The white fabric stretches across these 4 poles. No other poles, legs, or supports anywhere.
+          const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
+          if (tent) {
+            prompt += `
+ROOF: White marquee tent (${tent.name}) on top of stage.
+Tent structure: 4 legs total. One leg at each corner. That's it. Nothing else holding up the tent.
 `;
+          }
         } else if (roofStructure === "truss_frame") {
           prompt += `
 ROOF: Truss frame roof structure - **CRITICAL: NO center legs or middle supports. Must be open underneath.**
