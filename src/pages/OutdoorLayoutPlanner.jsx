@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import LayoutInputs from '../components/layout/LayoutInputs';
-import Canvas2DRenderer from '../components/layout/Canvas2DRenderer';
-import GearListModal from '../components/layout/GearListModal';
-import View3DRenderer from '../components/layout/View3DRenderer';
+import LayoutInputs from '@/components/layout/LayoutInputs';
+import Canvas2DRenderer from '@/components/layout/Canvas2DRenderer';
+import GearListModal from '@/components/layout/GearListModal';
+import View3DRenderer from '@/components/layout/View3DRenderer';
 import { Plus, Trash2, ZoomIn, ZoomOut } from 'lucide-react';
 
 export default function OutdoorLayoutPlanner() {
