@@ -127,35 +127,32 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      let prompt = `Photorealistic 3D render of a professional multi-tier event stage setup, outdoor setting.
+      let prompt = `Simple, clean schematic diagram of a multi-tier stage setup.
 
-STAGE SPECIFICATIONS:
+STAGE LAYOUT:
 `;
 
       validTiers.forEach((tier, index) => {
-        const platforms = calculateDeckPlatforms(tier.length, tier.width);
         prompt += `
-Tier ${index + 1}:
-- Dimensions: ${tier.length}ft (L) x ${tier.width}ft (W) x ${tier.height}ft (H)
-- Steel deck platform construction with black non-slip surface
-- Position: ${index === 0 ? 'Base tier on ground level' : `Centered on back edge of Tier ${index}, aligned to rear`}
+Tier ${index + 1}: ${tier.length}ft x ${tier.width}ft x ${tier.height}ft high
+${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
 `;
       });
 
       const firstTier = validTiers[0];
       if (parseFloat(firstTier.height) > 1) {
         prompt += `
-- Stairs: Professional stage stairs on the left side with handrails
+- Stairs on left side
 `;
       }
 
       if (railings.back || railings.left || railings.right) {
         prompt += `
-SAFETY RAILINGS:
+RAILINGS:
 `;
-        if (railings.back) prompt += `- Back railing: Aluminum pipe railing across the back edge\n`;
-        if (railings.left) prompt += `- Left side railing: Full length, does not block stairs\n`;
-        if (railings.right) prompt += `- Right side railing: Full length along the right side\n`;
+        if (railings.back) prompt += `- Back edge\n`;
+        if (railings.left) prompt += `- Left side\n`;
+        if (railings.right) prompt += `- Right side\n`;
       }
 
       if (roofStructure !== "none") {
@@ -163,38 +160,31 @@ SAFETY RAILINGS:
           const tent = selectMarqueeTent(parseFloat(firstTier.length), parseFloat(firstTier.width));
           if (tent) {
             prompt += `
-ROOF STRUCTURE:
-- White marquee canopy tent (${tent.name}) centered on base tier
-- Elegant peaked roof with guy lines and stakes
+ROOF: Marquee tent (${tent.name}) on base tier
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF STRUCTURE:
-- Professional aluminum box truss frame roof
-- Black powder-coated finish
-- Overhead rigging points for lighting and audio
+ROOF: Truss frame roof structure
 `;
         } else if (roofStructure === "frame_tent") {
           prompt += `
-ROOF STRUCTURE:
-- White frame tent canopy covering the base tier
-- Traditional pipe frame with fabric roof
+ROOF: Frame tent covering base tier
 `;
         }
       }
 
       prompt += `
 
-RENDERING STYLE:
-- Ultra realistic 3D render
-- Professional event production quality
-- Outdoor venue setting with natural lighting
-- Show the stage from a 3/4 angle view to see depth and tiers
-- Clean, professional stage setup
-- Cinematic lighting and shadows
-- High detail on materials and textures
-- Photo quality finish`;
+DIAGRAM STYLE:
+- Simple side view schematic showing all tiers stacked
+- Clean lines with light shading
+- Clear labels for dimensions
+- Easy to understand layout
+- Minimal colors: black outlines, light gray fills
+- Show stairs if present
+- Show railings as simple lines
+- Professional but simple diagram style`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
