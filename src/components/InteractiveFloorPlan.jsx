@@ -261,15 +261,27 @@ export default function InteractiveFloorPlan({ formData, onExport }) {
           height={roomLength * SCALE}
           className="absolute inset-0"
         >
+          {/* Room Background */}
           <rect
             x={0}
             y={0}
             width={roomWidth * SCALE}
             height={roomLength * SCALE}
-            fill="white"
-            stroke="#d1d5db"
-            strokeWidth="2"
+            fill="#fafafa"
+            stroke="#374151"
+            strokeWidth="4"
           />
+          
+          {/* Room Dimensions Label */}
+          <text
+            x={10}
+            y={20}
+            fill="#374151"
+            fontSize="14"
+            fontWeight="bold"
+          >
+            Room: {roomWidth}ft × {roomLength}ft
+          </text>
           
           {/* Grid */}
           {Array.from({ length: Math.floor(roomWidth / 10) }).map((_, i) => (
