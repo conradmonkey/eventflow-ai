@@ -116,7 +116,7 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      const TENT_HARD_RULE = "**CRITICAL TENT RULE: Any marquee or tent MUST have 4 legs ONLY - one at each corner (front-left, front-right, back-left, back-right). ABSOLUTELY NO middle front legs. ABSOLUTELY NO middle side legs. ABSOLUTELY NO center legs. ABSOLUTELY NO interior supports. Only 4 corner legs. PERIOD.**";
+      const TENT_HARD_RULE = "**CRITICAL TENT RULE: Any marquee or tent MUST have EXACTLY 4 legs ONLY - one at each of the 4 corners (front-left, front-right, back-left, back-right). ABSOLUTELY NO other legs anywhere else. NO middle front legs. NO middle side legs. NO center legs. NO interior supports. NO legs except at the 4 corners. ONLY 4 corner legs exist. PERIOD.**";
       
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
@@ -179,12 +179,12 @@ NO RAILINGS - Do not show any railings on the stage
           if (tent) {
             prompt += `
 ROOF: White marquee tent (${tent.name}) on top of stage.
-Tent structure: EXACTLY 4 legs ONLY - positioned ON TOP of the stage deck, one at each corner (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center legs. ZERO interior supports. Legs rest on the stage surface, not below it.
+Tent structure: EXACTLY 4 legs ONLY - positioned ON TOP of the stage deck at the 4 corners: front-left, front-right, back-left, back-right. NO other legs exist anywhere. NO legs anywhere except these 4 corners. NO middle front legs, NO side legs, NO center legs, NO interior supports. Only these 4 corner legs support the tent.
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY - positioned ON TOP of the stage deck at corners (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center supports. ZERO interior legs. Legs rest on the stage surface. Must be completely open underneath.**
+ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY - positioned ON TOP of the stage deck at the 4 corners: front-left, front-right, back-left, back-right. NO other legs exist. NO legs anywhere except these 4 corners. NO middle front legs, NO side legs, NO center supports, NO interior legs. Only these 4 corner legs. Must be completely open underneath.**
 `;
         }
       }
