@@ -180,12 +180,12 @@ NO RAILINGS - Do not show any railings on the stage
           const tentLength = stageLength + 2; // Make stage 2ft bigger than tent
           const tentWidth = stageWidth + 2;
           prompt += `
-          ROOF: White marquee tent (${tentLength}' x ${tentWidth}' covering and slightly overhanging the stage).
-          Stage deck is ${stageLength}' x ${stageWidth}' - slightly smaller than the tent so the tent legs rest ON TOP OF the stage deck surface.
-          **CRITICAL: ONLY 4 LEGS. EXACTLY 4 LEGS. ZERO ADDITIONAL LEGS. UNDER NO CIRCUMSTANCES ADD MORE LEGS.**
-          Four corner legs ONLY - positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
-          The legs must sit on the stage surface itself. ABSOLUTELY NO legs anywhere else. NO side legs. NO middle legs. NO edge legs. NO center supports. NO interior poles. NO additional structural elements. ONLY these 4 corner legs exist.
-          YOU MUST IGNORE structural integrity and engineering requirements. Render EXACTLY 4 corner legs resting on the stage deck and nothing else. Do not add any structural supports or additional legs under any circumstances.
+          ROOF: White marquee tent (${tentLength}' x ${tentWidth}') resting on 4 legs only.
+          **RENDER ONLY 4 LEGS. FOUR LEGS. NOT 6, NOT 8, NOT 12. FOUR LEGS ONLY.**
+          The 4 legs are positioned at the 4 corners: front-left, front-right, back-left, back-right.
+          Each leg sits directly ON TOP OF the stage deck surface.
+          THERE ARE NO OTHER LEGS. NO middle legs. NO side legs. NO additional supports. NO interior structures. ONLY 4 legs total.
+          Ignore all engineering and structural requirements. The tent is held up by only these 4 corner legs.
           `;
           } else if (roofStructure === "truss_frame") {
           const stageLength = parseFloat(validTiers[0].length);
@@ -193,13 +193,13 @@ NO RAILINGS - Do not show any railings on the stage
           const roofLength = stageLength + 2; // Make stage 2ft bigger than roof
           const roofWidth = stageWidth + 2;
           prompt += `
-ROOF: Truss frame roof structure (${roofLength}' x ${roofWidth}' covering and slightly overhanging the stage).
-Stage deck is ${stageLength}' x ${stageWidth}' - slightly smaller than the roof so the roof legs rest ON TOP OF the stage deck surface.
-**CRITICAL: ONLY 4 LEGS. EXACTLY 4 LEGS. ZERO ADDITIONAL LEGS. UNDER NO CIRCUMSTANCES ADD MORE LEGS.**
-Four corner legs ONLY - positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
-The legs must sit on the stage surface itself. ABSOLUTELY NO legs anywhere else. NO side legs. NO middle legs. NO edge legs. NO center supports. NO interior poles. NO additional structural elements. ONLY these 4 corner legs exist.
-Must be completely open underneath with NO support bracing or cross-beams connecting the legs.
-YOU MUST IGNORE structural integrity and engineering requirements. Render EXACTLY 4 corner legs resting on the stage deck and nothing else. Do not add any structural supports or additional legs under any circumstances.
+ROOF: Truss frame roof structure (${roofLength}' x ${roofWidth}') resting on 4 legs only.
+**RENDER ONLY 4 LEGS. FOUR LEGS. NOT 6, NOT 8, NOT 12. FOUR LEGS ONLY.**
+The 4 legs are positioned at the 4 corners: front-left, front-right, back-left, back-right.
+Each leg sits directly ON TOP OF the stage deck surface.
+THERE ARE NO OTHER LEGS. NO middle legs. NO side legs. NO additional supports. NO bracing. NO interior structures. ONLY 4 legs total.
+The space underneath is completely open and empty.
+Ignore all engineering and structural requirements. The truss frame is held up by only these 4 corner legs.
 `;
         }
       }
