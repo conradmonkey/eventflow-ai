@@ -6,11 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Ruler, Sparkles, Loader2, Layout, Box } from "lucide-react";
 import { motion } from "framer-motion";
-import InteractiveFloorPlan from "@/components/InteractiveFloorPlan";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
-    project_name: "",
     country: "",
     province: "",
     city: "",
@@ -32,8 +30,9 @@ export default function RoomDesigner() {
     table_color: "white",
   });
 
+  const [isLoading2D, setIsLoading2D] = useState(false);
   const [isLoading3D, setIsLoading3D] = useState(false);
-  const [showLayout, setShowLayout] = useState(false);
+  const [layout2D, setLayout2D] = useState(null);
   const [render3D, setRender3D] = useState(null);
   const [gearList, setGearList] = useState(null);
 
@@ -69,11 +68,51 @@ export default function RoomDesigner() {
     return { costs, totalCost };
   };
 
-  const handleGenerate2D = (e) => {
+  const handleGenerate2D = async (e) => {
     e.preventDefault();
-    const gear = calculateGearList();
-    setGearList(gear);
-    setShowLayout(true);
+    setIsLoading2D(true);
+    setLayout2D(null);
+    setGearList(null);
+
+    try {
+      const gear = calculateGearList();
+      setGearList(gear);
+
+      const prompt = `Create a professional 2D floor plan layout drawing for an elegant event space.
+
+Location: ${formData.city}, ${formData.province}, ${formData.country}
+
+Room: ${formData.room_length}ft x ${formData.room_width}ft
+
+Elements to include:
+${formData.stage_length && formData.stage_width ? `- Stage: ${formData.stage_length}ft x ${formData.stage_width}ft` : ''}
+${formData.dance_floor_length && formData.dance_floor_width ? `- Dance Floor: ${formData.dance_floor_length}ft x ${formData.dance_floor_width}ft` : ''}
+${formData.bar_length && formData.bar_width ? `- Bar: ${formData.bar_length}ft x ${formData.bar_width}ft` : ''}
+${formData.video_wall_height && formData.video_wall_width ? `- Video Wall: ${formData.video_wall_height}m x ${formData.video_wall_width}m` : ''}
+${formData.table_8ft !== "0" ? `- ${formData.table_8ft} x 8ft Banquet Tables` : ''}
+${formData.table_6ft !== "0" ? `- ${formData.table_6ft} x 6ft Banquet Tables` : ''}
+${formData.table_5ft_round !== "0" ? `- ${formData.table_5ft_round} x 5ft Round Tables` : ''}
+${formData.table_6ft_round !== "0" ? `- ${formData.table_6ft_round} x 6ft Round Tables` : ''}
+${formData.cocktail_tables !== "0" ? `- ${formData.cocktail_tables} x Cocktail Tables` : ''}
+
+Create an elegant, well-balanced 2D floor plan showing:
+- Top-down view with all elements clearly labeled
+- Optimal spacing for guest flow
+- Professional architectural drawing style
+- Clean lines and clear measurements
+- Elegant arrangement maximizing space efficiency
+- All furniture and fixtures properly positioned
+
+Style: Clean architectural floor plan, professional event layout, top-down view, black and white with subtle shading, labeled elements.`;
+
+      const response = await base44.integrations.Core.GenerateImage({ prompt });
+      setLayout2D(response.url);
+    } catch (error) {
+      console.error("Error generating 2D layout:", error);
+      alert("Error generating 2D layout. Please try again.");
+    } finally {
+      setIsLoading2D(false);
+    }
   };
 
   const handleGenerate3D = async () => {
@@ -167,18 +206,6 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
           className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
         >
           <form onSubmit={handleGenerate2D} className="space-y-8">
-            {/* Project Name */}
-            <div>
-              <Label className="text-zinc-400 text-sm">Project Name</Label>
-              <Input
-                required
-                value={formData.project_name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
-                className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-11 rounded-lg mt-2"
-                placeholder="e.g., Smith Wedding Reception"
-              />
-            </div>
-
             {/* Location */}
             <div>
               <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -430,22 +457,28 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
 
             <Button
               type="submit"
+              disabled={isLoading2D}
               className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg"
             >
-              <Sparkles className="w-5 h-5 mr-2" />
-              Generate Interactive Layout
+              {isLoading2D ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Generate 2D Layout
+                </>
+              )}
             </Button>
           </form>
         </motion.div>
 
-        {/* Gear List - Move to Left Column */}
-        {gearList && showLayout && (
+        {/* Gear List */}
+        {gearList && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
+            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
           >
-            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Equipment List & Costs</h2>
             <div className="space-y-4">
               {gearList.costs.tables_8ft.count > 0 && (
@@ -512,44 +545,36 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 *Prices do not include labour or pickup and delivery
               </p>
             </div>
-            <div></div>
           </motion.div>
         )}
 
-        {/* Two Column Layout */}
-        {showLayout && (
+        {/* 2D Layout */}
+        {layout2D && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
           >
-            {/* Left Side - Generate Button */}
-            <div className="space-y-8">
-              <motion.div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
-                <Button
-                  onClick={handleGenerate3D}
-                  disabled={isLoading3D}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
-                >
-                  {isLoading3D ? (
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  ) : (
-                    <Box className="w-5 h-5 mr-2" />
-                  )}
-                  Generate 3D Render
-                </Button>
-              </motion.div>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+              <Layout className="w-6 h-6 text-amber-400" />
+              2D Floor Plan
+            </h2>
+            <div className="bg-white rounded-lg p-4">
+              <img src={layout2D} alt="2D floor plan layout" className="w-full h-auto" />
             </div>
-
-            {/* Right Side - Interactive Floor Plan */}
-            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                <Layout className="w-6 h-6 text-amber-400" />
-                Interactive Floor Plan
-              </h2>
-              
-              <InteractiveFloorPlan formData={formData} />
-            </div>
+            
+            <Button
+              onClick={handleGenerate3D}
+              disabled={isLoading3D}
+              className="w-full mt-6 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
+            >
+              {isLoading3D ? (
+                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+              ) : (
+                <Box className="w-5 h-5 mr-2" />
+              )}
+              Generate 3D Render
+            </Button>
           </motion.div>
         )}
 
