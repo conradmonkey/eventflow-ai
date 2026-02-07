@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Ruler, Sparkles, Loader2, Layout, Box } from "lucide-react";
 import { motion } from "framer-motion";
+import InteractiveFloorPlan from "@/components/InteractiveFloorPlan";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
@@ -31,9 +32,8 @@ export default function RoomDesigner() {
     table_color: "white",
   });
 
-  const [isLoading2D, setIsLoading2D] = useState(false);
   const [isLoading3D, setIsLoading3D] = useState(false);
-  const [layout2D, setLayout2D] = useState(null);
+  const [showLayout, setShowLayout] = useState(false);
   const [render3D, setRender3D] = useState(null);
   const [gearList, setGearList] = useState(null);
 
@@ -69,53 +69,11 @@ export default function RoomDesigner() {
     return { costs, totalCost };
   };
 
-  const handleGenerate2D = async (e) => {
+  const handleGenerate2D = (e) => {
     e.preventDefault();
-    setIsLoading2D(true);
-    setLayout2D(null);
-    setGearList(null);
-
-    try {
-      const gear = calculateGearList();
-      setGearList(gear);
-
-      const prompt = `Create a professional 2D floor plan layout drawing for an elegant event space.
-
-Location: ${formData.city}, ${formData.province}, ${formData.country}
-
-Room: ${formData.room_length}ft x ${formData.room_width}ft
-
-CRITICAL: Include EXACTLY these elements (no more, no less):
-${formData.stage_length && formData.stage_width ? `- Stage: ${formData.stage_length}ft x ${formData.stage_width}ft` : ''}
-${formData.dance_floor_length && formData.dance_floor_width ? `- Dance Floor: ${formData.dance_floor_length}ft x ${formData.dance_floor_width}ft` : ''}
-${formData.bar_length && formData.bar_width ? `- Bar: ${formData.bar_length}ft x ${formData.bar_width}ft` : ''}
-${formData.video_wall_height && formData.video_wall_width ? `- Video Wall: ${formData.video_wall_height}m x ${formData.video_wall_width}m` : ''}
-${formData.table_8ft !== "0" ? `- EXACTLY ${formData.table_8ft} (${formData.table_8ft}) 8ft Banquet Tables (rectangular)` : ''}
-${formData.table_6ft !== "0" ? `- EXACTLY ${formData.table_6ft} (${formData.table_6ft}) 6ft Banquet Tables (rectangular)` : ''}
-${formData.table_5ft_round !== "0" ? `- EXACTLY ${formData.table_5ft_round} (${formData.table_5ft_round}) 5ft Round Tables (circles)` : ''}
-${formData.table_6ft_round !== "0" ? `- EXACTLY ${formData.table_6ft_round} (${formData.table_6ft_round}) 6ft Round Tables (circles)` : ''}
-${formData.cocktail_tables !== "0" ? `- EXACTLY ${formData.cocktail_tables} (${formData.cocktail_tables}) Cocktail Tables (small circles)` : ''}
-
-IMPORTANT: Draw the EXACT number of tables specified above. Count carefully. Do not add extra tables.
-
-Create an elegant, well-balanced 2D floor plan showing:
-- Top-down view with all elements clearly labeled with counts
-- Optimal spacing for guest flow
-- Professional architectural drawing style
-- Clean lines and clear measurements
-- Elegant arrangement maximizing space efficiency
-- All furniture and fixtures properly positioned
-
-Style: Clean architectural floor plan, professional event layout, top-down view, black and white with subtle shading, labeled elements with quantities.`;
-
-      const response = await base44.integrations.Core.GenerateImage({ prompt });
-      setLayout2D(response.url);
-    } catch (error) {
-      console.error("Error generating 2D layout:", error);
-      alert("Error generating 2D layout. Please try again.");
-    } finally {
-      setIsLoading2D(false);
-    }
+    const gear = calculateGearList();
+    setGearList(gear);
+    setShowLayout(true);
   };
 
   const handleGenerate3D = async () => {
@@ -472,17 +430,10 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
 
             <Button
               type="submit"
-              disabled={isLoading2D}
               className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg"
             >
-              {isLoading2D ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Generate 2D Layout
-                </>
-              )}
+              <Sparkles className="w-5 h-5 mr-2" />
+              Generate Interactive Layout
             </Button>
           </form>
         </motion.div>
@@ -563,8 +514,8 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
           </motion.div>
         )}
 
-        {/* 2D Layout */}
-        {layout2D && (
+        {/* Interactive 2D Layout */}
+        {showLayout && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -572,11 +523,10 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
           >
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
               <Layout className="w-6 h-6 text-amber-400" />
-              2D Floor Plan
+              Interactive Floor Plan
             </h2>
-            <div className="bg-white rounded-lg p-4">
-              <img src={layout2D} alt="2D floor plan layout" className="w-full h-auto" />
-            </div>
+            
+            <InteractiveFloorPlan formData={formData} />
             
             <Button
               onClick={handleGenerate3D}
