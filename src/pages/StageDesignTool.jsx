@@ -188,7 +188,9 @@ RAILINGS:
         prompt += "- NO railings\n";
       }
 
-      if (currentRoof !== "none") {
+      if (currentRoof === "none") {
+        prompt += "\nROOF: NO ROOF - Stage has NO overhead covering or structure. Render open-air stage only.\n";
+      } else {
         prompt += "\n*** ROOF STRUCTURE IS ESSENTIAL - MUST BE CLEARLY VISIBLE IN THE RENDERING ***\n";
 
         if (currentRoof === "marquee") {
