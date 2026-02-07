@@ -199,7 +199,6 @@ ROOF: Frame tent covering base tier
 - Show all tiers clearly stacked
 - Clean, minimalist style
 - Light shading and shadows for depth
-- Show stairs if present
 - Show railings as simple structures
 - Easy to understand perspective
 - Not photorealistic, just clean simple 3D visualization`
@@ -223,7 +222,6 @@ DIAGRAM STYLE:
 - Clear labels for dimensions
 - Easy to understand layout
 - Minimal colors: black outlines, light gray fills
-- Show stairs if present
 - Show railings as simple lines
 - Professional but simple diagram style`;
 
