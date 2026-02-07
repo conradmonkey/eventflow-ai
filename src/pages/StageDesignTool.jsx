@@ -97,10 +97,8 @@ export default function StageDesignTool() {
   };
 
   const selectMarqueeTent = (stageLength, stageWidth) => {
-    // Scale tent to match stage dimensions (slightly smaller for visual margin)
-    const tentLength = Math.max(10, Math.round(stageLength * 0.95 / 5) * 5);
-    const tentWidth = Math.max(10, Math.round(stageWidth * 0.95 / 5) * 5);
-    return { name: `${tentLength}'x${tentWidth}'`, length: tentLength, width: tentWidth };
+    // Always use 20x20 marquee as base but extend to full stage dimensions
+    return { name: `${stageLength}'x${stageWidth}'`, length: stageLength, width: stageWidth };
   };
 
   const handleGenerateSketch = async () => {
