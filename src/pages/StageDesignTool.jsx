@@ -346,9 +346,16 @@ ARTISTIC RENDER STYLE:
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
                 <SelectItem value="black" className="text-white">Black</SelectItem>
+                <SelectItem value="white" className="text-white">White</SelectItem>
                 <SelectItem value="gray" className="text-white">Gray</SelectItem>
                 <SelectItem value="natural_wood" className="text-white">Natural Wood</SelectItem>
-                <SelectItem value="white" className="text-white">White</SelectItem>
+                <SelectItem value="red" className="text-white">Red</SelectItem>
+                <SelectItem value="blue" className="text-white">Blue</SelectItem>
+                <SelectItem value="green" className="text-white">Green</SelectItem>
+                <SelectItem value="yellow" className="text-white">Yellow</SelectItem>
+                <SelectItem value="purple" className="text-white">Purple</SelectItem>
+                <SelectItem value="orange" className="text-white">Orange</SelectItem>
+                <SelectItem value="pink" className="text-white">Pink</SelectItem>
               </SelectContent>
             </Select>
           </div>
