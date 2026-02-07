@@ -127,7 +127,9 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      let prompt = `Simple, clean schematic diagram of a multi-tier stage setup.
+      let prompt = `Simple, clean schematic diagram of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
+
+IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
 
 STAGE LAYOUT:
 `;
