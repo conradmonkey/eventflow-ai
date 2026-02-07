@@ -190,7 +190,7 @@ ROOF: White frame tent covering base tier
 ARTISTIC RENDER STYLE:
 - Beautiful, artistic visualization of the stage
 - Photorealistic rendering with proper lighting
-- Dramatic angle showcasing the stage design
+- Dramatic angle showcasing the stage design (rotated 30-40 degrees from front, not diagonal)
 - High-quality textures for wood decking
 - Professional event lighting atmosphere
 - Show all structural elements beautifully
@@ -200,7 +200,7 @@ ARTISTIC RENDER STYLE:
         : `
 
 3D RENDER STYLE:
-- Simple 3D render from a 3/4 angle view
+- Simple 3D render from a 35-degree rotation (slightly tilted, not diagonal)
 - Show all tiers clearly stacked
 - Clean, minimalist style
 - Light shading and shadows for depth
