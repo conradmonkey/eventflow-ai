@@ -180,8 +180,8 @@ NO RAILINGS - Do not show any railings on the stage
             prompt += `
 ROOF: White marquee tent covering the entire stage.
 **ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
-Four legs total: front-left corner, front-right corner, back-left corner, back-right corner.
-No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs.
+Four legs total positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
+The legs must sit on the stage surface itself. No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs on the stage.
 IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
 `;
           }
@@ -189,8 +189,8 @@ IGNORE structural support requirements. Do not add supports for structural integ
           prompt += `
 ROOF: Truss frame roof structure.
 **ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
-Four legs total: front-left corner, front-right corner, back-left corner, back-right corner.
-No legs anywhere else. No side legs. No middle legs. No edge legs. Only these 4 corner legs.
+Four legs total positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
+The legs must sit on the stage surface itself. No legs anywhere else. No side legs. No middle legs. No edge legs. Only these 4 corner legs on the stage.
 Must be completely open underneath.
 IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
 `;
