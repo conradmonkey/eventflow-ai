@@ -18,6 +18,7 @@ export default function StageDesignTool() {
   });
   const [roofStructure, setRoofStructure] = useState("none");
   const [renderType, setRenderType] = useState("3d");
+  const [stageColor, setStageColor] = useState("black");
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const sketchRef = useRef(null);
@@ -150,6 +151,10 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
 `;
       });
 
+      prompt += `
+STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColor.charAt(0).toUpperCase() + stageColor.slice(1)} stage deck
+`;
+
 
 
       if (railings.back || railings.left || railings.right) {
@@ -171,7 +176,7 @@ NO RAILINGS - Do not show any railings on the stage
           const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
           if (tent) {
             prompt += `
-ROOF: Marquee tent (${tent.name}) on base tier
+ROOF: White marquee tent (${tent.name}) on base tier
 `;
           }
         } else if (roofStructure === "truss_frame") {
@@ -180,7 +185,7 @@ ROOF: Truss frame roof structure
 `;
         } else if (roofStructure === "frame_tent") {
           prompt += `
-ROOF: Frame tent covering base tier
+ROOF: White frame tent covering base tier
 `;
         }
       }
@@ -340,6 +345,22 @@ ARTISTIC RENDER STYLE:
               <SelectContent className="bg-zinc-900 border-zinc-700">
                 <SelectItem value="3d" className="text-white">Simple 3D Render</SelectItem>
                 <SelectItem value="artistic" className="text-white">Artistic Render</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Stage Color */}
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Stage Color</h3>
+            <Select value={stageColor} onValueChange={setStageColor}>
+              <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectItem value="black" className="text-white">Black</SelectItem>
+                <SelectItem value="gray" className="text-white">Gray</SelectItem>
+                <SelectItem value="natural_wood" className="text-white">Natural Wood</SelectItem>
+                <SelectItem value="white" className="text-white">White</SelectItem>
               </SelectContent>
             </Select>
           </div>
