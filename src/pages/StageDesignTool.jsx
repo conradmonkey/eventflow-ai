@@ -351,20 +351,6 @@ ARTISTIC RENDER STYLE:
             </Button>
           </div>
 
-          {/* Render Type */}
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-white mb-4">Render Style</h3>
-            <Select value={renderType} onValueChange={setRenderType}>
-              <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="3d" className="text-white">Simple 3D</SelectItem>
-                <SelectItem value="artistic" className="text-white">Artistic</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* Stage Color */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold text-white mb-4">Stage Deck Color</h3>
