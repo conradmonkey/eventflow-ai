@@ -85,26 +85,28 @@ Location: ${formData.city}, ${formData.province}, ${formData.country}
 
 Room: ${formData.room_length}ft x ${formData.room_width}ft
 
-Elements to include:
+CRITICAL: Include EXACTLY these elements (no more, no less):
 ${formData.stage_length && formData.stage_width ? `- Stage: ${formData.stage_length}ft x ${formData.stage_width}ft` : ''}
 ${formData.dance_floor_length && formData.dance_floor_width ? `- Dance Floor: ${formData.dance_floor_length}ft x ${formData.dance_floor_width}ft` : ''}
 ${formData.bar_length && formData.bar_width ? `- Bar: ${formData.bar_length}ft x ${formData.bar_width}ft` : ''}
 ${formData.video_wall_height && formData.video_wall_width ? `- Video Wall: ${formData.video_wall_height}m x ${formData.video_wall_width}m` : ''}
-${formData.table_8ft !== "0" ? `- ${formData.table_8ft} x 8ft Banquet Tables` : ''}
-${formData.table_6ft !== "0" ? `- ${formData.table_6ft} x 6ft Banquet Tables` : ''}
-${formData.table_5ft_round !== "0" ? `- ${formData.table_5ft_round} x 5ft Round Tables` : ''}
-${formData.table_6ft_round !== "0" ? `- ${formData.table_6ft_round} x 6ft Round Tables` : ''}
-${formData.cocktail_tables !== "0" ? `- ${formData.cocktail_tables} x Cocktail Tables` : ''}
+${formData.table_8ft !== "0" ? `- EXACTLY ${formData.table_8ft} (${formData.table_8ft}) 8ft Banquet Tables (rectangular)` : ''}
+${formData.table_6ft !== "0" ? `- EXACTLY ${formData.table_6ft} (${formData.table_6ft}) 6ft Banquet Tables (rectangular)` : ''}
+${formData.table_5ft_round !== "0" ? `- EXACTLY ${formData.table_5ft_round} (${formData.table_5ft_round}) 5ft Round Tables (circles)` : ''}
+${formData.table_6ft_round !== "0" ? `- EXACTLY ${formData.table_6ft_round} (${formData.table_6ft_round}) 6ft Round Tables (circles)` : ''}
+${formData.cocktail_tables !== "0" ? `- EXACTLY ${formData.cocktail_tables} (${formData.cocktail_tables}) Cocktail Tables (small circles)` : ''}
+
+IMPORTANT: Draw the EXACT number of tables specified above. Count carefully. Do not add extra tables.
 
 Create an elegant, well-balanced 2D floor plan showing:
-- Top-down view with all elements clearly labeled
+- Top-down view with all elements clearly labeled with counts
 - Optimal spacing for guest flow
 - Professional architectural drawing style
 - Clean lines and clear measurements
 - Elegant arrangement maximizing space efficiency
 - All furniture and fixtures properly positioned
 
-Style: Clean architectural floor plan, professional event layout, top-down view, black and white with subtle shading, labeled elements.`;
+Style: Clean architectural floor plan, professional event layout, top-down view, black and white with subtle shading, labeled elements with quantities.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setLayout2D(response.url);
