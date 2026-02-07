@@ -439,23 +439,7 @@ ${TENT_HARD_RULE}`;
                   </SelectContent>
                 </Select>
 
-                {roofStructure === "marquee" && validTiers.length > 0 && (
-                  <div className="bg-zinc-800/50 rounded-lg p-3 text-xs text-zinc-300">
-                    <p className="font-semibold text-white mb-1">Marquee Sizing:</p>
-                    <p>Sizes: 10'x10', 10'x20', 10'x30', 20'x20', 30'x30'</p>
-                    <p className="mt-1">
-                      {(() => {
-                        const tent = selectMarqueeTent(
-                          parseFloat(validTiers[0].length), 
-                          parseFloat(validTiers[0].width)
-                        );
-                        return tent 
-                          ? `✓ ${tent.name}`
-                          : '⚠️ No fit';
-                      })()}
-                    </p>
-                  </div>
-                )}
+
 
                 <Button
                   onClick={handleGenerateSketch}
