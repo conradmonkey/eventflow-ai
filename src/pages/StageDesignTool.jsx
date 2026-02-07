@@ -431,6 +431,22 @@ MULTI-ANGLE VIEW:
             </Select>
           </div>
 
+          {/* Roof Structure Options */}
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Roof Structure</h3>
+            <Select value={roofStructure} onValueChange={setRoofStructure}>
+              <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectItem value="none" className="text-white">No Roof</SelectItem>
+                <SelectItem value="marquee" className="text-white">Marquee Tent</SelectItem>
+                <SelectItem value="truss_frame" className="text-white">Truss Frame Roof</SelectItem>
+                <SelectItem value="frame_tent" className="text-white">Frame Tent</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Railings */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
@@ -492,29 +508,14 @@ MULTI-ANGLE VIEW:
             )}
           </Button>
 
-          {/* Roof Structure Options */}
-          {showRoofOptions && (
-            <div className="mt-6 pt-6 border-t border-zinc-700">
-              <h3 className="text-lg font-bold text-white mb-4">Roof Structure</h3>
-              
-              <div className="space-y-3">
-                <Label className="text-zinc-400 text-sm">Select type</Label>
-                <Select value={roofStructure} onValueChange={(value) => {
-                  setRoofStructure(value);
-                  handleGenerateSketch(value);
-                }}>
-                  <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    <SelectItem value="none" className="text-white">No Roof</SelectItem>
-                    <SelectItem value="marquee" className="text-white">Marquee Tent</SelectItem>
-                    <SelectItem value="truss_frame" className="text-white">Truss Frame Roof</SelectItem>
-                    <SelectItem value="frame_tent" className="text-white">Frame Tent</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+          {/* Update Roof Button */}
+          {sketchUrl && (
+            <Button
+              onClick={() => handleGenerateSketch(roofStructure)}
+              className="w-full bg-zinc-700 hover:bg-zinc-600 text-white font-semibold h-11 rounded-lg mt-4"
+            >
+              Update Roof
+            </Button>
           )}
         </motion.div>
 
