@@ -150,8 +150,8 @@ STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColo
       if (railings.back) {
         prompt += `
 RAILINGS:
-- Railing along the back
-- Front and sides (audience facing) have NO railing
+- **FULL-LENGTH railing spanning the ENTIRE back edge** of each tier (no gaps, continuous)
+- Front and sides (audience facing) have NO railing, NO railings whatsoever
 `;
       } else {
         prompt += `
