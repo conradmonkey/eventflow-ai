@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { 
   Theater, 
   FileCheck,
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ServiceCard from "@/components/ServiceCard";
+import { base44 } from "@/api/base44Client";
 
 
 const services = [
@@ -64,6 +66,12 @@ const services = [
 ];
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    base44.auth.isAuthenticated().then(setIsAuthenticated);
+  }, []);
+
   return (
     <div className="min-h-screen bg-zinc-950">
       {/* Hero Section */}
@@ -88,6 +96,15 @@ export default function Home() {
               <Sparkles className="w-4 h-4 text-amber-400" />
               <span className="text-sm text-amber-200">AI-Powered Event Planning</span>
             </div>
+
+            {isAuthenticated === false && (
+              <div className="mb-6">
+                <div className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 border border-amber-500/30">
+                  <p className="text-2xl font-bold text-amber-400">$20 per year</p>
+                  <p className="text-sm text-amber-200/80">First month free</p>
+                </div>
+              </div>
+            )}
             
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
               Bring Your Event
