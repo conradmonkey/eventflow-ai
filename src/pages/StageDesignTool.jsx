@@ -184,7 +184,7 @@ Tent structure: EXACTLY 4 legs and NOTHING else. One leg at front-left corner, o
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure - **CRITICAL: NO center legs or middle supports. Must be open underneath.**
+ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY. One leg at each corner. ZERO middle legs, ZERO center supports, ZERO interior legs, ZERO poles anywhere else. Must be open underneath with no supports in the middle.**
 `;
         }
       }
