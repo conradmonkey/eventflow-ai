@@ -132,13 +132,13 @@ export default function StageDesignTool() {
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
-IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
+CRITICAL: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less. Do not add any additional tiers or levels beyond what is specified below.
 
 STAGE LAYOUT:
 `
         : `Simple 3D render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
-IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
+CRITICAL: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less. Do not add any additional tiers or levels beyond what is specified below.
 
 STAGE LAYOUT:
 `;
