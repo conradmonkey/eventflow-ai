@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const ITEM_SIZES = {
   tent_10x10: { width: 10, height: 10, color: '#3B82F6', label: '10x10' },
@@ -26,16 +26,14 @@ export default function Canvas2DRenderer({
   const [draggingItem, setDraggingItem] = useState(null);
   const [dragStart, setDragStart] = useState(null);
 
-  const drawItems = React.useCallback((ctx, canvas) => {
+  const drawItems = useCallback((ctx, canvas) => {
     items.forEach((item, idx) => {
       const size = ITEM_SIZES[item.type];
       if (!size) return;
 
-      const pixelWidth = (size.width / scale) * zoom;
-      const pixelHeight = (size.height / scale) * zoom;
+      let width = (size.width / scale) * zoom;
+      let height = (size.height / scale) * zoom;
 
-      let width = pixelWidth;
-      let height = pixelHeight;
       if (item.type === 'video_wall' && item.width && item.height) {
         width = (item.width / scale) * zoom;
         height = (item.height / scale) * zoom;
@@ -87,7 +85,7 @@ export default function Canvas2DRenderer({
     } else {
       drawItems(ctx, canvas);
     }
-  }, [backgroundImage, items, scale, zoom, selectedItem, drawItems]);
+  }, [backgroundImage, items, scale, zoom, selectedItem, drawItems, canvasRef]);
 
   const getItemAtPoint = (x, y) => {
     for (let i = items.length - 1; i >= 0; i--) {
@@ -95,11 +93,9 @@ export default function Canvas2DRenderer({
       const size = ITEM_SIZES[item.type];
       if (!size) continue;
 
-      const pixelWidth = (size.width / scale) * zoom;
-      const pixelHeight = (size.height / scale) * zoom;
+      let width = (size.width / scale) * zoom;
+      let height = (size.height / scale) * zoom;
 
-      let width = pixelWidth;
-      let height = pixelHeight;
       if (item.type === 'video_wall' && item.width && item.height) {
         width = (item.width / scale) * zoom;
         height = (item.height / scale) * zoom;
@@ -173,7 +169,7 @@ export default function Canvas2DRenderer({
   return (
     <div
       ref={containerRef}
-      className="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-slate-200"
+      className="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-slate-200 relative"
       style={{ height: '600px' }}
     >
       <canvas
@@ -183,7 +179,7 @@ export default function Canvas2DRenderer({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         onContextMenu={handleContextMenu}
-        className="w-full h-full cursor-move"
+        className="w-full h-full cursor-move block"
       />
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
         Drag to move • Right-click to rotate
