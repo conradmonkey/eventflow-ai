@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const ITEM_SIZES = {
-  tent_10x10: { width: 10, height: 10, color: '#3B82F6', label: '10x10' },
-  tent_10x20: { width: 10, height: 20, color: '#3B82F6', label: '10x20' },
-  tent_15x15: { width: 15, height: 15, color: '#3B82F6', label: '15x15' },
-  tent_20x20: { width: 20, height: 20, color: '#3B82F6', label: '20x20' },
-  tent_20x30: { width: 20, height: 30, color: '#3B82F6', label: '20x30' },
-  video_wall: { width: 4, height: 4, color: '#1E90FF', label: 'Video Wall' },
-  toilet: { width: 4, height: 4, color: '#8B4513', label: 'Toilet' },
+  tent_10x10: { width: 10, height: 10, color: '#3B82F6', label: '10x10 Tent' },
+  tent_10x20: { width: 10, height: 20, color: '#3B82F6', label: '10x20 Tent' },
+  tent_15x15: { width: 15, height: 15, color: '#3B82F6', label: '15x15 Tent' },
+  tent_20x20: { width: 20, height: 20, color: '#3B82F6', label: '20x20 Tent' },
+  tent_20x30: { width: 20, height: 30, color: '#3B82F6', label: '20x30 Tent' },
+  video_wall: { width: 10, height: 8, color: '#1E90FF', label: 'Video Wall' },
+  toilet: { width: 5, height: 5, color: '#000000', label: 'Toilet' },
   handwash: { width: 3, height: 3, color: '#4169E1', label: 'Handwash' },
   sink: { width: 4, height: 4, color: '#20B2AA', label: 'Sink' },
   stage: { width: 16, height: 20, color: '#EF4444', label: 'Stage' },
