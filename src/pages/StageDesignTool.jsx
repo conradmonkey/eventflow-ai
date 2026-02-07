@@ -180,15 +180,14 @@ NO RAILINGS - Do not show any railings on the stage
           const tentLength = stageLength + 2; // Make stage 2ft bigger than tent
           const tentWidth = stageWidth + 2;
           prompt += `
-ROOF: White marquee tent (${tentLength}' x ${tentWidth}' covering and slightly overhanging the stage).
-Stage deck is ${stageLength}' x ${stageWidth}' - slightly smaller than the tent so the tent legs rest ON TOP OF the stage deck surface.
-**ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
-Four legs total positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
-The legs must sit on the stage surface itself. No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs on the stage.
-IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
-`;
-          }
-        } else if (roofStructure === "truss_frame") {
+          ROOF: White marquee tent (${tentLength}' x ${tentWidth}' covering and slightly overhanging the stage).
+          Stage deck is ${stageLength}' x ${stageWidth}' - slightly smaller than the tent so the tent legs rest ON TOP OF the stage deck surface.
+          **ONLY 4 LEGS. EXACTLY 4 LEGS. NO MORE LEGS. ONLY 4.**
+          Four legs total positioned ON TOP OF THE STAGE DECK at front-left corner, front-right corner, back-left corner, back-right corner.
+          The legs must sit on the stage surface itself. No legs anywhere else. No side legs. No middle legs. No edge legs. No poles. Only these 4 corner legs on the stage.
+          IGNORE structural support requirements. Do not add supports for structural integrity. Render exactly as specified.
+          `;
+          } else if (roofStructure === "truss_frame") {
           const stageLength = parseFloat(validTiers[0].length);
           const stageWidth = parseFloat(validTiers[0].width);
           const roofLength = stageLength + 2; // Make stage 2ft bigger than roof
