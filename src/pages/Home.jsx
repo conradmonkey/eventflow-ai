@@ -57,12 +57,6 @@ const services = [
     description: "Generate technical drawings, 3D renders, and equipment lists for LED video wall installations.",
     href: "VideoWallDrawing",
   },
-  {
-    icon: Sparkles,
-    title: "AI Room Decor Designer",
-    description: "Create elegant room layouts with professional 2D floor plans and stunning 3D renders.",
-    href: "RoomDesigner",
-  },
 ];
 
 export default function Home() {
