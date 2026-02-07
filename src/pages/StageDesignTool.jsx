@@ -17,7 +17,7 @@ export default function StageDesignTool() {
     right: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
-  const [renderType, setRenderType] = useState("schematic");
+  const [renderType, setRenderType] = useState("3d");
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const sketchRef = useRef(null);
@@ -129,21 +129,14 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      let prompt = renderType === "3d" 
-        ? `Simple 3D render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
-
-IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
-
-STAGE LAYOUT:
-`
-        : renderType === "artistic"
+      let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
 IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
 
 STAGE LAYOUT:
 `
-        : `Simple, clean schematic diagram of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
+        : `Simple 3D render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
 IMPORTANT: Show EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} - no more, no less.
 
@@ -187,19 +180,7 @@ ROOF: Frame tent covering base tier
         }
       }
 
-      prompt += renderType === "3d" 
-        ? `
-
-3D RENDER STYLE:
-- Simple 3D render from a 3/4 angle view
-- Show all tiers clearly stacked
-- Clean, minimalist style
-- Light shading and shadows for depth
-- Show railings as simple structures
-- Easy to understand perspective
-- Not photorealistic, just clean simple 3D visualization
-- NO STAIRS OR STAIRCASES - do not include any stairs`
-        : renderType === "artistic"
+      prompt += renderType === "artistic"
         ? `
 
 ARTISTIC RENDER STYLE:
@@ -214,14 +195,14 @@ ARTISTIC RENDER STYLE:
 - NO STAIRS OR STAIRCASES - do not include any stairs`
         : `
 
-DIAGRAM STYLE:
-- Simple side view schematic showing all tiers stacked
-- Clean lines with light shading
-- Clear labels for dimensions
-- Easy to understand layout
-- Minimal colors: black outlines, light gray fills
-- Show railings as simple lines
-- Professional but simple diagram style
+3D RENDER STYLE:
+- Simple 3D render from a 3/4 angle view
+- Show all tiers clearly stacked
+- Clean, minimalist style
+- Light shading and shadows for depth
+- Show railings as simple structures
+- Easy to understand perspective
+- Not photorealistic, just clean simple 3D visualization
 - NO STAIRS OR STAIRCASES - do not include any stairs`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
@@ -352,7 +333,6 @@ DIAGRAM STYLE:
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
-                <SelectItem value="schematic" className="text-white">Schematic Diagram</SelectItem>
                 <SelectItem value="3d" className="text-white">Simple 3D Render</SelectItem>
                 <SelectItem value="artistic" className="text-white">Artistic Render</SelectItem>
               </SelectContent>
