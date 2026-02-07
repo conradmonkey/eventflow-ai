@@ -3,7 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Theater, Plus, Trash2, Loader2, Box } from "lucide-react";
 import { motion } from "framer-motion";
@@ -325,33 +324,36 @@ DRAWING REQUIREMENTS:
             <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <Checkbox
+                <input
+                  type="checkbox"
                   id="back-railing"
                   checked={railings.back}
-                  onCheckedChange={(checked) => setRailings({ ...railings, back: checked })}
-                  className="border-zinc-600 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
+                  onChange={(e) => setRailings({ ...railings, back: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="back-railing" className="text-zinc-300 cursor-pointer">
                   Back Railing (full length across back)
                 </Label>
               </div>
               <div className="flex items-center space-x-3">
-                <Checkbox
+                <input
+                  type="checkbox"
                   id="left-railing"
                   checked={railings.left}
-                  onCheckedChange={(checked) => setRailings({ ...railings, left: checked })}
-                  className="border-zinc-600 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
+                  onChange={(e) => setRailings({ ...railings, left: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="left-railing" className="text-zinc-300 cursor-pointer">
                   Left Side Railing (won't block stairs)
                 </Label>
               </div>
               <div className="flex items-center space-x-3">
-                <Checkbox
+                <input
+                  type="checkbox"
                   id="right-railing"
                   checked={railings.right}
-                  onCheckedChange={(checked) => setRailings({ ...railings, right: checked })}
-                  className="border-zinc-600 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
+                  onChange={(e) => setRailings({ ...railings, right: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
                 />
                 <Label htmlFor="right-railing" className="text-zinc-300 cursor-pointer">
                   Right Side Railing (full length)
