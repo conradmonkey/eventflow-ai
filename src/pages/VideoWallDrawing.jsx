@@ -22,7 +22,6 @@ export default function VideoWallDrawing() {
     wall_height: "",
     wall_width: "",
     height_off_ground: "",
-    mounting_type: "", // "box", "stage", or "truss"
   });
   const [isLoading, setIsLoading] = useState(false);
   const [drawingUrl, setDrawingUrl] = useState(null);
@@ -32,7 +31,6 @@ export default function VideoWallDrawing() {
   const [isGeneratingRender, setIsGeneratingRender] = useState(false);
 
   const heightOffGroundInFeet = formData.height_off_ground ? parseFloat(formData.height_off_ground) * 3.28084 : 0;
-  const showMountingOptions = heightOffGroundInFeet >= 2;
 
   const calculateGearList = () => {
     const height = parseFloat(formData.wall_height);
@@ -49,8 +47,6 @@ export default function VideoWallDrawing() {
     let stageDeckCost = 0;
     let boxCount = 0;
     let boxCost = 0;
-    let trussCount = 0;
-    let riggingItems = [];
 
     const heightOffGroundFt = heightOffGround * 3.28084;
 
@@ -58,7 +54,7 @@ export default function VideoWallDrawing() {
       // Black box mounting
       boxCount = 1;
       boxCost = 150; // Estimated cost for custom box
-    } else if (formData.mounting_type === "stage") {
+    } else {
       // Calculate stage decks needed
       const stageWidthFt = 4;
       const stageLengthNeededFt = width * 3.28084;
@@ -77,31 +73,13 @@ export default function VideoWallDrawing() {
       
       stageDeckCount = length4x8 + length4x4;
       stageDeckCost = stageDeckCount * 100;
-    } else if (formData.mounting_type === "truss") {
-      // Calculate truss lengths
-      const trussWidth = (width + 0.6) * 3.28084; // +1ft each side
-      const trussHeight = (height + 0.3) * 3.28084; // +1ft top
-      
-      // Truss segments (12" box truss, typically 10ft sections)
-      const topBottomSegments = Math.ceil(trussWidth / 10) * 2; // top and bottom
-      const sideSegments = Math.ceil(trussHeight / 10) * 2; // left and right
-      trussCount = topBottomSegments + sideSegments + 4; // +4 for legs
-      
-      riggingItems = [
-        "Chain motors (4x)",
-        "Slings and eyebolts (12x)",
-        "Outriggers (4x)",
-        "Truss clamps and hardware"
-      ];
     }
 
     return {
       videoPanels: { count: totalPanels, dimensions: `${panelsHigh} high x ${panelsWide} wide`, cost: panelCost },
       stageDecks: stageDeckCount > 0 ? { count: stageDeckCount, cost: stageDeckCost } : null,
       box: boxCount > 0 ? { count: boxCount, cost: boxCost } : null,
-      truss: trussCount > 0 ? { segments: trussCount, cost: trussCount * 75 } : null,
-      rigging: riggingItems.length > 0 ? riggingItems : null,
-      totalCost: panelCost + stageDeckCost + boxCost + (trussCount * 75) + (riggingItems.length > 0 ? 500 : 0)
+      totalCost: panelCost + stageDeckCost + boxCost
     };
   };
 
@@ -217,16 +195,10 @@ Video Wall:
         renderPrompt += `- Mounted on a modern black support structure
 - Clean, minimalist design
 `;
-      } else if (formData.mounting_type === "stage") {
+      } else {
         renderPrompt += `- Positioned on a professional stage platform
 - Industrial stage deck construction
 - Stage is ${heightOffGround}m high
-`;
-      } else if (formData.mounting_type === "truss") {
-        renderPrompt += `- Suspended from professional rigging system
-- Truss structure completely hidden behind elegant black drape fabric
-- Clean, theatrical presentation with no visible rigging
-- Glamorous, polished look
 `;
       }
 
@@ -393,7 +365,7 @@ Style:
                   <Select
                     value={formData.height_off_ground}
                     onValueChange={(value) => {
-                      setFormData((prev) => ({ ...prev, height_off_ground: value, mounting_type: "" }));
+                      setFormData((prev) => ({ ...prev, height_off_ground: value }));
                     }}
                     required
                   >
@@ -412,37 +384,12 @@ Style:
               </div>
             </div>
 
-            {/* Mounting Type (only if >= 2ft) */}
-            {showMountingOptions && (
-              <div>
-                <h2 className="text-lg font-semibold text-white mb-4">MOUNTING TYPE</h2>
-                <RadioGroup
-                  value={formData.mounting_type}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, mounting_type: value }))}
-                  required
-                >
-                  <div className="flex items-center space-x-3 bg-zinc-900 border border-zinc-700 rounded-lg p-4 hover:border-cyan-500/50 transition-colors">
-                    <RadioGroupItem value="stage" id="stage" className="border-zinc-600 text-cyan-400" />
-                    <Label htmlFor="stage" className="text-white cursor-pointer flex-1">
-                      <div className="font-semibold">On Stage Platform</div>
-                      <div className="text-sm text-zinc-400">Video wall rests on stage decks</div>
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-3 bg-zinc-900 border border-zinc-700 rounded-lg p-4 hover:border-cyan-500/50 transition-colors">
-                    <RadioGroupItem value="truss" id="truss" className="border-zinc-600 text-cyan-400" />
-                    <Label htmlFor="truss" className="text-white cursor-pointer flex-1">
-                      <div className="font-semibold">Suspended from Truss</div>
-                      <div className="text-sm text-zinc-400">Video wall hangs from rigging truss</div>
-                    </Label>
-                  </div>
-                </RadioGroup>
-              </div>
-            )}
+
 
             <div className="flex gap-3">
               <Button
                 type="submit"
-                disabled={isLoading || (showMountingOptions && !formData.mounting_type)}
+                disabled={isLoading}
                 className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold h-12 rounded-lg"
               >
                 {isLoading ? (
@@ -588,38 +535,7 @@ Style:
                 </div>
               )}
 
-              {/* Truss */}
-              {gearList.truss && (
-                <div className="bg-zinc-800/50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-white mb-3">12" Box Truss System</h3>
-                  <div className="text-zinc-300 space-y-1">
-                    <p className="text-cyan-400 font-semibold">
-                      Segments: {gearList.truss.segments} (10ft sections)
-                    </p>
-                    <p className="text-amber-400 font-semibold">
-                      Cost: ${gearList.truss.cost.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              )}
 
-              {/* Rigging */}
-              {gearList.rigging && (
-                <div className="bg-zinc-800/50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-white mb-3">Rigging Equipment</h3>
-                  <ul className="text-zinc-300 space-y-2">
-                    {gearList.rigging.map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-amber-400 font-semibold mt-3">
-                    Estimated Cost: $500
-                  </p>
-                </div>
-              )}
 
               {/* Total */}
               <div className="bg-gradient-to-r from-amber-500/20 to-cyan-500/20 rounded-lg p-6 border border-amber-500/30">
