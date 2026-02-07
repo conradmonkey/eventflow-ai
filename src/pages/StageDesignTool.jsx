@@ -17,6 +17,7 @@ export default function StageDesignTool() {
     right: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
+  const [renderType, setRenderType] = useState("3d");
   const [stageColor, setStageColor] = useState("black");
   const [sketchUrl, setSketchUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
