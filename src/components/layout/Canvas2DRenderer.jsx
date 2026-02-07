@@ -64,28 +64,35 @@ export default function Canvas2DRenderer({
   }, [items, scale, zoom, selectedItem]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || !containerRef.current) return;
+    if (!containerRef.current) return;
 
+    const canvas = canvasRef.current;
     const container = containerRef.current;
+    
+    // Ensure canvas is properly sized
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
 
     const ctx = canvas.getContext('2d');
+    
+    // Clear canvas
     ctx.fillStyle = '#E0E7FF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (backgroundImage) {
       const img = new Image();
       img.onload = () => {
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        drawItems(ctx, canvas);
+      };
+      img.onerror = () => {
         drawItems(ctx, canvas);
       };
       img.src = backgroundImage;
     } else {
       drawItems(ctx, canvas);
     }
-  }, [backgroundImage, items, scale, zoom, selectedItem, drawItems, canvasRef]);
+  }, [backgroundImage, items, scale, zoom, selectedItem, drawItems]);
 
   const getItemAtPoint = (x, y) => {
     for (let i = items.length - 1; i >= 0; i--) {
