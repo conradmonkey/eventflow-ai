@@ -43,7 +43,7 @@ export default function StageDesignTool() {
     const lengthFt = parseFloat(length);
     const widthFt = parseFloat(width);
     
-    let platforms = { '4x8': 0, '4x4': 0, '4x2': 0 };
+    let platforms = { '4x8': 0, '4x4': 0 };
     let remainingArea = lengthFt * widthFt;
 
     // Maximize 4x8 platforms (32 sq ft each)
@@ -52,13 +52,8 @@ export default function StageDesignTool() {
     remainingArea -= num4x8 * 32;
 
     // Then 4x4 platforms (16 sq ft each)
-    const remaining4x4 = Math.floor(remainingArea / 16);
-    platforms['4x4'] = remaining4x4;
-    remainingArea -= remaining4x4 * 16;
-
-    // Finally 4x2 platforms (8 sq ft each)
-    const num4x2 = Math.ceil(remainingArea / 8);
-    platforms['4x2'] = num4x2;
+    const num4x4 = Math.ceil(remainingArea / 16);
+    platforms['4x4'] = num4x4;
 
     return platforms;
   };
@@ -160,9 +155,9 @@ The stage is composed of ${validTiers.length} tier(s) made from steel deck platf
       validTiers.forEach((tier, index) => {
         const platforms = calculateDeckPlatforms(tier.length, tier.width);
         prompt += `Tier ${index + 1}: ${tier.length}' length × ${tier.width}' width × ${tier.height}' high
-- Made of: ${platforms['4x8']} × 4'×8' platforms, ${platforms['4x4']} × 4'×4' platforms, ${platforms['4x2']} × 4'×2' platforms
-${index === 0 ? "(Base tier on ground)" : `(Positioned on back of Tier ${index})`}
-`;
+      - Made of: ${platforms['4x8']} × 4'×8' platforms, ${platforms['4x4']} × 4'×4' platforms
+      ${index === 0 ? "(Base tier on ground)" : `(Positioned on back of Tier ${index})`}
+      `;
       });
 
       const colorMap = {
@@ -551,7 +546,6 @@ MULTI-ANGLE VIEW:
                         <div className="text-sm text-zinc-300 space-y-1">
                           {platforms['4x8'] > 0 && <p>• {platforms['4x8']} × 4'×8' platforms</p>}
                           {platforms['4x4'] > 0 && <p>• {platforms['4x4']} × 4'×4' platforms</p>}
-                          {platforms['4x2'] > 0 && <p>• {platforms['4x2']} × 4'×2' platforms</p>}
                         </div>
                       </div>
                     );
