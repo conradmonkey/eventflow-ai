@@ -230,7 +230,18 @@ CRITICAL REQUIREMENTS:
 - Show all deck platform seams clearly
 - If railings present, show them as continuous bars
 - Include shadows for depth perception
-- Clean, professional technical drawing style`;
+- Clean, professional technical drawing style
+${renderType === "artistic" ? `
+
+ARTISTIC RENDER STYLE:
+- Photorealistic lighting and materials
+- Professional production quality
+- Dramatic 35-degree angle from front
+- High-quality textures for deck materials
+- Atmospheric lighting and shadows
+- Inspiring and visually compelling
+- Show the stage as clients would see it at an event
+` : ""}`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
