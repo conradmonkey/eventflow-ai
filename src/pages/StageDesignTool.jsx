@@ -154,12 +154,12 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
 
       if (railings.back || railings.left || railings.right) {
         prompt += `
-RAILINGS:
+RAILINGS (Maximum 3 sides only):
 `;
         if (railings.back) prompt += `- Back edge\n`;
         if (railings.left) prompt += `- Left side\n`;
         if (railings.right) prompt += `- Right side\n`;
-        prompt += `- NEVER add railings on the front edge of the stage\n`;
+        prompt += `- The front edge MUST remain open with NO railings\n`;
       } else {
         prompt += `
 NO RAILINGS - Do not show any railings on the stage
