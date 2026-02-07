@@ -57,7 +57,7 @@ export default function VideoWallDrawing() {
     } else {
       // Calculate stage decks needed
       const stageWidthFt = 4;
-      const stageLengthNeededFt = width * 3.28084;
+      const stageLengthNeededFt = Math.max(width * 3.28084, width * 3.28084); // Ensure stage is at least as wide as video wall
       
       // Use 4x8 and 4x4 decks
       let length4x8 = 0;
@@ -113,7 +113,7 @@ Video Wall Specifications:
 `;
       } else {
         setupDescription += `Mounting: Stage platform
-      - Stage: 1.2m (4ft) wide, minimum ${width}m long
+      - Stage dimensions: 1.2m (4ft) deep x ${width}m wide (matches video wall width)
       - Built with 4x8ft and 4x4ft stage deck platforms
       - Maximum one 4x8ft deck, remaining length with 4x4ft decks
       - Stage height: ${heightOffGround}m
