@@ -412,7 +412,6 @@ ARTISTIC RENDER STYLE:
                     <SelectItem value="none" className="text-white">No Roof</SelectItem>
                     <SelectItem value="marquee" className="text-white">Marquee Tent</SelectItem>
                     <SelectItem value="truss_frame" className="text-white">Truss Frame</SelectItem>
-                    <SelectItem value="frame_tent" className="text-white">Frame Tent</SelectItem>
                   </SelectContent>
                 </Select>
 
