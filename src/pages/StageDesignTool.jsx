@@ -136,6 +136,7 @@ STAGE CONFIGURATION:
 The stage is composed of ${validTiers.length} tier(s) made from steel deck platforms (4'×8', 4'×4', 4'×2' sizes).
 
 `;
+      prompt += ``;
 
       validTiers.forEach((tier, index) => {
         const platforms = calculateDeckPlatforms(tier.length, tier.width);
