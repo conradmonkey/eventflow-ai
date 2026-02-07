@@ -12,8 +12,7 @@ export default function StageDesignTool() {
     { id: 1, length: "", width: "", height: "" }
   ]);
   const [railings, setRailings] = useState({
-    back: false,
-    sides: false
+    back: false
   });
   const [roofStructure, setRoofStructure] = useState("none");
   const [renderType, setRenderType] = useState("3d");
