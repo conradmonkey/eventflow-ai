@@ -141,7 +141,7 @@ ${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
       });
 
       prompt += `
-ABSOLUTE REQUIREMENT: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. NO STAIRS, NO STEPS, NO RAMPS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS, NO TRANSITIONAL ELEMENTS, NO BACK WALLS, NO CENTER SUPPORT LEGS. Render ONLY what is listed above, nothing more. Tiers stack directly on top of each other.
+**FINAL ABSOLUTE REQUIREMENT**: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. ABSOLUTELY NO STAIRS, NO STEPS, NO RAMPS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS, NO TRANSITIONAL ELEMENTS, NO BACK WALLS, NO CENTER SUPPORT LEGS, NO DECORATIVE ADDITIONS. Render EXACTLY what is listed above - nothing more, nothing less. Tiers stack directly on top of each other with no transitions or intermediates.
 `;
 
       prompt += `
