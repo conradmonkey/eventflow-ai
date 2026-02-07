@@ -355,6 +355,38 @@ ARTISTIC RENDER STYLE:
             </Select>
           </div>
 
+          {/* Railings */}
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
+            <p className="text-xs text-zinc-500 mb-3">Front remains open (audience facing)</p>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  id="back-railing"
+                  checked={railings.back}
+                  onChange={(e) => setRailings({ ...railings, back: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
+                />
+                <Label htmlFor="back-railing" className="text-zinc-300 cursor-pointer">
+                  Back Railing
+                </Label>
+              </div>
+              <div className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  id="sides-railing"
+                  checked={railings.sides}
+                  onChange={(e) => setRailings({ ...railings, sides: e.target.checked })}
+                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
+                />
+                <Label htmlFor="sides-railing" className="text-zinc-300 cursor-pointer">
+                  Side Railings
+                </Label>
+              </div>
+            </div>
+          </div>
+
 
 
           <Button
