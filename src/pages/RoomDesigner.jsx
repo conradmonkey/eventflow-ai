@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +35,7 @@ export default function RoomDesigner() {
   const [render3D, setRender3D] = useState(null);
   const [isLoading3D, setIsLoading3D] = useState(false);
   const [showGearList, setShowGearList] = useState(false);
+  const render3DRef = useRef(null);
 
   const handleGenerate2D = (e) => {
     e.preventDefault();
@@ -128,6 +129,10 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
 - LED strip lighting for bar and architectural accents`
         }
       });
+      
+      setTimeout(() => {
+        render3DRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     } catch (error) {
       console.error("Error generating 3D render:", error);
       alert("Error generating 3D render. Please try again.");
@@ -475,6 +480,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
         {/* 3D Render */}
         {render3D && (
           <motion.div
+            ref={render3DRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-8 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
