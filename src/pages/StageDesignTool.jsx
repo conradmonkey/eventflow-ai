@@ -127,7 +127,7 @@ export default function StageDesignTool() {
       setSketchUrl(null);
 
       // Build detailed prompt
-      let prompt = `Technical architectural sketch of a multi-tier stage design, side view and top-down view.
+      let prompt = `Photorealistic 3D render of a professional multi-tier event stage setup, outdoor setting.
 
 STAGE SPECIFICATIONS:
 `;
@@ -137,24 +137,24 @@ STAGE SPECIFICATIONS:
         prompt += `
 Tier ${index + 1}:
 - Dimensions: ${tier.length}ft (L) x ${tier.width}ft (W) x ${tier.height}ft (H)
-- Platform composition: ${platforms['4x8']} units of 4'x8' deck platforms, ${platforms['4x4']} units of 4'x4' platforms, ${platforms['4x2']} units of 4'x2' platforms
-- Position: ${index === 0 ? 'Base tier' : `Centered on back edge of Tier ${index}, aligned to rear`}
+- Steel deck platform construction with black non-slip surface
+- Position: ${index === 0 ? 'Base tier on ground level' : `Centered on back edge of Tier ${index}, aligned to rear`}
 `;
       });
 
       const firstTier = validTiers[0];
       if (parseFloat(firstTier.height) > 1) {
         prompt += `
-- Stairs: Located on the left side of the stage, providing access from ground to tier 1
+- Stairs: Professional stage stairs on the left side with handrails
 `;
       }
 
       if (railings.back || railings.left || railings.right) {
         prompt += `
-RAILINGS:
+SAFETY RAILINGS:
 `;
-        if (railings.back) prompt += `- Back railing: Full length across the back edge of the top tier\n`;
-        if (railings.left) prompt += `- Left side railing: Full length along the left side, NOT blocking stairs\n`;
+        if (railings.back) prompt += `- Back railing: Aluminum pipe railing across the back edge\n`;
+        if (railings.left) prompt += `- Left side railing: Full length, does not block stairs\n`;
         if (railings.right) prompt += `- Right side railing: Full length along the right side\n`;
       }
 
@@ -162,43 +162,39 @@ RAILINGS:
         if (roofStructure === "marquee") {
           const tent = selectMarqueeTent(parseFloat(firstTier.length), parseFloat(firstTier.width));
           if (tent) {
-            const offsetLength = (parseFloat(firstTier.length) - tent.length) / 2;
-            const offsetWidth = (parseFloat(firstTier.width) - tent.width) / 2;
             prompt += `
 ROOF STRUCTURE:
-- Type: Marquee Canopy Tent (${tent.name})
-- Position: Centered on top of the base tier, ${offsetLength}ft from front/back edges, ${offsetWidth}ft from left/right edges
+- White marquee canopy tent (${tent.name}) centered on base tier
+- Elegant peaked roof with guy lines and stakes
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
 ROOF STRUCTURE:
-- Type: Truss Frame Roof
-- Dimensions: Slightly smaller than base tier to fit on top
-- Professional aluminum truss construction with overhead rigging points
+- Professional aluminum box truss frame roof
+- Black powder-coated finish
+- Overhead rigging points for lighting and audio
 `;
         } else if (roofStructure === "frame_tent") {
           prompt += `
 ROOF STRUCTURE:
-- Type: Frame Tent
-- Dimensions: Fitted to cover the entire base tier
-- Traditional tent frame with fabric canopy
+- White frame tent canopy covering the base tier
+- Traditional pipe frame with fabric roof
 `;
         }
       }
 
       prompt += `
 
-DRAWING REQUIREMENTS:
-- Create TWO views: side elevation view AND top-down floor plan view
-- Side view: Show all tiers stacked vertically with clear height measurements, include stairs if applicable, show deck platform layers
-- Top view: Show the footprint of each tier, deck platform grid layout (4'x8', 4'x4', 4'x2' visible), railing positions, roof structure outline
-- Professional architectural sketch style with clean lines
-- Include dimension labels and measurements
-- Show material specifications for platforms
-- Technical blueprint aesthetic with precise proportions
-- Black and white line drawing style
-- Grid background for scale reference`;
+RENDERING STYLE:
+- Ultra realistic 3D render
+- Professional event production quality
+- Outdoor venue setting with natural lighting
+- Show the stage from a 3/4 angle view to see depth and tiers
+- Clean, professional stage setup
+- Cinematic lighting and shadows
+- High detail on materials and textures
+- Photo quality finish`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
