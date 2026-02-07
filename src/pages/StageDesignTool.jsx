@@ -218,30 +218,30 @@ DRAWING REQUIREMENTS:
 
   return (
     <div className="min-h-screen bg-zinc-950">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 flex items-center justify-center mx-auto mb-6">
-            <Theater className="w-8 h-8 text-amber-400" />
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-4">AI Stage Design Assistant</h1>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-            Design multi-tier stages with optimized deck platforms, railings, and roof structures
-          </p>
-        </motion.div>
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center py-8 px-6"
+      >
+        <div className="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center mx-auto mb-4">
+          <Theater className="w-6 h-6 text-amber-400" />
+        </div>
+        <h1 className="text-3xl font-bold text-white mb-2">AI Stage Design Assistant</h1>
+        <p className="text-zinc-400">
+          Design multi-tier stages with optimized deck platforms, railings, and roof structures
+        </p>
+      </motion.div>
 
-        {/* Form */}
+      {/* Split Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-[calc(100vh-200px)]">
+        {/* Left Side - Form (1/3) */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800 p-6 overflow-y-auto"
         >
-          <h2 className="text-2xl font-bold text-white mb-6">Stage Tiers</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Stage Tiers</h2>
           
           <div className="space-y-6">
             {tiers.map((tier, index) => (
@@ -365,130 +365,135 @@ DRAWING REQUIREMENTS:
           <Button
             onClick={handleGenerateSketch}
             disabled={isGenerating}
-            className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg mt-8"
+            className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-11 rounded-lg mt-6"
           >
             {isGenerating ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Generating Stage Design...
+                Generating...
               </>
             ) : (
               <>
                 <Theater className="w-5 h-5 mr-2" />
-                Generate Stage Sketch
+                Generate Sketch
               </>
             )}
           </Button>
+
+          {/* Roof Structure Options */}
+          {showRoofOptions && (
+            <div className="mt-6 pt-6 border-t border-zinc-700">
+              <h3 className="text-lg font-bold text-white mb-4">Roof Structure</h3>
+              
+              <div className="space-y-3">
+                <Label className="text-zinc-400 text-sm">Select type</Label>
+                <Select value={roofStructure} onValueChange={setRoofStructure}>
+                  <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectItem value="none" className="text-white">No Roof</SelectItem>
+                    <SelectItem value="marquee" className="text-white">Marquee Tent</SelectItem>
+                    <SelectItem value="truss_frame" className="text-white">Truss Frame</SelectItem>
+                    <SelectItem value="frame_tent" className="text-white">Frame Tent</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {roofStructure === "marquee" && validTiers.length > 0 && (
+                  <div className="bg-zinc-800/50 rounded-lg p-3 text-xs text-zinc-300">
+                    <p className="font-semibold text-white mb-1">Marquee Sizing:</p>
+                    <p>Sizes: 10'x10', 10'x20', 10'x30', 30'x30'</p>
+                    <p className="mt-1">
+                      {(() => {
+                        const tent = selectMarqueeTent(
+                          parseFloat(validTiers[0].length), 
+                          parseFloat(validTiers[0].width)
+                        );
+                        return tent 
+                          ? `✓ ${tent.name}`
+                          : '⚠️ No fit';
+                      })()}
+                    </p>
+                  </div>
+                )}
+
+                <Button
+                  onClick={handleGenerateSketch}
+                  disabled={isGenerating}
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-11 rounded-lg"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Regenerating...
+                    </>
+                  ) : (
+                    <>
+                      <Box className="w-4 h-4 mr-2" />
+                      Add Roof
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
         </motion.div>
 
-        {/* Roof Structure Options */}
-        {showRoofOptions && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
-          >
-            <h2 className="text-2xl font-bold text-white mb-6">Roof Structure (Optional)</h2>
-            
-            <div className="space-y-4">
-              <Label className="text-zinc-400">Select roof structure type</Label>
-              <Select value={roofStructure} onValueChange={setRoofStructure}>
-                <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-12 rounded-lg">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
-                  <SelectItem value="none" className="text-white">No Roof Structure</SelectItem>
-                  <SelectItem value="marquee" className="text-white">Marquee Canopy Tent</SelectItem>
-                  <SelectItem value="truss_frame" className="text-white">Truss Frame Roof</SelectItem>
-                  <SelectItem value="frame_tent" className="text-white">Frame Tent</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {roofStructure === "marquee" && validTiers.length > 0 && (
-                <div className="bg-zinc-800/50 rounded-lg p-4 text-sm text-zinc-300">
-                  <p className="font-semibold text-white mb-2">Marquee Tent Sizing:</p>
-                  <p>Available sizes: 10'x10', 10'x20', 10'x30', 30'x30'</p>
-                  <p className="mt-2">
-                    {(() => {
-                      const tent = selectMarqueeTent(
-                        parseFloat(validTiers[0].length), 
-                        parseFloat(validTiers[0].width)
-                      );
-                      return tent 
-                        ? `✓ Selected: ${tent.name} (fits on your ${validTiers[0].length}' x ${validTiers[0].width}' stage)`
-                        : '⚠️ No marquee tent size fits this stage';
-                    })()}
-                  </p>
-                </div>
-              )}
-
-              <Button
-                onClick={handleGenerateSketch}
-                disabled={isGenerating}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Regenerating with Roof...
-                  </>
-                ) : (
-                  <>
-                    <Box className="w-5 h-5 mr-2" />
-                    Regenerate with Roof Structure
-                  </>
-                )}
-              </Button>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Generated Sketch */}
-        {sketchUrl && (
-          <motion.div
-            ref={sketchRef}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
-          >
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              <Theater className="w-6 h-6 text-amber-400" />
-              Stage Design Sketch
-            </h2>
-            
-            <div className="bg-black rounded-lg overflow-hidden mb-6">
-              <img src={sketchUrl} alt="Stage design sketch" className="w-full h-auto" />
-            </div>
-
-            {/* Platform Summary */}
-            <div className="bg-zinc-800/50 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Deck Platform Summary</h3>
-              <div className="space-y-3">
-                {validTiers.map((tier, index) => {
-                  const platforms = calculateDeckPlatforms(tier.length, tier.width);
-                  return (
-                    <div key={index} className="border-b border-zinc-700 pb-3 last:border-b-0">
-                      <p className="text-amber-400 font-semibold mb-2">
-                        Tier {index + 1}: {tier.length}' x {tier.width}' x {tier.height}' H
-                      </p>
-                      <div className="text-sm text-zinc-300 space-y-1">
-                        {platforms['4x8'] > 0 && <p>• {platforms['4x8']} x 4'×8' deck platforms</p>}
-                        {platforms['4x4'] > 0 && <p>• {platforms['4x4']} x 4'×4' deck platforms</p>}
-                        {platforms['4x2'] > 0 && <p>• {platforms['4x2']} x 4'×2' deck platforms</p>}
-                      </div>
-                    </div>
-                  );
-                })}
+        {/* Right Side - Canvas (2/3) */}
+        <div className="lg:col-span-2 bg-zinc-900/30 overflow-y-auto">
+          {sketchUrl ? (
+            <motion.div
+              ref={sketchRef}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="p-8"
+            >
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <Theater className="w-6 h-6 text-amber-400" />
+                Stage Design Sketch
+              </h2>
+              
+              <div className="bg-black rounded-lg overflow-hidden mb-6">
+                <img src={sketchUrl} alt="Stage design sketch" className="w-full h-auto" />
               </div>
 
-              {parseFloat(validTiers[0].height) > 1 && (
-                <p className="text-zinc-400 text-sm mt-4">
-                  • Stairs required on left side (stage height {'>'} 1 ft)
-                </p>
-              )}
+              {/* Platform Summary */}
+              <div className="bg-zinc-800/50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Deck Platform Summary</h3>
+                <div className="space-y-3">
+                  {validTiers.map((tier, index) => {
+                    const platforms = calculateDeckPlatforms(tier.length, tier.width);
+                    return (
+                      <div key={index} className="border-b border-zinc-700 pb-3 last:border-b-0">
+                        <p className="text-amber-400 font-semibold mb-2">
+                          Tier {index + 1}: {tier.length}' x {tier.width}' x {tier.height}' H
+                        </p>
+                        <div className="text-sm text-zinc-300 space-y-1">
+                          {platforms['4x8'] > 0 && <p>• {platforms['4x8']} x 4'×8' deck platforms</p>}
+                          {platforms['4x4'] > 0 && <p>• {platforms['4x4']} x 4'×4' deck platforms</p>}
+                          {platforms['4x2'] > 0 && <p>• {platforms['4x2']} x 4'×2' deck platforms</p>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {parseFloat(validTiers[0].height) > 1 && (
+                  <p className="text-zinc-400 text-sm mt-4">
+                    • Stairs required on left side (stage height {'>'} 1 ft)
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <div className="h-full flex items-center justify-center text-zinc-500">
+              <div className="text-center">
+                <Theater className="w-16 h-16 mx-auto mb-4 opacity-20" />
+                <p className="text-lg">Enter stage details and click Generate Sketch</p>
+              </div>
             </div>
-          </motion.div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
