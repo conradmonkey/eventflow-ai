@@ -170,7 +170,7 @@ RAILINGS:
 
       if (roofStructure !== "none") {
         if (roofStructure === "marquee") {
-          const tent = selectMarqueeTent(parseFloat(firstTier.length), parseFloat(firstTier.width));
+          const tent = selectMarqueeTent(parseFloat(validTiers[0].length), parseFloat(validTiers[0].width));
           if (tent) {
             prompt += `
 ROOF: Marquee tent (${tent.name}) on base tier
