@@ -450,10 +450,10 @@ ${TENT_HARD_RULE}`;
                       Regenerating...
                     </>
                   ) : (
-                    <>
-                      <Box className="w-4 h-4 mr-2" />
-                      Add Roof
-                    </>
+                   <>
+                     <Box className="w-4 h-4 mr-2" />
+                     Select Roof Options
+                   </>
                   )}
                 </Button>
               </div>
