@@ -143,12 +143,15 @@ Video Wall Specifications:
       `;
       } else if (formData.mounting_type === "truss") {
         const trussWidth = width + 0.6;
+        const trussBotHeight = heightOffGround + height; // panels hang from truss, so truss bottom is at top of panels
+        const trussTopHeight = trussBotHeight + 1.2; // ~4ft truss depth
         setupDescription += `Mounting: Suspended from truss
 - 12-inch box truss frame
 - Truss frame width: ${trussWidth.toFixed(2)}m wide
-- Video wall panels attach directly to bottom of truss via clamps
-- Bottom of video wall: ${heightOffGround}m (${heightOffGroundFt.toFixed(1)}ft) off ground
-- Video wall height: ${height}m
+- Truss bottom: ${trussBotHeight.toFixed(2)}m off ground (where panels attach)
+- Truss top: ${trussTopHeight.toFixed(2)}m off ground
+- Video wall panels (${width}m × ${height}m) attach directly to bottom of truss via clamps
+- Bottom of video wall panels: ${heightOffGround}m (${heightOffGroundFt.toFixed(1)}ft) off ground
 - Vertical truss sides are within 1ft (0.3m) from each side of the video wall
 - Four truss legs with outriggers for structural support
 `;
