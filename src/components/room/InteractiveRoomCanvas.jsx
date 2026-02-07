@@ -113,8 +113,8 @@ export default function InteractiveRoomCanvas({ formData }) {
     }
 
     // Add tables - 6ft banquet
-    const table6ftCount = parseInt(formData.table_6ft || 0);
-    for (let i = 0; i < table6ftCount; i++) {
+    const table6ftBanquetCount = parseInt(formData.table_6ft || 0);
+    for (let i = 0; i < table6ftBanquetCount; i++) {
       newItems.push({
         id: `table6ft-${itemId++}`,
         type: 'table_6ft',
@@ -128,8 +128,8 @@ export default function InteractiveRoomCanvas({ formData }) {
     }
 
     // Add tables - 5ft round
-    const table5ftCount = parseInt(formData.table_5ft_round || 0);
-    for (let i = 0; i < table5ftCount; i++) {
+    const table5ftRoundCount = parseInt(formData.table_5ft_round || 0);
+    for (let i = 0; i < table5ftRoundCount; i++) {
       newItems.push({
         id: `table5ft-${itemId++}`,
         type: 'table_5ft_round',
@@ -142,10 +142,10 @@ export default function InteractiveRoomCanvas({ formData }) {
     }
 
     // Add tables - 6ft round
-    const table6ftCount = parseInt(formData.table_6ft_round || 0);
-    for (let i = 0; i < table6ftCount; i++) {
+    const table6ftRoundCount = parseInt(formData.table_6ft_round || 0);
+    for (let i = 0; i < table6ftRoundCount; i++) {
       newItems.push({
-        id: `table6ft-${itemId++}`,
+        id: `table6ftround-${itemId++}`,
         type: 'table_6ft_round',
         diameter: 6,
         x: 200 + (i % 4) * 80,
