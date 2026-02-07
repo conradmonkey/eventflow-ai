@@ -179,12 +179,12 @@ NO RAILINGS - Do not show any railings on the stage
           if (tent) {
             prompt += `
 ROOF: White marquee tent (${tent.name}) on top of stage.
-Tent structure: EXACTLY 4 legs ONLY - one at each corner (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center legs. ZERO interior supports. ONLY the 4 corner legs.
+Tent structure: EXACTLY 4 legs ONLY - positioned ON TOP of the stage deck, one at each corner (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center legs. ZERO interior supports. Legs rest on the stage surface, not below it.
 `;
           }
         } else if (roofStructure === "truss_frame") {
           prompt += `
-ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY at corners (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center supports. ZERO interior legs. Must be completely open underneath.**
+ROOF: Truss frame roof structure - **CRITICAL: EXACTLY 4 legs ONLY - positioned ON TOP of the stage deck at corners (front-left, front-right, back-left, back-right). ZERO middle front legs. ZERO middle side legs. ZERO center supports. ZERO interior legs. Legs rest on the stage surface. Must be completely open underneath.**
 `;
         }
       }
