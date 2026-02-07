@@ -50,6 +50,7 @@
 import EventPlannerProfile from './pages/EventPlannerProfile';
 import Home from './pages/Home';
 import LightingDesign from './pages/LightingDesign';
+import OutdoorLayoutPlanner from './pages/OutdoorLayoutPlanner';
 import PermitInvestigation from './pages/PermitInvestigation';
 import PermitInvestigator from './pages/PermitInvestigator';
 import RoomDesigner from './pages/RoomDesigner';
@@ -59,13 +60,13 @@ import TentDesign from './pages/TentDesign';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
-import OutdoorLayoutPlanner from './pages/OutdoorLayoutPlanner';
 
 
 export const PAGES = {
     "EventPlannerProfile": EventPlannerProfile,
     "Home": Home,
     "LightingDesign": LightingDesign,
+    "OutdoorLayoutPlanner": OutdoorLayoutPlanner,
     "PermitInvestigation": PermitInvestigation,
     "PermitInvestigator": PermitInvestigator,
     "RoomDesigner": RoomDesigner,
@@ -75,7 +76,6 @@ export const PAGES = {
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
     "VideoWallDrawing": VideoWallDrawing,
-    "OutdoorLayoutPlanner": OutdoorLayoutPlanner,
 }
 
 export const pagesConfig = {

@@ -38,13 +38,7 @@ const services = [
     href: "https://tent-plan-ai.base44.app/",
     external: true,
   },
-  {
-    icon: Map,
-    title: "Outdoor Festival Topography Planner",
-    description: "Plan festival layouts with AI-powered terrain analysis and site optimization.",
-    href: "https://fest-map-pro.base44.app",
-    external: true,
-  },
+
   {
     icon: Building2,
     title: "Venue Scouting",
