@@ -135,12 +135,12 @@ STAGE LAYOUT:
       validTiers.forEach((tier, index) => {
         prompt += `
 Tier ${index + 1}: ${tier.length}ft x ${tier.width}ft x ${tier.height}ft high
-${index === 0 ? '(Base tier)' : `(On back of Tier ${index})`}
+${index === 0 ? '(Base tier)' : `(Stacked on back of Tier ${index})`}
 `;
       });
 
       prompt += `
-**FINAL ABSOLUTE REQUIREMENT**: There are ONLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} on this stage. ABSOLUTELY NO STAIRS, NO STEPS, NO RAMPS, NO ADDITIONAL PLATFORMS, NO EXTRA LEVELS, NO TRANSITIONAL ELEMENTS, NO BACK WALLS, NO CENTER SUPPORT LEGS, NO MIDDLE LEGS, NO INTERIOR POLES, NO DECORATIVE ADDITIONS. If there is a tent, it must be completely open underneath with ZERO supports inside. Render EXACTLY what is listed above - nothing more, nothing less. Tiers stack directly on top of each other with no transitions or intermediates.
+**DO NOT INCLUDE**: Stairs, steps, ramps, additional platforms, intermediate levels, back walls, center legs, middle legs, interior poles, or any decorative elements. Show only the ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} specified above, stacked directly on top of each other.
 `;
 
       prompt += `
