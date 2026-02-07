@@ -12,7 +12,6 @@ export default function StageDesignTool() {
     { id: 1, length: "", width: "", height: "" }
   ]);
   const [railings, setRailings] = useState({
-    back: false,
     left_back: false,
     right_back: false,
     right_front: false
@@ -169,11 +168,10 @@ STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColo
 
 
 
-      if (railings.back || railings.left_back || railings.right_back || railings.right_front) {
+      if (railings.left_back || railings.right_back || railings.right_front) {
         prompt += `
 RAILINGS:
 `;
-        if (railings.back) prompt += `- Back edge (rear of stage)\n`;
         if (railings.left_back) prompt += `- Left back corner\n`;
         if (railings.right_back) prompt += `- Right back corner\n`;
         if (railings.right_front) prompt += `- Right front area\n`;
@@ -398,18 +396,6 @@ ARTISTIC RENDER STYLE:
             <h3 className="text-lg font-semibold text-white mb-4">Railings</h3>
             <p className="text-xs text-zinc-500 mb-3">Front of stage (left side) always remains open</p>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="back-railing"
-                  checked={railings.back}
-                  onChange={(e) => setRailings({ ...railings, back: e.target.checked })}
-                  className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 checked:bg-amber-500 checked:border-amber-500"
-                />
-                <Label htmlFor="back-railing" className="text-zinc-300 cursor-pointer">
-                  Back
-                </Label>
-              </div>
               <div className="flex items-center space-x-3">
                 <input
                   type="checkbox"
