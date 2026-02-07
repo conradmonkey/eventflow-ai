@@ -122,13 +122,13 @@ export default function StageDesignTool() {
       let prompt = renderType === "artistic"
         ? `Artistic render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
-CRITICAL INSTRUCTION - TIER COUNT: This stage has EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''}. DO NOT add any extra tiers, steps, or levels. DO NOT create additional platforms beyond the ${validTiers.length} specified below. Show ONLY the tiers listed.
+**ABSOLUTE CRITICAL INSTRUCTION**: This stage has EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''}. UNDER NO CIRCUMSTANCES add any additional tiers, steps, levels, platforms, ramps, transitions, or staircases. DO NOT add decorative levels. DO NOT add intermediate platforms. RENDER ONLY the ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} listed below and nothing else.
 
 STAGE LAYOUT:
 `
         : `Simple 3D render of a ${validTiers.length === 1 ? 'single-tier' : 'multi-tier'} stage setup.
 
-CRITICAL INSTRUCTION - TIER COUNT: This stage has EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''}. DO NOT add any extra tiers, steps, or levels. DO NOT create additional platforms beyond the ${validTiers.length} specified below. Show ONLY the tiers listed.
+**ABSOLUTE CRITICAL INSTRUCTION**: This stage has EXACTLY ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''}. UNDER NO CIRCUMSTANCES add any additional tiers, steps, levels, platforms, ramps, transitions, or staircases. DO NOT add decorative levels. DO NOT add intermediate platforms. RENDER ONLY the ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} listed below and nothing else.
 
 STAGE LAYOUT:
 `;
