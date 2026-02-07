@@ -143,8 +143,22 @@ ${index === 0 ? '(Base tier)' : `(Stacked on back of Tier ${index})`}
 **DO NOT INCLUDE**: Stairs, steps, ramps, additional platforms, intermediate levels, back walls, center legs, middle legs, interior poles, or any decorative elements. Show only the ${validTiers.length} tier${validTiers.length > 1 ? 's' : ''} specified above, stacked directly on top of each other.
 `;
 
+      const colorMap = {
+        'natural_wood': 'Natural wood finish',
+        'black': 'Black',
+        'white': 'White',
+        'gray': 'Gray',
+        'red': 'Bright red',
+        'blue': 'Bright blue',
+        'green': 'Bright green',
+        'yellow': 'Bright yellow',
+        'purple': 'Bright purple',
+        'orange': 'Bright orange',
+        'pink': 'Bright pink'
+      };
+      
       prompt += `
-STAGE COLOR: ${stageColor === 'natural_wood' ? 'Natural wood finish' : stageColor.charAt(0).toUpperCase() + stageColor.slice(1)} stage deck
+STAGE COLOR: ${colorMap[stageColor] || stageColor} stage deck
 `;
 
       if (railings.back) {
