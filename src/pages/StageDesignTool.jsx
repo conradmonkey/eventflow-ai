@@ -431,8 +431,7 @@ ${TENT_HARD_RULE}`;
                 <Select value={roofStructure} onValueChange={(value) => {
                   setRoofStructure(value);
                   if (value === "none") {
-                    setIsGenerating(true);
-                    setTimeout(() => handleGenerateSketch().finally(() => setIsGenerating(false)), 100);
+                    handleGenerateSketch(value);
                   }
                 }}>
                   <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg">
