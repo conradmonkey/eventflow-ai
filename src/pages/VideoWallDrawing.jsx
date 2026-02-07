@@ -13,7 +13,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "./utils";
+import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 
 export default function VideoWallDrawing() {
