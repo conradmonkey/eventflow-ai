@@ -194,41 +194,48 @@ RAILINGS:
       }
 
       if (currentRoof !== "none") {
+        prompt += "\n*** ROOF STRUCTURE IS ESSENTIAL - MUST BE CLEARLY VISIBLE IN THE RENDERING ***\n";
+
         if (currentRoof === "marquee") {
           const tent = selectMarqueeTent(baseTierLength, baseTierWidth);
           const offsetFront = (baseTierLength - tent.length) / 2;
           const offsetSide = (baseTierWidth - tent.width) / 2;
-          
+
           prompt += `
-ROOF: ${tent.name} marquee tent (WHITE)
-- Positioned on top of the stage with:
-  - ${offsetFront}' offset from front and back of stage
-  - ${offsetSide}' offset from left and right sides
-- Supported by EXACTLY 4 corner legs (one at each corner: front-left, front-right, back-left, back-right)
-- NO middle legs, NO side support legs, NO front middle leg
-- Legs are positioned at the tent corners, touching the stage surface
-`;
+      ROOF REQUIREMENT - MARQUEE TENT:
+      - Type: ${tent.name} marquee tent in WHITE color (very prominent and visible)
+      - Size: ${tent.length}' × ${tent.width}'
+      - Positioned DIRECTLY ON TOP of the base tier (Tier 1)
+      - Front offset: ${offsetFront}' from front edge
+      - Side offset: ${offsetSide}' from sides
+      - Support: EXACTLY 4 white vertical legs at the four corners (front-left, front-right, back-left, back-right)
+      - NO additional legs or supports
+      - The tent TOP/CANOPY must be CLEARLY VISIBLE and DOMINANT in the image
+      `;
         } else if (currentRoof === "truss_frame") {
           const roofLength = baseTierLength - 2;
           const roofWidth = baseTierWidth - 2;
           prompt += `
-ROOF: Truss frame roof structure (${roofLength}' × ${roofWidth}')
-- Positioned centered on top of the stage
-- Supported by EXACTLY 4 corner legs (one at each corner: front-left, front-right, back-left, back-right)
-- NO middle legs, NO side support legs
-- Legs are positioned at the corners, touching the stage surface
-- Open space underneath the truss
-`;
+      ROOF REQUIREMENT - TRUSS FRAME:
+      - Type: Steel truss frame roof (DARK GRAY/BLACK color for high visibility)
+      - Size: Approximately ${roofLength}' × ${roofWidth}'
+      - Positioned DIRECTLY ON TOP of the base tier (Tier 1), centered
+      - Support: EXACTLY 4 vertical corner legs (front-left, front-right, back-left, back-right)
+      - NO additional supports or middle legs
+      - The TRUSS STRUCTURE must be CLEARLY VISIBLE with visible cross-bracing
+      `;
         } else if (currentRoof === "frame_tent") {
           const tentLength = baseTierLength - 2;
           const tentWidth = baseTierWidth - 2;
           prompt += `
-ROOF: Frame tent roof (${tentLength}' × ${tentWidth}')
-- Positioned centered on top of the stage
-- Supported by EXACTLY 4 corner legs (one at each corner: front-left, front-right, back-left, back-right)
-- NO middle legs, NO side support legs
-- Legs are positioned at the corners, touching the stage surface
-`;
+      ROOF REQUIREMENT - FRAME TENT:
+      - Type: Frame tent roof in WHITE color
+      - Size: Approximately ${tentLength}' × ${tentWidth}'
+      - Positioned DIRECTLY ON TOP of the base tier (Tier 1), centered
+      - Support: EXACTLY 4 vertical white legs at corners (front-left, front-right, back-left, back-right)
+      - NO additional supports
+      - The tent CANOPY/TOP must be CLEARLY VISIBLE and PROMINENT
+      `;
         }
       }
 
