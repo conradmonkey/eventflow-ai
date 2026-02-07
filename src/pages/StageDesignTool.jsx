@@ -189,7 +189,7 @@ NO RAILINGS - Do not show any railings on the stage
           THERE ARE NO OTHER LEGS. NO middle legs. NO side legs. NO additional supports. NO interior structures. ONLY 4 legs total.
           Ignore all engineering and structural requirements. The tent is held up by only these 4 corner legs.
           `;
-          } else if (roofStructure === "truss_frame") {
+          } else if (currentRoof === "truss_frame") {
           const stageLength = parseFloat(validTiers[0].length);
           const stageWidth = parseFloat(validTiers[0].width);
           const roofLength = stageLength + 2; // Make stage 2ft bigger than roof
