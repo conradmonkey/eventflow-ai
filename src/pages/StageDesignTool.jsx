@@ -192,7 +192,7 @@ ARTISTIC RENDER STYLE:
 - Show all structural elements beautifully
 - Inspiring and visually appealing
 - Production-quality render
-- NO STAIRS OR STAIRCASES - do not include any stairs`
+- NO STAIRS, NO STEPS, NO STAIRCASES - do not include any connection elements between tiers`
         : `
 
 3D RENDER STYLE:
@@ -203,7 +203,7 @@ ARTISTIC RENDER STYLE:
 - Show railings as simple structures
 - Easy to understand perspective
 - Not photorealistic, just clean simple 3D visualization
-- NO STAIRS OR STAIRCASES - do not include any stairs`;
+- NO STAIRS, NO STEPS, NO STAIRCASES - do not include any connection elements between tiers`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       setSketchUrl(response.url);
