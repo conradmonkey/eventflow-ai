@@ -271,7 +271,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
             <input
               type="color"
               value={tentConfig.tables8ft[0]?.color || '#8B4513'}
-              onChange={(e) => tentConfig.tables8ft.forEach((_, i) => updateTableColor('tables8ft', i, e.target.value))}
+              onChange={(e) => updateTableColor('tables8ft', e.target.value)}
               className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
             />
           </div>
