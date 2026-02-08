@@ -192,7 +192,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
                 <Trash2 className="w-3 h-3" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2 items-end">
               <Input 
                 type="number" 
                 placeholder="Length" 
@@ -204,6 +204,12 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
                 placeholder="Height" 
                 value={wall.height}
                 onChange={(e) => updateVideoWall(idx, 'height', e.target.value)}
+              />
+              <input
+                type="color"
+                value={wall.color || '#1E90FF'}
+                onChange={(e) => updateVideoWall(idx, 'color', e.target.value)}
+                className="w-full h-9 rounded cursor-pointer border border-input"
               />
             </div>
           </div>
