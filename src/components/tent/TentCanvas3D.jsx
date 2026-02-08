@@ -250,7 +250,7 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     if (danceFloors.length > 0) {
       const dfW = 18;
       const dfL = 18;
-      drawIsoRect(-dfW / 2, -dfL / 2, dfW, dfL, 0.2, '#d4af37', '#c19f2f', '#b08f28');
+      drawPerspRect(-dfW / 2, -dfL / 2, dfW, dfL, 0.2, '#d4af37', '#c19f2f', '#b08f28');
       
       // Disco lights effect
       const colors = ['#ff6b9d', '#4ecdc4', '#ffe66d', '#a8e6cf'];
@@ -258,15 +258,15 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
         const angle = (i / 4) * Math.PI * 2;
         const lx = Math.cos(angle) * 6;
         const ly = Math.sin(angle) * 6;
-        const sx = centerX + isoX(lx, ly) * scale;
-        const sy = centerY + isoY(lx, ly, 0.2) * scale;
+        const sx = centerX + perspX(lx, ly) * scale;
+        const sy = centerY + perspY(lx, ly, 0.2) * scale;
         
-        const colorGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 40 * scale);
-        colorGrad.addColorStop(0, colors[i] + 'aa');
+        const colorGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 30 * scale);
+        colorGrad.addColorStop(0, colors[i] + 'bb');
         colorGrad.addColorStop(1, colors[i] + '00');
         ctx.fillStyle = colorGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, 40 * scale, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 30 * scale, 0, Math.PI * 2);
         ctx.fill();
       }
     }
