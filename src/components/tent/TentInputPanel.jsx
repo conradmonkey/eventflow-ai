@@ -91,6 +91,15 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     });
   };
 
+  const updateTableColor = (tableType, index, color) => {
+    setTentConfig(prev => ({
+      ...prev,
+      [tableType]: prev[tableType].map((table, i) => 
+        i === index ? { ...table, color } : table
+      )
+    }));
+  };
+
   const addBar = () => {
     setTentConfig(prev => ({
       ...prev,
@@ -243,32 +252,59 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
       {/* Tables */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
         <Label className="text-sm font-semibold">Tables</Label>
-        <div className="space-y-3">
-          <div>
-            <Label className="text-xs">8ft Tables</Label>
-            <Input
-              type="number"
-              min="0"
-              value={tentConfig.tables8ft.length}
-              onChange={(e) => updateTableCount('tables8ft', e.target.value)}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <Label className="text-xs">8ft</Label>
+              <Input
+                type="number"
+                min="0"
+                value={tentConfig.tables8ft.length}
+                onChange={(e) => updateTableCount('tables8ft', e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <input
+              type="color"
+              value={tentConfig.tables8ft[0]?.color || '#8B4513'}
+              onChange={(e) => tentConfig.tables8ft.forEach((_, i) => updateTableColor('tables8ft', i, e.target.value))}
+              className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
             />
           </div>
-          <div>
-            <Label className="text-xs">6ft Tables</Label>
-            <Input
-              type="number"
-              min="0"
-              value={tentConfig.tables6ft.length}
-              onChange={(e) => updateTableCount('tables6ft', e.target.value)}
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <Label className="text-xs">6ft</Label>
+              <Input
+                type="number"
+                min="0"
+                value={tentConfig.tables6ft.length}
+                onChange={(e) => updateTableCount('tables6ft', e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <input
+              type="color"
+              value={tentConfig.tables6ft[0]?.color || '#8B4513'}
+              onChange={(e) => tentConfig.tables6ft.forEach((_, i) => updateTableColor('tables6ft', i, e.target.value))}
+              className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
             />
           </div>
-          <div>
-            <Label className="text-xs">5ft Round Tables</Label>
-            <Input
-              type="number"
-              min="0"
-              value={tentConfig.tables5ft.length}
-              onChange={(e) => updateTableCount('tables5ft', e.target.value)}
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <Label className="text-xs">5ft Round</Label>
+              <Input
+                type="number"
+                min="0"
+                value={tentConfig.tables5ft.length}
+                onChange={(e) => updateTableCount('tables5ft', e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <input
+              type="color"
+              value={tentConfig.tables5ft[0]?.color || '#8B4513'}
+              onChange={(e) => tentConfig.tables5ft.forEach((_, i) => updateTableColor('tables5ft', i, e.target.value))}
+              className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
             />
           </div>
         </div>
@@ -310,13 +346,24 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
 
       {/* Cocktail Tables */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <Label className="text-sm font-semibold">Cocktail Tables</Label>
-        <Input
-          type="number"
-          min="0"
-          value={tentConfig.cocktailTables.length}
-          onChange={(e) => updateTableCount('cocktailTables', e.target.value)}
-        />
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <Label className="text-sm font-semibold">Cocktail</Label>
+            <Input
+              type="number"
+              min="0"
+              value={tentConfig.cocktailTables.length}
+              onChange={(e) => updateTableCount('cocktailTables', e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <input
+            type="color"
+            value={tentConfig.cocktailTables[0]?.color || '#8B4513'}
+            onChange={(e) => tentConfig.cocktailTables.forEach((_, i) => updateTableColor('cocktailTables', i, e.target.value))}
+            className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
+          />
+        </div>
       </div>
 
       {/* Presentation Chairs */}
