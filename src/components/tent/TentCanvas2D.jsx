@@ -197,6 +197,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       if (item.groupId) {
         setSelectedGroup(item.groupId);
       }
+      setSelectedItem(itemIdx);
       setDragging(itemIdx);
       setDragStart({ x, y, itemX: item.x, itemY: item.y });
     }
