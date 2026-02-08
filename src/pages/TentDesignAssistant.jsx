@@ -643,45 +643,74 @@ export default function TentDesignAssistant() {
               </Select>
 
               {suggestedTent && (
-                <div className="mt-4 p-3 bg-purple-50 rounded-lg space-y-3">
+              <div className="mt-4 p-3 bg-purple-50 rounded-lg space-y-3">
+              <div>
+                <p className="text-sm font-semibold text-purple-900">Suggested Tent:</p>
+                <p className="text-lg font-bold text-purple-700">{suggestedTent.type} ft</p>
+              </div>
+              <div>
+                <Label className="text-sm font-semibold">Tent Style</Label>
+                <Select value={tentStyle} onValueChange={setTentStyle}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select tent style" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="marquee">Marquee (Peaked)</SelectItem>
+                    <SelectItem value="frame">Frame (Modern)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-sm font-semibold">Tent Dimensions</Label>
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-purple-900">Suggested Tent:</p>
-                    <p className="text-lg font-bold text-purple-700">{suggestedTent.type} ft</p>
+                    <Label className="text-xs">Length (ft)</Label>
+                    <Input
+                      type="number"
+                      value={tentConfig.length}
+                      onChange={(e) => setTentConfig(prev => ({ ...prev, length: parseFloat(e.target.value) || 0 }))}
+                    />
                   </div>
                   <div>
-                    <Label className="text-sm font-semibold">Tent Style</Label>
-                    <Select value={tentStyle} onValueChange={setTentStyle}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select tent style" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="marquee">Marquee (Peaked)</SelectItem>
-                        <SelectItem value="frame">Frame (Modern)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label className="text-xs">Width (ft)</Label>
+                    <Input
+                      type="number"
+                      value={tentConfig.width}
+                      onChange={(e) => setTentConfig(prev => ({ ...prev, width: parseFloat(e.target.value) || 0 }))}
+                    />
                   </div>
-                  <div>
-                    <Label className="text-sm font-semibold">Tent Dimensions</Label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label className="text-xs">Length (ft)</Label>
-                        <Input
-                          type="number"
-                          value={tentConfig.length}
-                          onChange={(e) => setTentConfig(prev => ({ ...prev, length: parseFloat(e.target.value) || 0 }))}
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs">Width (ft)</Label>
-                        <Input
-                          type="number"
-                          value={tentConfig.width}
-                          onChange={(e) => setTentConfig(prev => ({ ...prev, width: parseFloat(e.target.value) || 0 }))}
-                        />
-                      </div>
+                </div>
+              </div>
+              {seatingArrangement === 'presentation' && (
+                <div>
+                  <Label className="text-sm font-semibold">Presentation Chairs</Label>
+                  <div className="grid grid-cols-2 gap-3 mt-2">
+                    <div>
+                      <Label className="text-xs">Rows</Label>
+                      <Input
+                        type="number"
+                        value={tentConfig.chairs.rows}
+                        onChange={(e) => setTentConfig(prev => ({
+                          ...prev,
+                          chairs: { ...prev.chairs, rows: parseInt(e.target.value) || 0 }
+                        }))}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Per Row</Label>
+                      <Input
+                        type="number"
+                        value={tentConfig.chairs.perRow}
+                        onChange={(e) => setTentConfig(prev => ({
+                          ...prev,
+                          chairs: { ...prev.chairs, perRow: parseInt(e.target.value) || 0 }
+                        }))}
+                      />
                     </div>
                   </div>
                 </div>
+              )}
+              </div>
               )}
             </div>
 
