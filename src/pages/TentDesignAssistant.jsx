@@ -33,6 +33,21 @@ export default function TentDesignAssistant() {
   const [showGearList, setShowGearList] = useState(false);
   const [items, setItems] = useState([]);
   const canvasRef = useRef(null);
+  const [customEquipment, setCustomEquipment] = useState({
+    name: '',
+    width: 10,
+    length: 10,
+    color: '#888888'
+  });
+
+  const addCustomEquipment = () => {
+    if (!customEquipment.name) return;
+    setTentConfig(prev => ({
+      ...prev,
+      customEquipment: [...(prev.customEquipment || []), { ...customEquipment }]
+    }));
+    setCustomEquipment({ name: '', width: 10, length: 10, color: '#888888' });
+  };
 
   const tentData = {
     "20x20": { standing: 60, presentation: 70, seated_5ft: 40, seated_8ft: 50, width: 20, length: 20 },
@@ -303,6 +318,54 @@ export default function TentDesignAssistant() {
                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   2D Render
                 </Button>
+
+                {/* Custom Equipment */}
+                <div className="pt-3 border-t space-y-2">
+                  <Label className="text-sm font-semibold">Add Custom Equipment</Label>
+                  <Input
+                    placeholder="Equipment name"
+                    value={customEquipment.name}
+                    onChange={(e) => setCustomEquipment(prev => ({ ...prev, name: e.target.value }))}
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      type="number"
+                      placeholder="Width (ft)"
+                      value={customEquipment.width}
+                      onChange={(e) => setCustomEquipment(prev => ({ ...prev, width: parseFloat(e.target.value) || 0 }))}
+                    />
+                    <Input
+                      type="number"
+                      placeholder="Length (ft)"
+                      value={customEquipment.length}
+                      onChange={(e) => setCustomEquipment(prev => ({ ...prev, length: parseFloat(e.target.value) || 0 }))}
+                    />
+                  </div>
+                  <Input
+                    type="color"
+                    value={customEquipment.color}
+                    onChange={(e) => setCustomEquipment(prev => ({ ...prev, color: e.target.value }))}
+                  />
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={addCustomEquipment}
+                    disabled={!customEquipment.name}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Equipment
+                  </Button>
+                  {tentConfig.customEquipment && tentConfig.customEquipment.length > 0 && (
+                    <div className="text-xs text-gray-600 mt-2 p-2 bg-gray-50 rounded">
+                      <p className="font-semibold mb-1">Added:</p>
+                      {tentConfig.customEquipment.map((eq, idx) => (
+                        <p key={idx}>• {eq.name} ({eq.width}x{eq.length}ft)</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <Button
                   variant="outline"
                   className="w-full"
