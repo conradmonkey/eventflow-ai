@@ -380,7 +380,7 @@ export default function TentDesignAssistant() {
                   onClick={() => setShow3D(true)}
                   disabled={items.length === 0}
                 >
-                  3D Render
+                  Artistic Visualization
                 </Button>
                 <Button
                   variant="outline"
