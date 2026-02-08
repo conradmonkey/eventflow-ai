@@ -183,6 +183,41 @@ export default function TentDesignAssistant() {
       }
     }
 
+    // Generate realistic image if not already generated
+    let realisticImageToUse = realisticImage;
+    if (!realisticImageToUse) {
+      try {
+        const itemCounts = {};
+        items.forEach(item => {
+          itemCounts[item.type] = (itemCounts[item.type] || 0) + 1;
+        });
+
+        let setupDescription = 'A functional event space with';
+        let elements = [];
+
+        if (itemCounts.stage > 0) elements.push(`${itemCounts.stage} stage(s)`);
+        if (itemCounts.danceFloor > 0) elements.push(`${itemCounts.danceFloor} dance floor(s)`);
+        if (itemCounts.bar > 0) elements.push(`${itemCounts.bar} bar(s)`);
+        if (itemCounts.table8ft > 0) elements.push(`${itemCounts.table8ft} 8ft tables`);
+        if (itemCounts.table6ft > 0) elements.push(`${itemCounts.table6ft} 6ft tables`);
+        if (itemCounts.table5ft > 0) elements.push(`${itemCounts.table5ft} round tables`);
+        if (itemCounts.cocktailTable > 0) elements.push(`${itemCounts.cocktailTable} cocktail tables`);
+        if (itemCounts.videoWall > 0) elements.push(`${itemCounts.videoWall} video wall(s)`);
+        if (itemCounts.chair > 0) elements.push(`${itemCounts.chair} chairs`);
+
+        const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent' : 'frame tent';
+        const elementsText = elements.length > 0 ? elements.join(', ') : 'basic setup';
+
+        const prompt = `Realistic photograph of an event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc} with ${elementsText}. Standard event lighting, practical decor with ${tentConfig.linenColor || 'white'} linens, ${attendees} guests present. Natural daylight mixed with standard uplighting. Actual venue photography style, authentic event setup, professional quality, no stylization.`;
+
+        const response = await base44.integrations.Core.GenerateImage({ prompt });
+        realisticImageToUse = response.url;
+        setRealisticImage(realisticImageToUse);
+      } catch (error) {
+        console.error('Failed to generate realistic image for PDF:', error);
+      }
+    }
+
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
