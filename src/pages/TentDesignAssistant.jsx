@@ -340,7 +340,7 @@ export default function TentDesignAssistant() {
     }
 
     // Add Realistic Image if available
-    if (realisticImage) {
+    if (realisticImageToUse) {
       pdf.addPage();
       yPos = 20;
 
@@ -351,7 +351,7 @@ export default function TentDesignAssistant() {
       try {
         const img = new Image();
         img.crossOrigin = 'anonymous';
-        img.src = realisticImage;
+        img.src = realisticImageToUse;
         
         await new Promise((resolve, reject) => {
           img.onload = resolve;
@@ -365,7 +365,7 @@ export default function TentDesignAssistant() {
         const finalHeight = Math.min(imgHeight, maxHeight);
         const finalWidth = (img.width * finalHeight) / img.height;
 
-        pdf.addImage(realisticImage, 'JPEG', 20, yPos, finalWidth, finalHeight);
+        pdf.addImage(realisticImageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
       } catch (error) {
         console.error('Error adding realistic image to PDF:', error);
         pdf.text('(Realistic image could not be loaded)', 20, yPos);
