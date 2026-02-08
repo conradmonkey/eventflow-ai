@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown } from "lucide-react";
+import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import InteractiveRoomCanvas from "@/components/room/InteractiveRoomCanvas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { jsPDF } from "jspdf";
+import { useSubscriptionStatus } from "@/components/useSubscriptionStatus";
+import SubscriptionModal from "@/components/SubscriptionModal";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
@@ -41,8 +43,10 @@ export default function RoomDesigner() {
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const render3DRef = useRef(null);
 
+  const { isSubscribed } = useSubscriptionStatus();
   const queryClient = useQueryClient();
   const { data: savedProjects = [] } = useQuery({
     queryKey: ['room-projects'],
@@ -157,6 +161,11 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   const gearList = showGearList ? calculateGearList() : null;
 
   const handleSaveProject = async () => {
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+
     if (!formData.project_name.trim()) {
       alert('Please enter a project name');
       return;
@@ -184,6 +193,11 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const handleLoadProject = (project) => {
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+
     setFormData({
       project_name: project.project_name,
       country: project.country,
@@ -221,6 +235,11 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const handleExportPDF = () => {
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -713,31 +732,31 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setShowLoadModal(true)}
-                  className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
+                  className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
                 >
                   <FolderOpen className="w-5 h-5 mr-2" />
-                  Load
+                  Load {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                 </Button>
               </div>
               {showCanvas && (
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     type="button"
-                    onClick={() => setShowSaveModal(true)}
-                    className="bg-green-600 hover:bg-green-700 h-12 rounded-lg"
+                    onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
+                    className={`h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
                   >
                     <Save className="w-5 h-5 mr-2" />
-                    Save
+                    Save {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                   </Button>
                   <Button
                     type="button"
                     onClick={handleExportPDF}
                     variant="outline"
-                    className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                    className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
                   >
                     <FileDown className="w-5 h-5 mr-2" />
-                    Export PDF
+                    Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                   </Button>
                 </div>
               )}
@@ -991,6 +1010,25 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
             </motion.div>
           </div>
         )}
+
+        {/* Subscription Modal */}
+        <SubscriptionModal
+          isOpen={showSubscriptionModal}
+          onClose={() => setShowSubscriptionModal(false)}
+          onSubscribe={async () => {
+            try {
+              const user = await base44.auth.me();
+              const response = await base44.functions.invoke('createCheckoutSession', {
+                email: user.email,
+                successUrl: window.location.href,
+                cancelUrl: window.location.href
+              });
+              window.location.href = response.data.url;
+            } catch (error) {
+              alert('Error starting checkout: ' + error.message);
+            }
+          }}
+        />
       </div>
     </div>
   );
