@@ -291,9 +291,9 @@ export default function TentDesignAssistant() {
           <h1 className="text-4xl font-bold text-slate-900">AI Tent Design Visualizer</h1>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Panel - Inputs */}
-          <div className="col-span-1 space-y-6">
+          <div className="col-span-1 lg:col-span-1 space-y-6">
             {/* Project Name */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label className="text-sm font-semibold">Project Name</Label>
@@ -422,7 +422,7 @@ export default function TentDesignAssistant() {
           </div>
 
           {/* Right Panel - Canvas */}
-          <div className="col-span-2">
+          <div className="col-span-1 lg:col-span-2">
             <TentCanvas2D
               tentConfig={tentConfig}
               items={items}
