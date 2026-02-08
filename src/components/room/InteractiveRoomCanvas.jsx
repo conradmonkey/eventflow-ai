@@ -249,9 +249,9 @@ export default function InteractiveRoomCanvas({ formData }) {
             }}
           >
             {/* Room dimensions label */}
-            <div className="absolute -top-6 left-0 text-zinc-400 text-xs">
-              {formData.room_length}ft x {formData.room_width}ft
-            </div>
+             <div className="absolute -top-6 left-0 text-zinc-400 text-xs">
+               {canvasSize.isRotated ? `${formData.room_width}ft x ${formData.room_length}ft` : `${formData.room_length}ft x ${formData.room_width}ft`} {canvasSize.isRotated && '(rotated)'}
+             </div>
           </div>
         )}
 
