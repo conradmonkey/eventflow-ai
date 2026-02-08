@@ -82,7 +82,8 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
       
       if (numCount > currentCount) {
         const toAdd = numCount - currentCount;
-        newConfig[tableType] = [...prev[tableType], ...Array(toAdd).fill({ color: '#8B4513' })];
+        const newTables = Array.from({ length: toAdd }, () => ({ color: '#8B4513' }));
+        newConfig[tableType] = [...prev[tableType], ...newTables];
       } else if (numCount < currentCount) {
         newConfig[tableType] = prev[tableType].slice(0, numCount);
       }
