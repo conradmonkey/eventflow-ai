@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FileCheck, Loader2, MapPin, Search } from "lucide-react";
+import { FileCheck, Loader2, MapPin, Search, Save, FolderOpen, X } from "lucide-react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function PermitInvestigator() {
   const [formData, setFormData] = useState({
@@ -24,6 +25,15 @@ export default function PermitInvestigator() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+  const [searchName, setSearchName] = useState("");
+
+  const queryClient = useQueryClient();
+  const { data: savedSearches = [] } = useQuery({
+    queryKey: ['permit-searches'],
+    queryFn: () => base44.entities.PermitSearch.list('-updated_date')
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,6 +81,44 @@ Be thorough and specific to the location provided.`;
         [feature]: checked,
       },
     }));
+  };
+
+  const handleSaveSearch = async () => {
+    if (!searchName.trim()) {
+      alert('Please enter a name for this search');
+      return;
+    }
+
+    try {
+      await base44.entities.PermitSearch.create({
+        search_name: searchName,
+        event_name: formData.event_name,
+        country: formData.country,
+        province: formData.province,
+        city: formData.city,
+        features: formData.features,
+        results: results
+      });
+
+      queryClient.invalidateQueries(['permit-searches']);
+      setShowSaveModal(false);
+      setSearchName("");
+      alert('Search saved successfully!');
+    } catch (error) {
+      alert('Error saving search: ' + error.message);
+    }
+  };
+
+  const handleLoadSearch = (search) => {
+    setFormData({
+      event_name: search.event_name || "",
+      country: search.country,
+      province: search.province,
+      city: search.city,
+      features: search.features
+    });
+    setResults(search.results);
+    setShowLoadModal(false);
   };
 
   return (
@@ -250,20 +298,31 @@ Be thorough and specific to the location provided.`;
               </div>
             </div>
 
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold h-14 rounded-xl text-lg"
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Search className="w-5 h-5 mr-2" />
-                  Find Required Permits
-                </>
-              )}
-            </Button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="md:col-span-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold h-14 rounded-xl text-lg"
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    <Search className="w-5 h-5 mr-2" />
+                    Find Required Permits
+                  </>
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowLoadModal(true)}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-14 rounded-xl"
+              >
+                <FolderOpen className="w-5 h-5 mr-2" />
+                Load Saved
+              </Button>
+            </div>
           </form>
         </motion.div>
 
@@ -274,10 +333,19 @@ Be thorough and specific to the location provided.`;
             animate={{ opacity: 1, y: 0 }}
             className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
           >
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              <FileCheck className="w-6 h-6 text-blue-400" />
-              Required Permits & Regulations
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <FileCheck className="w-6 h-6 text-blue-400" />
+                Required Permits & Regulations
+              </h2>
+              <Button
+                onClick={() => setShowSaveModal(true)}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                Save Search
+              </Button>
+            </div>
             <div className="prose prose-invert prose-zinc max-w-none">
               <ReactMarkdown
                 components={{
@@ -325,6 +393,100 @@ Be thorough and specific to the location provided.`;
               </ReactMarkdown>
             </div>
           </motion.div>
+        )}
+
+        {/* Save Modal */}
+        {showSaveModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-md"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Save Search</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowSaveModal(false)}
+                  className="text-zinc-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-zinc-300">Search Name</Label>
+                  <Input
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                    placeholder="e.g., Toronto Summer Festival 2026"
+                    className="bg-zinc-800 border-zinc-700 text-white mt-2"
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setShowSaveModal(false)}
+                    variant="outline"
+                    className="flex-1 border-zinc-700 text-zinc-300"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSaveSearch}
+                    className="flex-1 bg-green-600 hover:bg-green-700"
+                  >
+                    Save
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Load Modal */}
+        {showLoadModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Saved Searches</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowLoadModal(false)}
+                  className="text-zinc-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              {savedSearches.length === 0 ? (
+                <p className="text-zinc-400 text-center py-8">No saved searches yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {savedSearches.map((search) => (
+                    <div
+                      key={search.id}
+                      onClick={() => handleLoadSearch(search)}
+                      className="border border-zinc-800 rounded-xl p-4 hover:bg-zinc-800/50 cursor-pointer transition-colors"
+                    >
+                      <h4 className="font-semibold text-white mb-2">{search.search_name}</h4>
+                      <div className="text-sm text-zinc-400 space-y-1">
+                        {search.event_name && <p>Event: {search.event_name}</p>}
+                        <p>Location: {search.city}, {search.province}, {search.country}</p>
+                        <p className="text-xs text-zinc-500 mt-2">
+                          Saved: {new Date(search.created_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </div>
         )}
       </div>
     </div>
