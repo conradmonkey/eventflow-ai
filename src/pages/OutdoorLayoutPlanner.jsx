@@ -614,6 +614,33 @@ export default function OutdoorLayoutPlanner() {
           </motion.div>
         </div>
       )}
+
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+        onSubscribe={async () => {
+          try {
+            const user = await base44.auth.me();
+            const response = await base44.functions.invoke('createCheckoutSession', {
+              email: user.email,
+              successUrl: window.location.href,
+              cancelUrl: window.location.href
+            });
+            window.location.href = response.data.url;
+          } catch (error) {
+            alert('Error starting checkout: ' + error.message);
+          }
+        }}
+      />
+
+      {/* AI Suggestions Modal */}
+      <AILayoutSuggestions
+        isOpen={showAISuggestions}
+        onClose={() => setShowAISuggestions(false)}
+        suggestions={aiSuggestions}
+        isLoading={aiLoading}
+      />
     </div>
   );
 }
