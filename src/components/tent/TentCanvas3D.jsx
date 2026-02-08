@@ -112,7 +112,7 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     };
 
     // Luxury marble floor
-    drawIsoRect(-tentW / 2, -tentL / 2, tentW, tentL, 0, '#2d2d3f', '#25253a', '#1f1f30');
+    drawPerspRect(-tentW / 2, -tentL / 2, tentW, tentL, 0, '#2d2d3f', '#25253a', '#1f1f30');
 
     // Floor pattern (marble tiles)
     for (let i = 0; i < tentW; i += 5) {
