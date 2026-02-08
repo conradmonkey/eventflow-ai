@@ -8,8 +8,9 @@ import TentInputPanel from '@/components/tent/TentInputPanel';
 import TentCanvas2D from '@/components/tent/TentCanvas2D';
 
 import TentGearList from '@/components/tent/TentGearList';
-import { Sparkles, Plus, Camera, X } from 'lucide-react';
+import { Sparkles, Plus, Camera, X, Save, FolderOpen } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function TentDesignAssistant() {
   const [projectName, setProjectName] = useState('');
@@ -38,6 +39,14 @@ export default function TentDesignAssistant() {
   const [generatedImage, setGeneratedImage] = useState(null);
   const [generatingImage, setGeneratingImage] = useState(false);
   const canvasRef = useRef(null);
+  const [currentProjectId, setCurrentProjectId] = useState(null);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { data: savedProjects = [] } = useQuery({
+    queryKey: ['tent-projects'],
+    queryFn: () => base44.entities.TentProject.list('-updated_date')
+  });
 
   const handleSaveProject = async () => {
     if (!projectName.trim()) {
@@ -62,6 +71,46 @@ export default function TentDesignAssistant() {
         const newProject = await base44.entities.TentProject.create(projectData);
         setCurrentProjectId(newProject.id);
       }
+      alert('Project saved successfully!');
+    } catch (error) {
+      alert('Error saving project: ' + error.message);
+    }
+  };
+
+  const handleLoadProject = (project) => {
+    setProjectName(project.project_name);
+    setAttendees(project.attendees);
+    setSeatingArrangement(project.seating_arrangement);
+    setTentStyle(project.tent_style);
+    setTentConfig(project.tent_config);
+    setCurrentProjectId(project.id);
+    setShowLoadModal(false);
+  };
+
+  const handleSaveProject = async () => {
+    if (!projectName.trim()) {
+      alert('Please enter a project name');
+      return;
+    }
+
+    const projectData = {
+      project_name: projectName,
+      attendees,
+      seating_arrangement: seatingArrangement,
+      tent_style: tentStyle,
+      tent_width: tentConfig.width,
+      tent_length: tentConfig.length,
+      tent_config: tentConfig
+    };
+
+    try {
+      if (currentProjectId) {
+        await base44.entities.TentProject.update(currentProjectId, projectData);
+      } else {
+        const newProject = await base44.entities.TentProject.create(projectData);
+        setCurrentProjectId(newProject.id);
+      }
+      queryClient.invalidateQueries(['tent-projects']);
       alert('Project saved successfully!');
     } catch (error) {
       alert('Error saving project: ' + error.message);
@@ -437,6 +486,22 @@ export default function TentDesignAssistant() {
             {/* Render Buttons */}
             {seatingArrangement && (
               <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    className="bg-green-600 hover:bg-green-700"
+                    onClick={handleSaveProject}
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Project
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowLoadModal(true)}
+                  >
+                    <FolderOpen className="w-4 h-4 mr-2" />
+                    Load Project
+                  </Button>
+                </div>
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   onClick={handleGenerateImage}
@@ -492,6 +557,41 @@ export default function TentDesignAssistant() {
             </div>
             <div className="flex-1 p-4 overflow-auto flex items-center justify-center">
               <img src={generatedImage} alt="Generated event" className="max-w-full max-h-full rounded-lg shadow-lg" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLoadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Load Project</h2>
+                <Button variant="ghost" onClick={() => setShowLoadModal(false)}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              {savedProjects.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">No saved projects yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {savedProjects.map((project) => (
+                    <div 
+                      key={project.id}
+                      className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                      onClick={() => handleLoadProject(project)}
+                    >
+                      <h3 className="font-semibold text-lg">{project.project_name}</h3>
+                      <div className="text-sm text-gray-600 mt-2">
+                        <p>Attendees: {project.attendees}</p>
+                        <p>Arrangement: {project.seating_arrangement?.replace('_', ' ')}</p>
+                        <p>Tent: {project.tent_width}' x {project.tent_length}' {project.tent_style}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
