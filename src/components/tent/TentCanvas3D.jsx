@@ -335,13 +335,14 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       const px = -tentW / 3 + Math.random() * (tentW * 0.6);
       const py = -tentL / 3 + Math.random() * (tentL * 0.6);
       const personHeight = 5;
+      const pScale = perspectiveScale(py);
       
-      const sx = centerX + isoX(px, py) * scale;
-      const sy = centerY + isoY(px, py, 0) * scale;
+      const sx = centerX + perspX(px, py) * scale;
+      const sy = centerY + perspY(px, py, 0) * scale;
       
       ctx.fillStyle = `hsla(${200 + Math.random() * 60}, 50%, 50%, 0.7)`;
       ctx.beginPath();
-      ctx.ellipse(sx, sy - personHeight * scale, 2, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(sx, sy - personHeight * scale * pScale, 1.5 * pScale, 3.5 * pScale, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
