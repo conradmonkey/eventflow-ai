@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
-export default function TentCanvas3D({ tentConfig, items, onClose, attendees, tentType }) {
+export default function TentCanvas3D({ tentConfig, items, onClose, attendees, tentType, tentStyle }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
