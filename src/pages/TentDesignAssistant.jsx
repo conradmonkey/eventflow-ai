@@ -608,7 +608,7 @@ export default function TentDesignAssistant() {
       const chairWidth = 1.5; // Chair width in feet
       const chairLength = 1.5; // Chair depth in feet
       const gapWithinRow = 0.5; // 6 inches gap between chairs in a row
-      const aisleGap = 3; // 3 feet aisle between rows
+      const aisleGap = 2; // 2 feet aisle between rows
       const chairSpacingX = chairWidth + gapWithinRow; // Spacing between chairs horizontally
       const chairSpacingY = chairLength + aisleGap; // Spacing between rows vertically
       const totalRowWidth = (perRow * chairWidth) + ((perRow - 1) * gapWithinRow);
