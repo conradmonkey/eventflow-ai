@@ -17,313 +17,323 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     const w = canvas.width;
     const h = canvas.height;
 
-    // Elegant evening sky gradient
-    const skyGradient = ctx.createLinearGradient(0, 0, 0, h);
-    skyGradient.addColorStop(0, '#0d1b2a');
-    skyGradient.addColorStop(0.4, '#1b263b');
-    skyGradient.addColorStop(1, '#415a77');
-    ctx.fillStyle = skyGradient;
+    // Isometric helper functions
+    const isoX = (x, y) => (x - y) * Math.cos(Math.PI / 6);
+    const isoY = (x, y, z = 0) => (x + y) * Math.sin(Math.PI / 6) - z;
+
+    // Dark elegant background
+    const bgGradient = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.7);
+    bgGradient.addColorStop(0, '#1a1a2e');
+    bgGradient.addColorStop(1, '#0f0f1e');
+    ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, w, h);
 
-    // Soft twinkling stars
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    for (let i = 0; i < 60; i++) {
+    // Subtle stars
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    for (let i = 0; i < 80; i++) {
       ctx.beginPath();
-      ctx.arc(Math.random() * w, Math.random() * h * 0.4, Math.random() * 1.5, 0, Math.PI * 2);
+      ctx.arc(Math.random() * w, Math.random() * h * 0.5, Math.random() * 1.2, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Floor with perspective
-    const horizon = h * 0.4;
-    const floorGradient = ctx.createLinearGradient(0, horizon, 0, h);
-    floorGradient.addColorStop(0, '#2c3e50');
-    floorGradient.addColorStop(0.5, '#34495e');
-    floorGradient.addColorStop(1, '#1a252f');
-    ctx.fillStyle = floorGradient;
-    ctx.fillRect(0, horizon, w, h - horizon);
+    // Isometric scaling and positioning
+    const scale = Math.min(w, h) / 80;
+    const centerX = w / 2;
+    const centerY = h * 0.55;
 
-    // Tent ceiling - different styles
+    const tentW = Math.max(tentConfig.width || 40, 30);
+    const tentL = Math.max(tentConfig.length || 60, 40);
+    const tentH = 12;
+
+    // Draw ground/floor plane (luxury flooring)
+    const drawIsoRect = (x, y, width, length, z, color1, color2, color3) => {
+      const x1 = centerX + isoX(x, y) * scale;
+      const y1 = centerY + isoY(x, y, z) * scale;
+      const x2 = centerX + isoX(x + width, y) * scale;
+      const y2 = centerY + isoY(x + width, y, z) * scale;
+      const x3 = centerX + isoX(x + width, y + length) * scale;
+      const y3 = centerY + isoY(x + width, y + length, z) * scale;
+      const x4 = centerX + isoX(x, y + length) * scale;
+      const y4 = centerY + isoY(x, y + length, z) * scale;
+
+      // Top face
+      ctx.fillStyle = color1;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.lineTo(x3, y3);
+      ctx.lineTo(x4, y4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Right face
+      if (color2) {
+        const x5 = centerX + isoX(x + width, y + length) * scale;
+        const y5 = centerY + isoY(x + width, y + length, 0) * scale;
+        ctx.fillStyle = color2;
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x3, y3);
+        ctx.lineTo(x5, y5);
+        ctx.lineTo(centerX + isoX(x + width, y) * scale, centerY + isoY(x + width, y, 0) * scale);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Left face
+      if (color3) {
+        const x6 = centerX + isoX(x, y + length) * scale;
+        const y6 = centerY + isoY(x, y + length, 0) * scale;
+        ctx.fillStyle = color3;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x4, y4);
+        ctx.lineTo(x6, y6);
+        ctx.lineTo(centerX + isoX(x, y) * scale, centerY + isoY(x, y, 0) * scale);
+        ctx.closePath();
+        ctx.fill();
+      }
+    };
+
+    // Luxury marble floor
+    drawIsoRect(-tentW / 2, -tentL / 2, tentW, tentL, 0, '#2d2d3f', '#25253a', '#1f1f30');
+
+    // Floor pattern (marble tiles)
+    for (let i = 0; i < tentW; i += 5) {
+      for (let j = 0; j < tentL; j += 5) {
+        const tileX = -tentW / 2 + i;
+        const tileY = -tentL / 2 + j;
+        const brightness = ((i + j) % 10 === 0) ? 5 : 0;
+        const tileColor = `rgba(255, 255, 255, ${0.02 + brightness * 0.008})`;
+        
+        const tx1 = centerX + isoX(tileX, tileY) * scale;
+        const ty1 = centerY + isoY(tileX, tileY, 0) * scale;
+        const tx2 = centerX + isoX(tileX + 5, tileY) * scale;
+        const ty2 = centerY + isoY(tileX + 5, tileY, 0) * scale;
+        const tx3 = centerX + isoX(tileX + 5, tileY + 5) * scale;
+        const ty3 = centerY + isoY(tileX + 5, tileY + 5, 0) * scale;
+        const tx4 = centerX + isoX(tileX, tileY + 5) * scale;
+        const ty4 = centerY + isoY(tileX, tileY + 5, 0) * scale;
+
+        ctx.strokeStyle = tileColor;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(tx1, ty1);
+        ctx.lineTo(tx2, ty2);
+        ctx.lineTo(tx3, ty3);
+        ctx.lineTo(tx4, ty4);
+        ctx.closePath();
+        ctx.stroke();
+      }
+    }
+
+    // Tent structure walls
     if (tentStyle === 'marquee') {
-      // Marquee: Peaked with elegant draping
+      // Marquee peaked roof
+      const peakH = tentH + 5;
+      
+      // Back wall
+      ctx.fillStyle = 'rgba(250, 250, 255, 0.15)';
+      ctx.beginPath();
+      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      // Left wall
+      ctx.fillStyle = 'rgba(245, 245, 255, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      // Peaked roof (two slopes)
       ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
       ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(w, 0);
-      ctx.lineTo(w, horizon * 0.8);
-      ctx.quadraticCurveTo(w / 2, horizon * 1.1, 0, horizon * 0.8);
+      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(0, -tentL / 2) * scale, centerY + isoY(0, -tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + isoX(0, tentL / 2) * scale, centerY + isoY(0, tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
 
-      // Decorative drape lines
-      for (let i = 0; i < 8; i++) {
-        const x = (w / 8) * i;
-        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.quadraticCurveTo(w / 2, horizon * 0.9, w / 2, horizon);
-        ctx.stroke();
-      }
-
-      // Peak accent
-      ctx.fillStyle = 'rgba(220, 220, 230, 0.8)';
-      ctx.beginPath();
-      ctx.moveTo(w * 0.4, 0);
-      ctx.lineTo(w * 0.6, 0);
-      ctx.lineTo(w / 2, horizon * 0.3);
-      ctx.closePath();
-      ctx.fill();
-    } else {
-      // Frame: Clean, modern, taut ceiling
-      ctx.fillStyle = 'rgba(250, 250, 255, 0.95)';
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(w, 0);
-      ctx.lineTo(w, horizon * 0.7);
-      ctx.lineTo(0, horizon * 0.7);
-      ctx.closePath();
-      ctx.fill();
-
-      // Modern structural lines
-      for (let i = 1; i < 8; i++) {
-        const x = (w / 8) * i;
-        ctx.strokeStyle = 'rgba(180, 180, 190, 0.3)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, horizon * 0.7);
-        ctx.stroke();
-      }
-
-      // Horizontal frame lines
-      ctx.strokeStyle = 'rgba(160, 160, 170, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, horizon * 0.35);
-      ctx.lineTo(w, horizon * 0.35);
-      ctx.stroke();
-    }
-
-    // Side drapes/walls - different styles
-    if (tentStyle === 'marquee') {
-      // Marquee: Flowing elegant drapes
-      ctx.fillStyle = 'rgba(240, 240, 245, 0.9)';
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(w * 0.08, h * 0.3, w * 0.12, h);
-      ctx.lineTo(0, h);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(w, 0);
-      ctx.quadraticCurveTo(w * 0.92, h * 0.3, w * 0.88, h);
-      ctx.lineTo(w, h);
-      ctx.closePath();
-      ctx.fill();
-    } else {
-      // Frame: Straight, taut walls
       ctx.fillStyle = 'rgba(245, 245, 250, 0.9)';
-      ctx.fillRect(0, 0, w * 0.1, h);
-      ctx.fillRect(w * 0.9, 0, w * 0.1, h);
-    }
-
-    // String lights with warm glow
-    const numLights = 20;
-    for (let i = 0; i < numLights; i++) {
-      const x = (w / numLights) * i + w / (numLights * 2);
-      const y = horizon * 0.65 + Math.sin(i * 0.8) * 15;
-      
-      const glow = ctx.createRadialGradient(x, y, 0, x, y, 20);
-      glow.addColorStop(0, 'rgba(255, 230, 180, 0.8)');
-      glow.addColorStop(0.5, 'rgba(255, 200, 100, 0.3)');
-      glow.addColorStop(1, 'rgba(255, 180, 80, 0)');
-      ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.moveTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(0, -tentL / 2) * scale, centerY + isoY(0, -tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + isoX(0, tentL / 2) * scale, centerY + isoY(0, tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, tentL / 2) * scale, centerY + isoY(tentW / 2, tentL / 2, tentH) * scale);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      // Frame tent - flat roof
+      // Back wall
+      ctx.fillStyle = 'rgba(250, 250, 255, 0.15)';
+      ctx.beginPath();
+      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.closePath();
       ctx.fill();
 
-      ctx.fillStyle = '#fffacd';
+      // Left wall
+      ctx.fillStyle = 'rgba(245, 245, 255, 0.12)';
       ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.closePath();
+      ctx.fill();
+
+      // Flat roof
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.beginPath();
+      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(tentW / 2, tentL / 2) * scale, centerY + isoY(tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.closePath();
       ctx.fill();
     }
 
-    // Stage area
+    // Stage
     const stages = items.filter(item => item.type === 'stage');
     if (stages.length > 0) {
-      const stageY = horizon * 0.9;
-      const stageW = w * 0.5;
-      const stageH = h * 0.2;
+      const stageW = 20;
+      const stageL = 16;
+      const stageH = 3;
+      drawIsoRect(-stageW / 2, -tentL / 2 + 5, stageW, stageL, stageH, '#1a1a1a', '#0f0f0f', '#080808');
       
-      // Stage platform
-      ctx.fillStyle = '#2c2c2c';
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = 20;
-      ctx.fillRect(w / 2 - stageW / 2, stageY, stageW, stageH);
-      ctx.shadowBlur = 0;
-
-      // Stage lighting - multiple spotlights
-      for (let i = 0; i < 4; i++) {
-        const spotX = w / 2 - stageW / 3 + (stageW / 2.5) * i;
-        const spotGradient = ctx.createRadialGradient(spotX, stageY + stageH / 2, 0, spotX, stageY + stageH / 2, 120);
-        spotGradient.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-        spotGradient.addColorStop(0.3, 'rgba(255, 220, 180, 0.3)');
-        spotGradient.addColorStop(1, 'rgba(255, 200, 150, 0)');
-        ctx.fillStyle = spotGradient;
+      // Stage lighting
+      for (let i = 0; i < 3; i++) {
+        const lx = -stageW / 2 + (stageW / 4) * (i + 0.5);
+        const ly = -tentL / 2 + 12;
+        const sx = centerX + isoX(lx, ly) * scale;
+        const sy = centerY + isoY(lx, ly, stageH) * scale;
+        
+        const spotGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 60 * scale);
+        spotGrad.addColorStop(0, 'rgba(255, 220, 150, 0.4)');
+        spotGrad.addColorStop(1, 'rgba(255, 200, 120, 0)');
+        ctx.fillStyle = spotGrad;
         ctx.beginPath();
-        ctx.arc(spotX, stageY + stageH / 2, 120, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 60 * scale, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // Dance floor with shimmer
+    // Dance floor
     const danceFloors = items.filter(item => item.type === 'danceFloor');
     if (danceFloors.length > 0) {
-      const dfY = h * 0.65;
-      const dfW = w * 0.4;
-      const dfH = h * 0.25;
+      const dfW = 18;
+      const dfL = 18;
+      drawIsoRect(-dfW / 2, -dfL / 2, dfW, dfL, 0.2, '#d4af37', '#c19f2f', '#b08f28');
       
-      // Reflective floor
-      ctx.fillStyle = danceFloors[0].color || '#d4af37';
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-      ctx.shadowBlur = 15;
-      ctx.fillRect(w / 2 - dfW / 2, dfY, dfW, dfH);
-      ctx.shadowBlur = 0;
-
-      // Light reflections
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2;
-        const colors = ['#ff6b9d', '#4ecdc4', '#ffe66d', '#a8e6cf', '#ff8b94', '#c7ceea'];
-        const refGradient = ctx.createRadialGradient(
-          w / 2 + Math.cos(angle) * 50, dfY + dfH / 2 + Math.sin(angle) * 30, 0,
-          w / 2 + Math.cos(angle) * 50, dfY + dfH / 2 + Math.sin(angle) * 30, 60
-        );
-        refGradient.addColorStop(0, `${colors[i]}66`);
-        refGradient.addColorStop(1, `${colors[i]}00`);
-        ctx.fillStyle = refGradient;
+      // Disco lights effect
+      const colors = ['#ff6b9d', '#4ecdc4', '#ffe66d', '#a8e6cf'];
+      for (let i = 0; i < 4; i++) {
+        const angle = (i / 4) * Math.PI * 2;
+        const lx = Math.cos(angle) * 6;
+        const ly = Math.sin(angle) * 6;
+        const sx = centerX + isoX(lx, ly) * scale;
+        const sy = centerY + isoY(lx, ly, 0.2) * scale;
+        
+        const colorGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 40 * scale);
+        colorGrad.addColorStop(0, colors[i] + 'aa');
+        colorGrad.addColorStop(1, colors[i] + '00');
+        ctx.fillStyle = colorGrad;
         ctx.beginPath();
-        ctx.arc(w / 2 + Math.cos(angle) * 50, dfY + dfH / 2 + Math.sin(angle) * 30, 60, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 40 * scale, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // Tables with elegant settings
+    // Tables with elegant styling
     const tables = items.filter(item => 
       item.type === 'table8ft' || item.type === 'table6ft' || item.type === 'table5ft'
     );
     
-    const tableY = h * 0.7;
-    tables.slice(0, 8).forEach((table, idx) => {
-      const spacing = w * 0.12;
-      const tableX = w * 0.15 + (idx % 4) * spacing;
-      const tableRow = tableY + Math.floor(idx / 4) * 80;
+    tables.slice(0, 12).forEach((table, idx) => {
+      const row = Math.floor(idx / 4);
+      const col = idx % 4;
+      const tableX = -tentW / 3 + (tentW / 5) * col;
+      const tableY = tentL / 4 - row * 12;
+      const tableSize = table.type === 'table5ft' ? 4 : 6;
       
-      // Table shadow
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      // Table top
+      drawIsoRect(tableX - tableSize / 2, tableY - tableSize / 2, tableSize, tableSize, 2.5, 
+        tentConfig.linenColor || '#ffffff', 
+        'rgba(230, 230, 235, 0.95)', 
+        'rgba(225, 225, 230, 0.9)');
+      
+      // Centerpiece glow
+      const tx = centerX + isoX(tableX, tableY) * scale;
+      const ty = centerY + isoY(tableX, tableY, 3) * scale;
+      const cpGrad = ctx.createRadialGradient(tx, ty, 0, tx, ty, 15);
+      cpGrad.addColorStop(0, 'rgba(255, 215, 0, 0.8)');
+      cpGrad.addColorStop(1, 'rgba(255, 180, 50, 0)');
+      ctx.fillStyle = cpGrad;
       ctx.beginPath();
-      ctx.ellipse(tableX, tableRow + 5, 30, 15, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Table with linen
-      ctx.fillStyle = tentConfig.linenColor || '#ffffff';
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-      ctx.shadowBlur = 10;
-      ctx.beginPath();
-      if (table.type === 'table5ft') {
-        ctx.arc(tableX, tableRow, 28, 0, Math.PI * 2);
-      } else {
-        ctx.ellipse(tableX, tableRow, 35, 20, 0, 0, Math.PI * 2);
-      }
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      // Elegant centerpiece
-      const cpGradient = ctx.createRadialGradient(tableX, tableRow - 8, 0, tableX, tableRow - 8, 12);
-      cpGradient.addColorStop(0, '#ffd700');
-      cpGradient.addColorStop(0.6, '#ffb347');
-      cpGradient.addColorStop(1, 'rgba(255, 179, 71, 0)');
-      ctx.fillStyle = cpGradient;
-      ctx.beginPath();
-      ctx.arc(tableX, tableRow - 8, 12, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Centerpiece detail
-      ctx.fillStyle = '#ff6b6b';
-      ctx.beginPath();
-      ctx.arc(tableX, tableRow - 8, 4, 0, Math.PI * 2);
+      ctx.arc(tx, ty, 15, 0, Math.PI * 2);
       ctx.fill();
     });
 
-    // Glamorous people silhouettes
-    const numPeople = Math.min(attendees || 50, 150);
-    const peopleToShow = Math.min(Math.floor(numPeople * 0.4), 50);
+    // Chandelier lighting from ceiling
+    for (let i = 0; i < 6; i++) {
+      const lx = -tentW / 3 + (tentW / 3) * (i % 3);
+      const ly = -tentL / 4 + (tentL / 2) * Math.floor(i / 3);
+      const sx = centerX + isoX(lx, ly) * scale;
+      const sy = centerY + isoY(lx, ly, tentH - 1) * scale;
+      
+      // Chandelier crystal
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 3, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Warm glow
+      const chandelierGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 80 * scale);
+      chandelierGrad.addColorStop(0, 'rgba(255, 245, 220, 0.3)');
+      chandelierGrad.addColorStop(0.5, 'rgba(255, 235, 200, 0.15)');
+      chandelierGrad.addColorStop(1, 'rgba(255, 220, 180, 0)');
+      ctx.fillStyle = chandelierGrad;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 80 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Elegant people silhouettes
+    const numPeople = Math.min(attendees || 50, 100);
+    const peopleToShow = Math.min(Math.floor(numPeople * 0.3), 40);
     
     for (let i = 0; i < peopleToShow; i++) {
-      const zone = Math.random();
-      let personX, personY, personScale;
+      const px = -tentW / 3 + Math.random() * (tentW * 0.6);
+      const py = -tentL / 3 + Math.random() * (tentL * 0.6);
+      const personHeight = 5;
       
-      if (zone < 0.5) {
-        // Dance floor area
-        personX = w * 0.35 + Math.random() * w * 0.3;
-        personY = h * 0.68 + Math.random() * h * 0.15;
-        personScale = 0.8 + Math.random() * 0.4;
-      } else {
-        // Around tables
-        personX = w * 0.15 + Math.random() * w * 0.7;
-        personY = h * 0.72 + Math.random() * h * 0.12;
-        personScale = 0.6 + Math.random() * 0.3;
-      }
+      const sx = centerX + isoX(px, py) * scale;
+      const sy = centerY + isoY(px, py, 0) * scale;
       
-      const personH = 50 * personScale;
-      const hue = Math.random() * 60 + 200; // Blue to purple range
-      
-      ctx.fillStyle = `hsla(${hue}, 60%, 60%, 0.7)`;
-      ctx.globalAlpha = 0.85;
-      
-      // Head
+      ctx.fillStyle = `hsla(${200 + Math.random() * 60}, 50%, 50%, 0.7)`;
       ctx.beginPath();
-      ctx.arc(personX, personY - personH * 0.85, personH * 0.15, 0, Math.PI * 2);
+      ctx.ellipse(sx, sy - personHeight * scale, 2, 4, 0, 0, Math.PI * 2);
       ctx.fill();
-      
-      // Body
-      ctx.beginPath();
-      ctx.moveTo(personX - personH * 0.12, personY - personH * 0.7);
-      ctx.lineTo(personX + personH * 0.12, personY - personH * 0.7);
-      ctx.lineTo(personX + personH * 0.15, personY);
-      ctx.lineTo(personX - personH * 0.15, personY);
-      ctx.closePath();
-      ctx.fill();
-      
-      ctx.globalAlpha = 1;
     }
 
-    // Atmospheric lighting effects
-    const ambientGlow = ctx.createRadialGradient(w / 2, horizon, 0, w / 2, horizon, w * 0.6);
-    ambientGlow.addColorStop(0, 'rgba(255, 240, 200, 0.15)');
-    ambientGlow.addColorStop(0.5, 'rgba(255, 220, 180, 0.08)');
-    ambientGlow.addColorStop(1, 'rgba(255, 200, 150, 0)');
-    ctx.fillStyle = ambientGlow;
-    ctx.fillRect(0, horizon * 0.6, w, h);
-
-    // Soft light beams from ceiling
-    for (let i = 0; i < 4; i++) {
-      const beamX = w * 0.25 + (w * 0.5 / 3) * i;
-      const beamGradient = ctx.createLinearGradient(beamX, horizon * 0.5, beamX, h * 0.7);
-      beamGradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
-      beamGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = beamGradient;
-      ctx.fillRect(beamX - 30, horizon * 0.5, 60, h * 0.3);
-    }
-
-    // Display tent type information
+    // Info display
     if (tentType) {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.font = 'bold 18px Arial';
-      ctx.textAlign = 'right';
-      ctx.fillText(`${tentType} ${tentStyle === 'marquee' ? 'Marquee' : 'Frame'} Tent`, w - 20, 30);
-      ctx.font = '14px Arial';
-      ctx.fillText(`${attendees} Guests`, w - 20, 52);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.font = 'bold 20px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${tentType} ${tentStyle === 'marquee' ? 'Marquee' : 'Frame'} Tent`, 20, 35);
+      ctx.font = '16px Arial';
+      ctx.fillText(`${attendees} Guests • Luxury Isometric View`, 20, 60);
     }
   }, [tentConfig, items, attendees, tentType, tentStyle]);
 
