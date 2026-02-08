@@ -37,21 +37,6 @@ export default function TentDesignAssistant() {
   const [generatedImage, setGeneratedImage] = useState(null);
   const [generatingImage, setGeneratingImage] = useState(false);
   const canvasRef = useRef(null);
-  const [customEquipment, setCustomEquipment] = useState({
-    name: '',
-    width: 10,
-    length: 10,
-    color: '#888888'
-  });
-
-  const addCustomEquipment = () => {
-    if (!customEquipment.name) return;
-    setTentConfig(prev => ({
-      ...prev,
-      customEquipment: [...(prev.customEquipment || []), { ...customEquipment }]
-    }));
-    setCustomEquipment({ name: '', width: 10, length: 10, color: '#888888' });
-  };
 
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
