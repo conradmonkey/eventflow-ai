@@ -8,7 +8,7 @@ import TentInputPanel from '@/components/tent/TentInputPanel';
 import TentCanvas2D from '@/components/tent/TentCanvas2D';
 import TentCanvas3D from '@/components/tent/TentCanvas3D';
 import TentGearList from '@/components/tent/TentGearList';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Plus } from 'lucide-react';
 
 export default function TentDesignAssistant() {
   const [attendees, setAttendees] = useState(100);
