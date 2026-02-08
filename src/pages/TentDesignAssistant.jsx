@@ -6,7 +6,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TentInputPanel from '@/components/tent/TentInputPanel';
 import TentCanvas2D from '@/components/tent/TentCanvas2D';
-import TentCanvas3D from '@/components/tent/TentCanvas3D';
+
 import TentGearList from '@/components/tent/TentGearList';
 import { Sparkles, Plus } from 'lucide-react';
 
@@ -30,7 +30,7 @@ export default function TentDesignAssistant() {
     chairs: { rows: 0, perRow: 0 },
     customEquipment: []
   });
-  const [show3D, setShow3D] = useState(false);
+
   const [showGearList, setShowGearList] = useState(false);
   const [items, setItems] = useState([]);
   const canvasRef = useRef(null);
@@ -389,14 +389,7 @@ export default function TentDesignAssistant() {
                   )}
                 </div>
 
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => setShow3D(true)}
-                  disabled={items.length === 0}
-                >
-                  Artistic Visualization
-                </Button>
+
                 <Button
                   variant="outline"
                   className="w-full"
@@ -422,17 +415,6 @@ export default function TentDesignAssistant() {
       </div>
 
       {/* Modals */}
-      {show3D && (
-        <TentCanvas3D
-          tentConfig={tentConfig}
-          items={items}
-          attendees={attendees}
-          tentType={suggestedTent?.type}
-          tentStyle={tentStyle}
-          onClose={() => setShow3D(false)}
-        />
-      )}
-
       {showGearList && (
         <TentGearList
           tentConfig={tentConfig}
