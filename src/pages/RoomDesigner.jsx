@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Ruler, Layout, Box, DollarSign, Loader2 } from "lucide-react";
+import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown } from "lucide-react";
 import { motion } from "framer-motion";
 import InteractiveRoomCanvas from "@/components/room/InteractiveRoomCanvas";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { jsPDF } from "jspdf";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
@@ -36,7 +38,16 @@ export default function RoomDesigner() {
   const [render3D, setRender3D] = useState(null);
   const [isLoading3D, setIsLoading3D] = useState(false);
   const [showGearList, setShowGearList] = useState(false);
+  const [currentProjectId, setCurrentProjectId] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
   const render3DRef = useRef(null);
+
+  const queryClient = useQueryClient();
+  const { data: savedProjects = [] } = useQuery({
+    queryKey: ['room-projects'],
+    queryFn: () => base44.entities.RoomProject.list('-updated_date')
+  });
 
   const handleGenerate2D = (e) => {
     e.preventDefault();
@@ -119,7 +130,7 @@ Atmosphere:
 Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end production value, ultra detailed.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
-      setRender3D({
+      const renderData = {
         url: response.url,
         suggestions: {
           drape: `${formData.table_color} table draping - approximately ${totalLinenFt} feet total`,
@@ -129,7 +140,8 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
 - 4-6 stage wash lights (warm tones)
 - LED strip lighting for bar and architectural accents`
         }
-      });
+      };
+      setRender3D(renderData);
       
       setTimeout(() => {
         render3DRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -143,6 +155,265 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const gearList = showGearList ? calculateGearList() : null;
+
+  const handleSaveProject = async () => {
+    if (!formData.project_name.trim()) {
+      alert('Please enter a project name');
+      return;
+    }
+
+    try {
+      const projectData = {
+        ...formData,
+        render_3d_url: render3D?.url || ""
+      };
+
+      if (currentProjectId) {
+        await base44.entities.RoomProject.update(currentProjectId, projectData);
+      } else {
+        const newProject = await base44.entities.RoomProject.create(projectData);
+        setCurrentProjectId(newProject.id);
+      }
+
+      queryClient.invalidateQueries(['room-projects']);
+      setShowSaveModal(false);
+      alert('Project saved successfully!');
+    } catch (error) {
+      alert('Error saving project: ' + error.message);
+    }
+  };
+
+  const handleLoadProject = (project) => {
+    setFormData({
+      project_name: project.project_name,
+      country: project.country,
+      province: project.province,
+      city: project.city,
+      room_length: project.room_length,
+      room_width: project.room_width,
+      stage_length: project.stage_length || "",
+      stage_width: project.stage_width || "",
+      dance_floor_length: project.dance_floor_length || "",
+      dance_floor_width: project.dance_floor_width || "",
+      bar_length: project.bar_length || "",
+      bar_width: project.bar_width || "",
+      video_wall_height: project.video_wall_height || "",
+      video_wall_width: project.video_wall_width || "",
+      table_8ft: project.table_8ft || "0",
+      table_6ft: project.table_6ft || "0",
+      table_5ft_round: project.table_5ft_round || "0",
+      table_6ft_round: project.table_6ft_round || "0",
+      cocktail_tables: project.cocktail_tables || "0",
+      table_color: project.table_color || "white"
+    });
+    setCurrentProjectId(project.id);
+    setShowCanvas(true);
+    if (project.render_3d_url) {
+      setRender3D({
+        url: project.render_3d_url,
+        suggestions: {
+          drape: `${project.table_color} table draping`,
+          lighting: "Lighting suggestions available after re-generation"
+        }
+      });
+    }
+    setShowLoadModal(false);
+  };
+
+  const handleExportPDF = () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = margin;
+
+    // Title
+    pdf.setFontSize(22);
+    pdf.setTextColor(245, 158, 11); // Amber
+    pdf.text('Room Design Report', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Project Details
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Project Information', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    if (formData.project_name) {
+      pdf.text(`Project: ${formData.project_name}`, margin, yPos);
+      yPos += 6;
+    }
+    pdf.text(`Location: ${formData.city}, ${formData.province}, ${formData.country}`, margin, yPos);
+    yPos += 6;
+    pdf.text(`Room: ${formData.room_length}' x ${formData.room_width}'`, margin, yPos);
+    yPos += 10;
+
+    // Equipment Summary
+    pdf.setFontSize(14);
+    pdf.text('Equipment Summary', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    const items = [];
+    if (formData.stage_length && formData.stage_width) {
+      items.push(`Stage: ${formData.stage_length}' x ${formData.stage_width}'`);
+    }
+    if (formData.dance_floor_length && formData.dance_floor_width) {
+      items.push(`Dance Floor: ${formData.dance_floor_length}' x ${formData.dance_floor_width}'`);
+    }
+    if (formData.bar_length && formData.bar_width) {
+      items.push(`Bar: ${formData.bar_length}' x ${formData.bar_width}'`);
+    }
+    if (formData.video_wall_height && formData.video_wall_width) {
+      items.push(`Video Wall: ${formData.video_wall_height}m x ${formData.video_wall_width}m`);
+    }
+    if (formData.table_8ft !== "0") items.push(`8ft Tables: ${formData.table_8ft}`);
+    if (formData.table_6ft !== "0") items.push(`6ft Tables: ${formData.table_6ft}`);
+    if (formData.table_5ft_round !== "0") items.push(`5ft Round Tables: ${formData.table_5ft_round}`);
+    if (formData.table_6ft_round !== "0") items.push(`6ft Round Tables: ${formData.table_6ft_round}`);
+    if (formData.cocktail_tables !== "0") items.push(`Cocktail Tables: ${formData.cocktail_tables}`);
+
+    items.forEach(item => {
+      pdf.text(`• ${item}`, margin + 5, yPos);
+      yPos += 6;
+    });
+    yPos += 5;
+
+    // Gear List with Costs
+    if (gearList) {
+      pdf.setFontSize(14);
+      pdf.text('Cost Breakdown', margin, yPos);
+      yPos += 8;
+
+      pdf.setFontSize(10);
+      if (gearList.costs.tables_8ft.count > 0) {
+        pdf.text(`8ft Tables: $${gearList.costs.tables_8ft.total}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.tables_6ft.count > 0) {
+        pdf.text(`6ft Tables: $${gearList.costs.tables_6ft.total}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.tables_5ft_round.count > 0) {
+        pdf.text(`5ft Round Tables: $${gearList.costs.tables_5ft_round.total}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.tables_6ft_round.count > 0) {
+        pdf.text(`6ft Round Tables: $${gearList.costs.tables_6ft_round.total}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.cocktail_tables.count > 0) {
+        pdf.text(`Cocktail Tables: $${gearList.costs.cocktail_tables.total}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.table_linen.count > 0) {
+        pdf.text(`Table Linens: $${gearList.costs.table_linen.total}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.stage.area > 0) {
+        pdf.text(`Stage: $${gearList.costs.stage.total.toFixed(0)}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.dance_floor.area > 0) {
+        pdf.text(`Dance Floor: $${gearList.costs.dance_floor.total.toFixed(0)}`, margin, yPos);
+        yPos += 6;
+      }
+      if (gearList.costs.video_wall.area > 0) {
+        pdf.text(`Video Wall: $${gearList.costs.video_wall.total.toFixed(0)}`, margin, yPos);
+        yPos += 6;
+      }
+
+      yPos += 5;
+      pdf.setFontSize(12);
+      pdf.text(`Total: $${gearList.totalCost.toFixed(0)}`, margin, yPos);
+      yPos += 10;
+    }
+
+    // 3D Render
+    if (render3D?.url) {
+      if (yPos > pageHeight - 100) {
+        pdf.addPage();
+        yPos = margin;
+      }
+
+      pdf.setFontSize(14);
+      pdf.text('3D Visualization', margin, yPos);
+      yPos += 10;
+
+      try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = render3D.url;
+        
+        img.onload = () => {
+          const imgWidth = pageWidth - 2 * margin;
+          const imgHeight = (img.height * imgWidth) / img.width;
+          const maxHeight = pageHeight - yPos - 30;
+          
+          const finalHeight = Math.min(imgHeight, maxHeight);
+          const finalWidth = (img.width * finalHeight) / img.height;
+
+          pdf.addImage(render3D.url, 'JPEG', margin, yPos, finalWidth, finalHeight);
+
+          // Footer
+          const totalPages = pdf.internal.pages.length - 1;
+          for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(8);
+            pdf.setTextColor(150, 150, 150);
+            pdf.text(
+              `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+              pageWidth / 2,
+              pageHeight - 10,
+              { align: 'center' }
+            );
+          }
+
+          const fileName = `${formData.project_name || 'room-design'}-${Date.now()}.pdf`;
+          pdf.save(fileName);
+        };
+
+        img.onerror = () => {
+          // Save without image
+          const totalPages = pdf.internal.pages.length - 1;
+          for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(8);
+            pdf.setTextColor(150, 150, 150);
+            pdf.text(
+              `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+              pageWidth / 2,
+              pageHeight - 10,
+              { align: 'center' }
+            );
+          }
+
+          const fileName = `${formData.project_name || 'room-design'}-${Date.now()}.pdf`;
+          pdf.save(fileName);
+        };
+      } catch (error) {
+        console.error('Error adding image:', error);
+      }
+    } else {
+      // Footer
+      const totalPages = pdf.internal.pages.length - 1;
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text(
+          `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+          pageWidth / 2,
+          pageHeight - 10,
+          { align: 'center' }
+        );
+      }
+
+      const fileName = `${formData.project_name || 'room-design'}-${Date.now()}.pdf`;
+      pdf.save(fileName);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950">
@@ -431,13 +702,45 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg"
-              >
-                <Layout className="w-5 h-5 mr-2" />
-                Generate 2D Layout
-              </Button>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  type="submit"
+                  className="bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg"
+                >
+                  <Layout className="w-5 h-5 mr-2" />
+                  Generate 2D
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowLoadModal(true)}
+                  className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                >
+                  <FolderOpen className="w-5 h-5 mr-2" />
+                  Load
+                </Button>
+              </div>
+              {showCanvas && (
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    type="button"
+                    onClick={() => setShowSaveModal(true)}
+                    className="bg-green-600 hover:bg-green-700 h-12 rounded-lg"
+                  >
+                    <Save className="w-5 h-5 mr-2" />
+                    Save
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleExportPDF}
+                    variant="outline"
+                    className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                  >
+                    <FileDown className="w-5 h-5 mr-2" />
+                    Export PDF
+                  </Button>
+                </div>
+              )}
             </form>
           </motion.div>
 
@@ -596,6 +899,97 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
               </p>
             </div>
           </motion.div>
+        )}
+
+        {/* Save Modal */}
+        {showSaveModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-md"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">
+                  {currentProjectId ? 'Update Project' : 'Save Project'}
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowSaveModal(false)}
+                  className="text-zinc-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="space-y-4">
+                <p className="text-zinc-300 text-sm">
+                  {formData.project_name ? `Saving: ${formData.project_name}` : 'Please enter a project name first'}
+                </p>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setShowSaveModal(false)}
+                    variant="outline"
+                    className="flex-1 border-zinc-700 text-zinc-300"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSaveProject}
+                    disabled={!formData.project_name}
+                    className="flex-1 bg-green-600 hover:bg-green-700"
+                  >
+                    {currentProjectId ? 'Update' : 'Save'}
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Load Modal */}
+        {showLoadModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Load Project</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowLoadModal(false)}
+                  className="text-zinc-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              {savedProjects.length === 0 ? (
+                <p className="text-zinc-400 text-center py-8">No saved projects yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {savedProjects.map((project) => (
+                    <div
+                      key={project.id}
+                      onClick={() => handleLoadProject(project)}
+                      className="border border-zinc-800 rounded-xl p-4 hover:bg-zinc-800/50 cursor-pointer transition-colors"
+                    >
+                      <h4 className="font-semibold text-white mb-2">{project.project_name}</h4>
+                      <div className="text-sm text-zinc-400 space-y-1">
+                        <p>Location: {project.city}, {project.province}, {project.country}</p>
+                        <p>Room: {project.room_length}' x {project.room_width}'</p>
+                        <p className="text-xs text-zinc-500 mt-2">
+                          Saved: {new Date(project.created_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </div>
         )}
       </div>
     </div>
