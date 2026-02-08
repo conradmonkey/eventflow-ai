@@ -104,21 +104,29 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       ctx.stroke();
     }
 
-    // Side drapes - flowing and elegant
-    ctx.fillStyle = 'rgba(240, 240, 245, 0.9)';
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.quadraticCurveTo(w * 0.08, h * 0.3, w * 0.12, h);
-    ctx.lineTo(0, h);
-    ctx.closePath();
-    ctx.fill();
+    // Side drapes/walls - different styles
+    if (tentStyle === 'marquee') {
+      // Marquee: Flowing elegant drapes
+      ctx.fillStyle = 'rgba(240, 240, 245, 0.9)';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(w * 0.08, h * 0.3, w * 0.12, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      ctx.fill();
 
-    ctx.beginPath();
-    ctx.moveTo(w, 0);
-    ctx.quadraticCurveTo(w * 0.92, h * 0.3, w * 0.88, h);
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(w, 0);
+      ctx.quadraticCurveTo(w * 0.92, h * 0.3, w * 0.88, h);
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      // Frame: Straight, taut walls
+      ctx.fillStyle = 'rgba(245, 245, 250, 0.9)';
+      ctx.fillRect(0, 0, w * 0.1, h);
+      ctx.fillRect(w * 0.9, 0, w * 0.1, h);
+    }
 
     // String lights with warm glow
     const numLights = 20;
