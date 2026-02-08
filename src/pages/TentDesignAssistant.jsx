@@ -539,7 +539,7 @@ export default function TentDesignAssistant() {
             length: 2,
             x: startX + col * chairSpacing,
             y: tentWidth * 0.5 + row * rowSpacing,
-            rotation: 90,
+            rotation: 0,
             groupId: 'chairs'
           });
         }
