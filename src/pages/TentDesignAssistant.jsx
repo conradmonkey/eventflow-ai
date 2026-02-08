@@ -8,9 +8,10 @@ import TentInputPanel from '@/components/tent/TentInputPanel';
 import TentCanvas2D from '@/components/tent/TentCanvas2D';
 
 import TentGearList from '@/components/tent/TentGearList';
-import { Sparkles, Plus, Camera, X, Save, FolderOpen } from 'lucide-react';
+import { Sparkles, Plus, Camera, X, Save, FolderOpen, FileDown } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { jsPDF } from 'jspdf';
 
 export default function TentDesignAssistant() {
   const [projectName, setProjectName] = useState('');
@@ -140,6 +141,147 @@ export default function TentDesignAssistant() {
     acc[cat].push(project);
     return acc;
   }, {});
+
+  const handleExportPDF = async () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    let yPos = 20;
+
+    // Title
+    pdf.setFontSize(22);
+    pdf.setTextColor(88, 28, 135);
+    pdf.text('Tent Design Report', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Project Details
+    pdf.setFontSize(16);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Project Details', 20, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    pdf.text(`Project Name: ${projectName || 'Untitled'}`, 20, yPos);
+    yPos += 6;
+    pdf.text(`Category: ${projectCategory}`, 20, yPos);
+    yPos += 6;
+    pdf.text(`Attendees: ${attendees}`, 20, yPos);
+    yPos += 6;
+    pdf.text(`Seating: ${seatingArrangement?.replace('_', ' ') || 'N/A'}`, 20, yPos);
+    yPos += 6;
+    pdf.text(`Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`, 20, yPos);
+    yPos += 10;
+
+    // Equipment List
+    pdf.setFontSize(16);
+    pdf.text('Equipment List', 20, yPos);
+    yPos += 8;
+
+    const itemCounts = {};
+    items.forEach(item => {
+      const key = item.type;
+      itemCounts[key] = (itemCounts[key] || 0) + 1;
+    });
+
+    pdf.setFontSize(10);
+    
+    // Add tent
+    pdf.text(`• Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`, 25, yPos);
+    yPos += 6;
+
+    // Add items
+    Object.entries(itemCounts).forEach(([type, count]) => {
+      const label = type.replace(/([A-Z])/g, ' $1').trim();
+      pdf.text(`• ${label}: ${count}`, 25, yPos);
+      yPos += 6;
+      if (yPos > pageHeight - 20) {
+        pdf.addPage();
+        yPos = 20;
+      }
+    });
+
+    yPos += 5;
+
+    // Add 2D Layout if available
+    if (canvasRef.current && items.length > 0) {
+      if (yPos > pageHeight - 100) {
+        pdf.addPage();
+        yPos = 20;
+      }
+
+      pdf.setFontSize(16);
+      pdf.text('2D Layout', 20, yPos);
+      yPos += 10;
+
+      try {
+        const canvas = canvasRef.current;
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = pageWidth - 40;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        if (yPos + imgHeight > pageHeight - 20) {
+          pdf.addPage();
+          yPos = 20;
+        }
+
+        pdf.addImage(imgData, 'PNG', 20, yPos, imgWidth, imgHeight);
+        yPos += imgHeight + 10;
+      } catch (error) {
+        console.error('Error adding canvas to PDF:', error);
+      }
+    }
+
+    // Add AI Generated Image if available
+    if (generatedImage) {
+      pdf.addPage();
+      yPos = 20;
+
+      pdf.setFontSize(16);
+      pdf.text('AI Generated Design', 20, yPos);
+      yPos += 10;
+
+      try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = generatedImage;
+        
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+
+        const imgWidth = pageWidth - 40;
+        const imgHeight = (img.height * imgWidth) / img.width;
+        const maxHeight = pageHeight - 40;
+        
+        const finalHeight = Math.min(imgHeight, maxHeight);
+        const finalWidth = (img.width * finalHeight) / img.height;
+
+        pdf.addImage(generatedImage, 'JPEG', 20, yPos, finalWidth, finalHeight);
+      } catch (error) {
+        console.error('Error adding generated image to PDF:', error);
+        pdf.text('(Generated image could not be loaded)', 20, yPos);
+      }
+    }
+
+    // Footer
+    const totalPages = pdf.internal.pages.length - 1;
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(
+        `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+    }
+
+    // Save PDF
+    const fileName = `${projectName || 'tent-design'}-${Date.now()}.pdf`;
+    pdf.save(fileName);
+  };
 
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
@@ -544,14 +686,24 @@ export default function TentDesignAssistant() {
                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   2D Render
                 </Button>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => setShowGearList(true)}
-                  disabled={items.length === 0}
-                >
-                  Gear List
-                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowGearList(true)}
+                    disabled={items.length === 0}
+                  >
+                    Gear List
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleExportPDF}
+                    disabled={items.length === 0}
+                    className="bg-slate-50"
+                  >
+                    <FileDown className="w-4 h-4 mr-2" />
+                    Export PDF
+                  </Button>
+                </div>
               </div>
             )}
           </div>
