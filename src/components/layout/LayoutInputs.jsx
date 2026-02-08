@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function LayoutInputs({ onAddItems }) {
   const [inputs, setInputs] = useState({
@@ -10,7 +11,7 @@ export default function LayoutInputs({ onAddItems }) {
     tent_15x15: 0,
     tent_20x20: 0,
     tent_20x30: 0,
-    video_wall: { count: 0, width: 10, height: 8 },
+    video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
     toilet: 0,
     handwash: 0,
     sink: 0,
@@ -29,7 +30,7 @@ export default function LayoutInputs({ onAddItems }) {
       ...prev,
       video_wall: {
         ...prev.video_wall,
-        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : parseFloat(value) || 0
+        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : field === 'color' ? value : parseFloat(value) || 0
       }
     }));
   };
@@ -63,6 +64,7 @@ export default function LayoutInputs({ onAddItems }) {
         type: 'video_wall',
         width: inputs.video_wall.width,
         height: inputs.video_wall.height,
+        color: inputs.video_wall.color,
         x: Math.random() * 300,
         y: Math.random() * 300,
         rotation: 0
@@ -101,7 +103,7 @@ export default function LayoutInputs({ onAddItems }) {
       tent_15x15: 0,
       tent_20x20: 0,
       tent_20x30: 0,
-      video_wall: { count: 0, width: 10, height: 8 },
+      video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
       toilet: 0,
       handwash: 0,
       sink: 0,
@@ -160,6 +162,24 @@ export default function LayoutInputs({ onAddItems }) {
         <div>
           <Label htmlFor="vw_height" className="text-xs">Height (ft)</Label>
           <Input type="number" id="vw_height" value={inputs.video_wall.height} onChange={(e) => handleVideoWallChange('height', e.target.value)} min="1" step="0.5" />
+        </div>
+        <div>
+          <Label htmlFor="vw_color" className="text-xs">Color</Label>
+          <Select value={inputs.video_wall.color} onValueChange={(value) => handleVideoWallChange('color', value)}>
+            <SelectTrigger id="vw_color" className="text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="#000000">Black</SelectItem>
+              <SelectItem value="#1a1a1a">Dark Gray</SelectItem>
+              <SelectItem value="#FF0000">Red</SelectItem>
+              <SelectItem value="#00FF00">Green</SelectItem>
+              <SelectItem value="#0000FF">Blue</SelectItem>
+              <SelectItem value="#FFFF00">Yellow</SelectItem>
+              <SelectItem value="#00FFFF">Cyan</SelectItem>
+              <SelectItem value="#FF00FF">Magenta</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
