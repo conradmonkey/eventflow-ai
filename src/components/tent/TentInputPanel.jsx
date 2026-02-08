@@ -129,6 +129,8 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
 
   return (
     <div className="space-y-4 max-h-[calc(100vh-500px)] overflow-y-auto">
+      <h3 className="text-lg font-bold text-slate-900">Add Decor Items</h3>
+      
       {/* Stages */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
         <div className="flex justify-between items-center">
