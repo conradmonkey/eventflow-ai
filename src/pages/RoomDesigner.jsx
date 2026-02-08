@@ -165,10 +165,8 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   const gearList = showGearList ? calculateGearList() : null;
 
   const handleSaveProject = async () => {
-    if (!isSubscribed) {
-      setShowSubscriptionModal(true);
-      return;
-    }
+    // Remove subscription check - allow authenticated users
+
 
     if (!formData.project_name.trim()) {
       alert('Please enter a project name');
