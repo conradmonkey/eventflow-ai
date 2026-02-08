@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Building2, Loader2, MapPin, Users, DollarSign, Search, Save, FolderOpen, X } from "lucide-react";
+import { Building2, Loader2, MapPin, Users, DollarSign, Search, Save, FolderOpen, X, FileDown } from "lucide-react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { jsPDF } from "jspdf";
 
 export default function VenueScouting() {
   const [formData, setFormData] = useState({
@@ -112,6 +113,93 @@ Format the response in a clear, organized manner with venue names as headers. Us
     });
     setResults(search.results);
     setShowLoadModal(false);
+  };
+
+  const handleExportPDF = () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = margin;
+
+    // Title
+    pdf.setFontSize(22);
+    pdf.setTextColor(168, 85, 247); // Purple
+    pdf.text('Venue Recommendations', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Event Details
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Event Information', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    if (formData.event_name) {
+      pdf.text(`Event Name: ${formData.event_name}`, margin, yPos);
+      yPos += 6;
+    }
+    pdf.text(`Event Type: ${formData.event_type}`, margin, yPos);
+    yPos += 6;
+    pdf.text(`Capacity: ${formData.capacity}`, margin, yPos);
+    yPos += 6;
+    pdf.text(`Location: ${formData.city}, ${formData.province}, ${formData.country}`, margin, yPos);
+    yPos += 6;
+    pdf.text(`Budget: ${formData.budget}`, margin, yPos);
+    yPos += 10;
+
+    if (formData.requirements) {
+      pdf.setFontSize(12);
+      pdf.text('Requirements:', margin, yPos);
+      yPos += 6;
+      pdf.setFontSize(10);
+      const reqLines = pdf.splitTextToSize(formData.requirements, pageWidth - 2 * margin);
+      reqLines.forEach(line => {
+        if (yPos > pageHeight - margin) {
+          pdf.addPage();
+          yPos = margin;
+        }
+        pdf.text(line, margin, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+    }
+
+    // Results
+    pdf.setFontSize(14);
+    pdf.text('Venue Recommendations', margin, yPos);
+    yPos += 8;
+
+    // Split results into lines and add to PDF
+    pdf.setFontSize(10);
+    const lines = pdf.splitTextToSize(results, pageWidth - 2 * margin);
+    
+    lines.forEach(line => {
+      if (yPos > pageHeight - margin) {
+        pdf.addPage();
+        yPos = margin;
+      }
+      pdf.text(line, margin, yPos);
+      yPos += 5;
+    });
+
+    // Footer
+    const totalPages = pdf.internal.pages.length - 1;
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(
+        `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+    }
+
+    // Save PDF
+    const fileName = `venue-recommendations-${formData.city}-${Date.now()}.pdf`;
+    pdf.save(fileName);
   };
 
   return (
@@ -303,13 +391,23 @@ Format the response in a clear, organized manner with venue names as headers. Us
                 <Building2 className="w-6 h-6 text-purple-400" />
                 Recommended Venues
               </h2>
-              <Button
-                onClick={() => setShowSaveModal(true)}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                Save Search
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleExportPDF}
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                >
+                  <FileDown className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
+                <Button
+                  onClick={() => setShowSaveModal(true)}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Search
+                </Button>
+              </div>
             </div>
             <div className="prose prose-invert prose-zinc max-w-none">
               <ReactMarkdown
