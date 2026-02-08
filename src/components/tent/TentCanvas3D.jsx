@@ -17,9 +17,21 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     const w = canvas.width;
     const h = canvas.height;
 
-    // Isometric helper functions
-    const isoX = (x, y) => (x - y) * Math.cos(Math.PI / 6);
-    const isoY = (x, y, z = 0) => (x + y) * Math.sin(Math.PI / 6) - z;
+    // Perspective helper functions - view from back of room
+    const perspectiveScale = (y) => {
+      const depth = y + 40; // Offset to positive
+      return 1 / (1 + depth * 0.015); // Objects further away are smaller
+    };
+    
+    const perspX = (x, y) => {
+      const scale = perspectiveScale(y);
+      return x * scale;
+    };
+    
+    const perspY = (x, y, z = 0) => {
+      const scale = perspectiveScale(y);
+      return y * scale * 0.4 - z * 0.8; // Lower viewing angle
+    };
 
     // Dark elegant background
     const bgGradient = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.7);
@@ -36,10 +48,10 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       ctx.fill();
     }
 
-    // Isometric scaling and positioning
-    const scale = Math.min(w, h) / 80;
+    // Perspective scaling and positioning
+    const scale = Math.min(w, h) / 35;
     const centerX = w / 2;
-    const centerY = h * 0.55;
+    const centerY = h * 0.75;
 
     const tentW = Math.max(tentConfig.width || 40, 30);
     const tentL = Math.max(tentConfig.length || 60, 40);
