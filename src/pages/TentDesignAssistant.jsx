@@ -105,8 +105,10 @@ export default function TentDesignAssistant() {
 
   const handleRender2D = () => {
     const newItems = [];
+    const tentLength = tentConfig.length;
+    const tentWidth = tentConfig.width;
 
-    // Add stages
+    // Add stages - position in top area
     tentConfig.stages.forEach((stage, idx) => {
       newItems.push({
         type: 'stage',
@@ -114,95 +116,99 @@ export default function TentDesignAssistant() {
         length: stage.length,
         height: stage.height,
         color: stage.color,
-        x: 100 + idx * 50,
-        y: 100,
+        x: tentLength * 0.2 + idx * (stage.width + 5),
+        y: tentWidth * 0.15,
         rotation: 0
       });
     });
 
-    // Add video walls
+    // Add video walls - near stages
     tentConfig.videoWalls.forEach((wall, idx) => {
       newItems.push({
         type: 'videoWall',
         width: wall.length,
         height: wall.height,
-        x: 100 + idx * 50,
-        y: 200,
+        x: tentLength * 0.5 + idx * (wall.length + 3),
+        y: tentWidth * 0.15,
         rotation: 0
       });
     });
 
-    // Add dance floors
+    // Add dance floors - center area
     tentConfig.danceFloors.forEach((floor, idx) => {
       newItems.push({
         type: 'danceFloor',
         width: floor.width,
         length: floor.length,
         color: floor.color,
-        x: 300 + idx * 50,
-        y: 200,
+        x: tentLength * 0.5,
+        y: tentWidth * 0.5 + idx * (floor.length + 3),
         rotation: 0
       });
     });
 
-    // Add 8ft tables
+    // Add 8ft tables - arranged in rows
+    const tables8ftPerRow = Math.floor(tentLength / 12);
     for (let i = 0; i < tentConfig.tables8ft.length; i++) {
       newItems.push({
         type: 'table8ft',
         width: 8,
         length: 2.5,
         color: tentConfig.tables8ft[i].color,
-        x: 150 + (i % 5) * 40,
-        y: 300 + Math.floor(i / 5) * 40,
+        x: 10 + (i % tables8ftPerRow) * 10,
+        y: tentWidth * 0.6 + Math.floor(i / tables8ftPerRow) * 5,
         rotation: 0
       });
     }
 
     // Add 6ft tables
+    const tables6ftPerRow = Math.floor(tentLength / 10);
     for (let i = 0; i < tentConfig.tables6ft.length; i++) {
       newItems.push({
         type: 'table6ft',
         width: 6,
         length: 2.5,
         color: tentConfig.tables6ft[i].color,
-        x: 150 + (i % 5) * 40,
-        y: 400 + Math.floor(i / 5) * 40,
+        x: 10 + (i % tables6ftPerRow) * 8,
+        y: tentWidth * 0.7 + Math.floor(i / tables6ftPerRow) * 5,
         rotation: 0
       });
     }
 
     // Add 5ft round tables
+    const tables5ftPerRow = Math.floor(tentLength / 8);
     for (let i = 0; i < tentConfig.tables5ft.length; i++) {
       newItems.push({
         type: 'table5ft',
         diameter: 5,
         color: tentConfig.tables5ft[i].color,
-        x: 150 + (i % 5) * 40,
-        y: 500 + Math.floor(i / 5) * 40,
+        x: 10 + (i % tables5ftPerRow) * 7,
+        y: tentWidth * 0.8 + Math.floor(i / tables5ftPerRow) * 6,
         rotation: 0
       });
     }
 
-    // Add bars
+    // Add bars - side area
     tentConfig.bars.forEach((bar, idx) => {
       newItems.push({
         type: 'bar',
         width: bar.width,
         length: bar.length,
-        x: 400 + idx * 50,
-        y: 100,
+        x: tentLength * 0.85,
+        y: tentWidth * 0.2 + idx * (bar.length + 5),
         rotation: 0
       });
     });
 
-    // Add cocktail tables
+    // Add cocktail tables - scattered
+    const cocktailPerRow = Math.floor(tentLength / 5);
     for (let i = 0; i < tentConfig.cocktailTables.length; i++) {
       newItems.push({
         type: 'cocktailTable',
         diameter: 2.5,
         color: tentConfig.cocktailTables[i].color,
-        x: 400 + (i % 5) * 30,
-        y: 300 + Math.floor(i / 5) * 30,
+        x: tentLength * 0.15 + (i % cocktailPerRow) * 4,
+        y: tentWidth * 0.3 + Math.floor(i / cocktailPerRow) * 4,
         rotation: 0
       });
     }
@@ -211,14 +217,16 @@ export default function TentDesignAssistant() {
     if (seatingArrangement === 'presentation') {
       const { rows, perRow } = tentConfig.chairs;
       let chairGroup = [];
+      const chairSpacing = 3;
+      const startX = (tentLength - (perRow * chairSpacing)) / 2;
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < perRow; col++) {
           chairGroup.push({
             type: 'chair',
             width: 2,
             length: 2,
-            x: 200 + col * 3,
-            y: 400 + row * 6,
+            x: startX + col * chairSpacing,
+            y: tentWidth * 0.5 + row * 3,
             rotation: 0,
             groupId: 'chairs'
           });
@@ -236,8 +244,8 @@ export default function TentDesignAssistant() {
           width: equipment.width,
           length: equipment.length,
           color: equipment.color,
-          x: 250 + idx * 50,
-          y: 250,
+          x: tentLength * 0.3 + idx * (equipment.width + 3),
+          y: tentWidth * 0.3,
           rotation: 0
         });
       });
