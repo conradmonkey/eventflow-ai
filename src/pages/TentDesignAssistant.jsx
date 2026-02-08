@@ -365,6 +365,14 @@ export default function TentDesignAssistant() {
             {/* Render Buttons */}
             {seatingArrangement && (
               <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  onClick={handleGenerateImage}
+                  disabled={items.length === 0 || generatingImage}
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  {generatingImage ? 'Generating...' : 'A.I. Designer'}
+                </Button>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   2D Render
                 </Button>
@@ -375,15 +383,6 @@ export default function TentDesignAssistant() {
                   disabled={items.length === 0}
                 >
                   Gear List
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleGenerateImage}
-                  disabled={items.length === 0 || generatingImage}
-                >
-                  <Camera className="w-4 h-4 mr-2" />
-                  {generatingImage ? 'Generating...' : 'Camera'}
                 </Button>
               </div>
             )}
