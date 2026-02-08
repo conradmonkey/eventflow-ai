@@ -229,7 +229,7 @@ export default function InteractiveRoomCanvas({ formData }) {
   const scale = canvasSize.scale || 1;
 
   return (
-    <div className="relative w-full h-[600px] bg-zinc-800 rounded-lg overflow-hidden">
+    <div className="relative w-full h-screen bg-zinc-800 rounded-lg overflow-hidden">
       <div
         ref={canvasRef}
         className="absolute inset-0"
