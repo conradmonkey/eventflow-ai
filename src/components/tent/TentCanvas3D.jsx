@@ -17,231 +17,255 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees }) 
     const w = canvas.width;
     const h = canvas.height;
 
-    // Dramatic gradient background - deep purples and golds
-    const bgGradient = ctx.createLinearGradient(0, 0, 0, h);
-    bgGradient.addColorStop(0, '#0a0015');
-    bgGradient.addColorStop(0.3, '#1a0033');
-    bgGradient.addColorStop(0.7, '#2d1b4e');
-    bgGradient.addColorStop(1, '#1a0520');
-    ctx.fillStyle = bgGradient;
+    // Elegant evening sky gradient
+    const skyGradient = ctx.createLinearGradient(0, 0, 0, h);
+    skyGradient.addColorStop(0, '#0d1b2a');
+    skyGradient.addColorStop(0.4, '#1b263b');
+    skyGradient.addColorStop(1, '#415a77');
+    ctx.fillStyle = skyGradient;
     ctx.fillRect(0, 0, w, h);
 
-    // Twinkling lights/stars
-    for (let i = 0; i < 80; i++) {
-      const x = Math.random() * w;
-      const y = Math.random() * h * 0.5;
-      const size = Math.random() * 3;
-      const alpha = Math.random() * 0.8 + 0.2;
-      const sparkle = ctx.createRadialGradient(x, y, 0, x, y, size * 2);
-      sparkle.addColorStop(0, `rgba(255, 220, 150, ${alpha})`);
-      sparkle.addColorStop(1, 'rgba(255, 220, 150, 0)');
-      ctx.fillStyle = sparkle;
+    // Soft twinkling stars
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    for (let i = 0; i < 60; i++) {
       ctx.beginPath();
-      ctx.arc(x, y, size * 2, 0, Math.PI * 2);
+      ctx.arc(Math.random() * w, Math.random() * h * 0.4, Math.random() * 1.5, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Eye-level perspective view
-    const vanishingPointX = w / 2;
-    const vanishingPointY = h * 0.35;
-    const floorY = h * 0.85;
+    // Floor with perspective
+    const horizon = h * 0.4;
+    const floorGradient = ctx.createLinearGradient(0, horizon, 0, h);
+    floorGradient.addColorStop(0, '#2c3e50');
+    floorGradient.addColorStop(0.5, '#34495e');
+    floorGradient.addColorStop(1, '#1a252f');
+    ctx.fillStyle = floorGradient;
+    ctx.fillRect(0, horizon, w, h - horizon);
 
-    // Elegant drapes on sides with shimmer
-    const drapeWidth = w * 0.15;
-    
-    // Left drape
-    const leftDrapeGradient = ctx.createLinearGradient(0, 0, drapeWidth, 0);
-    leftDrapeGradient.addColorStop(0, '#2d1a4a');
-    leftDrapeGradient.addColorStop(0.3, '#4a2d6e');
-    leftDrapeGradient.addColorStop(0.6, '#6b3fa0');
-    leftDrapeGradient.addColorStop(1, 'rgba(107, 63, 160, 0.7)');
-    ctx.fillStyle = leftDrapeGradient;
+    // Tent ceiling with elegant white draping
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.quadraticCurveTo(drapeWidth * 0.5, h * 0.3, drapeWidth * 0.8, floorY);
-    ctx.lineTo(0, floorY);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, horizon * 0.8);
+    ctx.quadraticCurveTo(w / 2, horizon * 1.1, 0, horizon * 0.8);
     ctx.closePath();
     ctx.fill();
 
-    // Right drape
-    const rightDrapeGradient = ctx.createLinearGradient(w - drapeWidth, 0, w, 0);
-    rightDrapeGradient.addColorStop(0, 'rgba(107, 63, 160, 0.7)');
-    rightDrapeGradient.addColorStop(0.4, '#6b3fa0');
-    rightDrapeGradient.addColorStop(0.7, '#4a2d6e');
-    rightDrapeGradient.addColorStop(1, '#2d1a4a');
-    ctx.fillStyle = rightDrapeGradient;
-    ctx.beginPath();
-    ctx.moveTo(w, 0);
-    ctx.quadraticCurveTo(w - drapeWidth * 0.5, h * 0.3, w - drapeWidth * 0.8, floorY);
-    ctx.lineTo(w, floorY);
-    ctx.closePath();
-    ctx.fill();
-
-    // Ceiling drapes with golden highlights
-    for (let i = 0; i < 5; i++) {
-      const x = w * 0.2 + (w * 0.6 / 4) * i;
-      ctx.strokeStyle = `rgba(255, 215, 0, ${0.3 + Math.random() * 0.2})`;
+    // Ceiling drape details
+    for (let i = 0; i < 8; i++) {
+      const x = (w / 8) * i;
+      ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(x, 0);
-      ctx.quadraticCurveTo(vanishingPointX, vanishingPointY * 0.5, vanishingPointX, vanishingPointY);
+      ctx.quadraticCurveTo(w / 2, horizon * 0.9, w / 2, horizon);
       ctx.stroke();
     }
 
-    // Spectacular hanging string lights
-    for (let i = 0; i < 12; i++) {
-      const x = w * 0.15 + (w * 0.7 / 11) * i;
-      const y = vanishingPointY * 0.7 + Math.sin(i * 0.5) * 20;
+    // Side drapes - flowing and elegant
+    ctx.fillStyle = 'rgba(240, 240, 245, 0.9)';
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(w * 0.08, h * 0.3, w * 0.12, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(w, 0);
+    ctx.quadraticCurveTo(w * 0.92, h * 0.3, w * 0.88, h);
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fill();
+
+    // String lights with warm glow
+    const numLights = 20;
+    for (let i = 0; i < numLights; i++) {
+      const x = (w / numLights) * i + w / (numLights * 2);
+      const y = horizon * 0.65 + Math.sin(i * 0.8) * 15;
       
-      const glow = ctx.createRadialGradient(x, y, 0, x, y, 15);
-      glow.addColorStop(0, '#fff9e6');
-      glow.addColorStop(0.4, '#ffd700');
-      glow.addColorStop(1, 'rgba(255, 215, 0, 0)');
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, 20);
+      glow.addColorStop(0, 'rgba(255, 230, 180, 0.8)');
+      glow.addColorStop(0.5, 'rgba(255, 200, 100, 0.3)');
+      glow.addColorStop(1, 'rgba(255, 180, 80, 0)');
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
       ctx.fill();
-      
-      // Light bulb
+
       ctx.fillStyle = '#fffacd';
       ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Dance floor with spectacular lighting
-    const danceFloorCenterX = vanishingPointX;
-    const danceFloorCenterY = floorY * 0.8;
-    
-    const danceFloor = items.find(item => item.type === 'danceFloor');
-    if (danceFloor) {
-      // Reflective dance floor with color beams
-      for (let i = 0; i < 8; i++) {
-        const angle = (i / 8) * Math.PI * 2;
-        const beamGradient = ctx.createRadialGradient(
-          danceFloorCenterX, danceFloorCenterY, 0,
-          danceFloorCenterX + Math.cos(angle) * 200, danceFloorCenterY + Math.sin(angle) * 100, 150
-        );
-        const colors = ['#ff00ff', '#00ffff', '#ffff00', '#ff0080', '#0080ff', '#80ff00'];
-        const color = colors[i % colors.length];
-        beamGradient.addColorStop(0, `${color}88`);
-        beamGradient.addColorStop(0.5, `${color}33`);
-        beamGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = beamGradient;
-        ctx.fillRect(danceFloorCenterX - 200, danceFloorCenterY - 100, 400, 200);
+    // Stage area
+    const stages = items.filter(item => item.type === 'stage');
+    if (stages.length > 0) {
+      const stageY = horizon * 0.9;
+      const stageW = w * 0.5;
+      const stageH = h * 0.2;
+      
+      // Stage platform
+      ctx.fillStyle = '#2c2c2c';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 20;
+      ctx.fillRect(w / 2 - stageW / 2, stageY, stageW, stageH);
+      ctx.shadowBlur = 0;
+
+      // Stage lighting - multiple spotlights
+      for (let i = 0; i < 4; i++) {
+        const spotX = w / 2 - stageW / 3 + (stageW / 2.5) * i;
+        const spotGradient = ctx.createRadialGradient(spotX, stageY + stageH / 2, 0, spotX, stageY + stageH / 2, 120);
+        spotGradient.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
+        spotGradient.addColorStop(0.3, 'rgba(255, 220, 180, 0.3)');
+        spotGradient.addColorStop(1, 'rgba(255, 200, 150, 0)');
+        ctx.fillStyle = spotGradient;
+        ctx.beginPath();
+        ctx.arc(spotX, stageY + stageH / 2, 120, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    // Stage with dramatic spotlights
-    const stage = items.find(item => item.type === 'stage');
-    if (stage) {
-      const stageY = vanishingPointY + 20;
-      const stageWidth = w * 0.4;
+    // Dance floor with shimmer
+    const danceFloors = items.filter(item => item.type === 'danceFloor');
+    if (danceFloors.length > 0) {
+      const dfY = h * 0.65;
+      const dfW = w * 0.4;
+      const dfH = h * 0.25;
       
-      // Stage structure with depth
-      ctx.fillStyle = '#1a0a20';
-      ctx.fillRect(vanishingPointX - stageWidth / 2, stageY, stageWidth, h * 0.15);
-      
-      // Spotlight beams on stage
-      for (let i = 0; i < 3; i++) {
-        const beamX = vanishingPointX - stageWidth / 3 + (stageWidth / 3) * i;
-        const spotGradient = ctx.createRadialGradient(beamX, stageY - 50, 10, beamX, stageY + 50, 80);
-        spotGradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-        spotGradient.addColorStop(0.5, 'rgba(255, 200, 255, 0.4)');
-        spotGradient.addColorStop(1, 'rgba(255, 100, 255, 0)');
-        ctx.fillStyle = spotGradient;
+      // Reflective floor
+      ctx.fillStyle = danceFloors[0].color || '#d4af37';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowBlur = 15;
+      ctx.fillRect(w / 2 - dfW / 2, dfY, dfW, dfH);
+      ctx.shadowBlur = 0;
+
+      // Light reflections
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        const colors = ['#ff6b9d', '#4ecdc4', '#ffe66d', '#a8e6cf', '#ff8b94', '#c7ceea'];
+        const refGradient = ctx.createRadialGradient(
+          w / 2 + Math.cos(angle) * 50, dfY + dfH / 2 + Math.sin(angle) * 30, 0,
+          w / 2 + Math.cos(angle) * 50, dfY + dfH / 2 + Math.sin(angle) * 30, 60
+        );
+        refGradient.addColorStop(0, `${colors[i]}66`);
+        refGradient.addColorStop(1, `${colors[i]}00`);
+        ctx.fillStyle = refGradient;
         ctx.beginPath();
-        ctx.moveTo(beamX, stageY - 50);
-        ctx.lineTo(beamX - 40, stageY + 100);
-        ctx.lineTo(beamX + 40, stageY + 100);
-        ctx.closePath();
+        ctx.arc(w / 2 + Math.cos(angle) * 50, dfY + dfH / 2 + Math.sin(angle) * 30, 60, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
     // Tables with elegant settings
-    const tableItems = items.filter(item => 
+    const tables = items.filter(item => 
       item.type === 'table8ft' || item.type === 'table6ft' || item.type === 'table5ft'
     );
     
-    tableItems.forEach((table, idx) => {
-      const tableX = w * 0.3 + (idx % 3) * (w * 0.2);
-      const tableY = floorY * 0.7 + Math.floor(idx / 3) * 60;
-      const tableSize = 40;
+    const tableY = h * 0.7;
+    tables.slice(0, 8).forEach((table, idx) => {
+      const spacing = w * 0.12;
+      const tableX = w * 0.15 + (idx % 4) * spacing;
+      const tableRow = tableY + Math.floor(idx / 4) * 80;
       
+      // Table shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.beginPath();
+      ctx.ellipse(tableX, tableRow + 5, 30, 15, 0, 0, Math.PI * 2);
+      ctx.fill();
+
       // Table with linen
       ctx.fillStyle = tentConfig.linenColor || '#ffffff';
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
       ctx.shadowBlur = 10;
       ctx.beginPath();
       if (table.type === 'table5ft') {
-        ctx.arc(tableX, tableY, tableSize / 2, 0, Math.PI * 2);
+        ctx.arc(tableX, tableRow, 28, 0, Math.PI * 2);
       } else {
-        ctx.ellipse(tableX, tableY, tableSize / 2, tableSize / 3, 0, 0, Math.PI * 2);
+        ctx.ellipse(tableX, tableRow, 35, 20, 0, 0, Math.PI * 2);
       }
       ctx.fill();
       ctx.shadowBlur = 0;
-      
-      // Centerpiece sparkle
-      const sparkleGradient = ctx.createRadialGradient(tableX, tableY - 5, 0, tableX, tableY - 5, 8);
-      sparkleGradient.addColorStop(0, '#ffd700');
-      sparkleGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
-      ctx.fillStyle = sparkleGradient;
+
+      // Elegant centerpiece
+      const cpGradient = ctx.createRadialGradient(tableX, tableRow - 8, 0, tableX, tableRow - 8, 12);
+      cpGradient.addColorStop(0, '#ffd700');
+      cpGradient.addColorStop(0.6, '#ffb347');
+      cpGradient.addColorStop(1, 'rgba(255, 179, 71, 0)');
+      ctx.fillStyle = cpGradient;
       ctx.beginPath();
-      ctx.arc(tableX, tableY - 5, 8, 0, Math.PI * 2);
+      ctx.arc(tableX, tableRow - 8, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Centerpiece detail
+      ctx.fillStyle = '#ff6b6b';
+      ctx.beginPath();
+      ctx.arc(tableX, tableRow - 8, 4, 0, Math.PI * 2);
       ctx.fill();
     });
 
-    // Add glamorous people silhouettes
-    const numPeople = Math.min(attendees || 50, 100);
-    const peopleCount = Math.floor(numPeople * 0.3); // Show 30% of attendees
+    // Glamorous people silhouettes
+    const numPeople = Math.min(attendees || 50, 150);
+    const peopleToShow = Math.min(Math.floor(numPeople * 0.4), 50);
     
-    for (let i = 0; i < peopleCount; i++) {
-      const personX = w * 0.2 + Math.random() * w * 0.6;
-      const personY = floorY * 0.65 + Math.random() * floorY * 0.2;
-      const personScale = 0.3 + Math.random() * 0.4;
-      const personHeight = 40 * personScale;
+    for (let i = 0; i < peopleToShow; i++) {
+      const zone = Math.random();
+      let personX, personY, personScale;
       
-      // Person silhouette with colored lighting
-      const colorTint = ['#ff00ff', '#00ffff', '#ffff00'][i % 3];
-      ctx.fillStyle = `${colorTint}99`;
-      ctx.globalAlpha = 0.7;
+      if (zone < 0.5) {
+        // Dance floor area
+        personX = w * 0.35 + Math.random() * w * 0.3;
+        personY = h * 0.68 + Math.random() * h * 0.15;
+        personScale = 0.8 + Math.random() * 0.4;
+      } else {
+        // Around tables
+        personX = w * 0.15 + Math.random() * w * 0.7;
+        personY = h * 0.72 + Math.random() * h * 0.12;
+        personScale = 0.6 + Math.random() * 0.3;
+      }
+      
+      const personH = 50 * personScale;
+      const hue = Math.random() * 60 + 200; // Blue to purple range
+      
+      ctx.fillStyle = `hsla(${hue}, 60%, 60%, 0.7)`;
+      ctx.globalAlpha = 0.85;
       
       // Head
       ctx.beginPath();
-      ctx.arc(personX, personY - personHeight, personHeight * 0.2, 0, Math.PI * 2);
+      ctx.arc(personX, personY - personH * 0.85, personH * 0.15, 0, Math.PI * 2);
       ctx.fill();
       
       // Body
-      ctx.fillRect(personX - personHeight * 0.15, personY - personHeight * 0.8, personHeight * 0.3, personHeight * 0.6);
+      ctx.beginPath();
+      ctx.moveTo(personX - personH * 0.12, personY - personH * 0.7);
+      ctx.lineTo(personX + personH * 0.12, personY - personH * 0.7);
+      ctx.lineTo(personX + personH * 0.15, personY);
+      ctx.lineTo(personX - personH * 0.15, personY);
+      ctx.closePath();
+      ctx.fill();
       
       ctx.globalAlpha = 1;
     }
 
-    // Atmospheric light rays from above
-    for (let i = 0; i < 5; i++) {
-      const rayX = w * 0.2 + (w * 0.6 / 4) * i;
-      const rayGradient = ctx.createLinearGradient(rayX, 0, rayX, h * 0.6);
-      rayGradient.addColorStop(0, 'rgba(255, 215, 100, 0.15)');
-      rayGradient.addColorStop(0.5, 'rgba(255, 180, 200, 0.08)');
-      rayGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = rayGradient;
-      ctx.beginPath();
-      ctx.moveTo(rayX - 20, 0);
-      ctx.lineTo(rayX + 20, 0);
-      ctx.lineTo(rayX + 60, h * 0.6);
-      ctx.lineTo(rayX - 60, h * 0.6);
-      ctx.closePath();
-      ctx.fill();
-    }
+    // Atmospheric lighting effects
+    const ambientGlow = ctx.createRadialGradient(w / 2, horizon, 0, w / 2, horizon, w * 0.6);
+    ambientGlow.addColorStop(0, 'rgba(255, 240, 200, 0.15)');
+    ambientGlow.addColorStop(0.5, 'rgba(255, 220, 180, 0.08)');
+    ambientGlow.addColorStop(1, 'rgba(255, 200, 150, 0)');
+    ctx.fillStyle = ambientGlow;
+    ctx.fillRect(0, horizon * 0.6, w, h);
 
-    // Foreground atmospheric glow
-    const foregroundGlow = ctx.createRadialGradient(vanishingPointX, floorY, 0, vanishingPointX, floorY, w * 0.5);
-    foregroundGlow.addColorStop(0, 'rgba(255, 215, 0, 0.1)');
-    foregroundGlow.addColorStop(0.5, 'rgba(255, 100, 255, 0.05)');
-    foregroundGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = foregroundGlow;
-    ctx.fillRect(0, floorY * 0.5, w, floorY * 0.5);
+    // Soft light beams from ceiling
+    for (let i = 0; i < 4; i++) {
+      const beamX = w * 0.25 + (w * 0.5 / 3) * i;
+      const beamGradient = ctx.createLinearGradient(beamX, horizon * 0.5, beamX, h * 0.7);
+      beamGradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+      beamGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = beamGradient;
+      ctx.fillRect(beamX - 30, horizon * 0.5, 60, h * 0.3);
+    }
   }, [tentConfig, items, attendees]);
 
   return (
