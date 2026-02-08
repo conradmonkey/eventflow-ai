@@ -224,19 +224,45 @@ export default function TentDesignAssistant() {
     let yPos = 20;
 
     // Title
-    pdf.setFontSize(22);
+    pdf.setFontSize(24);
     pdf.setTextColor(88, 28, 135);
     pdf.text('Tent Design Report', pageWidth / 2, yPos, { align: 'center' });
-    yPos += 15;
+    yPos += 20;
+
+    // Project Name (Prominent)
+    pdf.setFontSize(18);
+    pdf.setTextColor(40, 40, 40);
+    pdf.text(`${projectName || 'Untitled Project'}`, pageWidth / 2, yPos, { align: 'center' });
+    yPos += 12;
 
     // Project Details
+    pdf.setFontSize(11);
+    pdf.setTextColor(80, 80, 80);
+    const detailsText = `${seatingArrangement?.replace('_', ' ') || 'N/A'} • ${attendees} Attendees • ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`;
+    pdf.text(detailsText, pageWidth / 2, yPos, { align: 'center' });
+    yPos += 12;
+
+    pdf.setDrawColor(150, 150, 150);
+    pdf.line(20, yPos, pageWidth - 20, yPos);
+    yPos += 10;
+
+    // Equipment List (Gear List)
     pdf.setFontSize(16);
     pdf.setTextColor(0, 0, 0);
-    pdf.text('Project Details', 20, yPos);
+    pdf.text('Equipment List', 20, yPos);
     yPos += 8;
 
+    const itemCounts = {};
+    items.forEach(item => {
+      const key = item.type;
+      itemCounts[key] = (itemCounts[key] || 0) + 1;
+    });
+
     pdf.setFontSize(10);
-    pdf.text(`Project Name: ${projectName || 'Untitled'}`, 20, yPos);
+    pdf.setTextColor(40, 40, 40);
+    
+    // Add tent
+    pdf.text(`• Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`, 25, yPos);
     yPos += 6;
     pdf.text(`Category: ${projectCategory}`, 20, yPos);
     yPos += 6;
