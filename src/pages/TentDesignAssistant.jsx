@@ -41,11 +41,22 @@ export default function TentDesignAssistant() {
   const canvasRef = useRef(null);
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [showLoadModal, setShowLoadModal] = useState(false);
+  const [projectCategory, setProjectCategory] = useState('Uncategorized');
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [selectedProjectForHistory, setSelectedProjectForHistory] = useState(null);
 
   const queryClient = useQueryClient();
   const { data: savedProjects = [] } = useQuery({
     queryKey: ['tent-projects'],
     queryFn: () => base44.entities.TentProject.list('-updated_date')
+  });
+
+  const { data: projectVersions = [] } = useQuery({
+    queryKey: ['tent-project-versions', selectedProjectForHistory?.id],
+    queryFn: () => selectedProjectForHistory 
+      ? base44.entities.TentProjectVersion.filter({ project_id: selectedProjectForHistory.id }, '-version_number')
+      : Promise.resolve([]),
+    enabled: !!selectedProjectForHistory
   });
 
   const handleSaveProject = async () => {
@@ -56,6 +67,7 @@ export default function TentDesignAssistant() {
 
     const projectData = {
       project_name: projectName,
+      category: projectCategory,
       attendees,
       seating_arrangement: seatingArrangement,
       tent_style: tentStyle,
@@ -65,13 +77,36 @@ export default function TentDesignAssistant() {
     };
 
     try {
+      let projectId = currentProjectId;
+      let currentVersion = 1;
+
       if (currentProjectId) {
+        const existingProject = savedProjects.find(p => p.id === currentProjectId);
+        currentVersion = (existingProject?.version || 0) + 1;
+        projectData.version = currentVersion;
         await base44.entities.TentProject.update(currentProjectId, projectData);
       } else {
         const newProject = await base44.entities.TentProject.create(projectData);
-        setCurrentProjectId(newProject.id);
+        projectId = newProject.id;
+        setCurrentProjectId(projectId);
       }
+
+      // Create version history entry
+      await base44.entities.TentProjectVersion.create({
+        project_id: projectId,
+        project_name: projectName,
+        version_number: currentVersion,
+        attendees,
+        seating_arrangement: seatingArrangement,
+        tent_style: tentStyle,
+        tent_width: tentConfig.width,
+        tent_length: tentConfig.length,
+        tent_config: tentConfig,
+        description: currentProjectId ? 'Updated design' : 'Initial design'
+      });
+
       queryClient.invalidateQueries(['tent-projects']);
+      queryClient.invalidateQueries(['tent-project-versions']);
       alert('Project saved successfully!');
     } catch (error) {
       alert('Error saving project: ' + error.message);
@@ -84,9 +119,27 @@ export default function TentDesignAssistant() {
     setSeatingArrangement(project.seating_arrangement);
     setTentStyle(project.tent_style);
     setTentConfig(project.tent_config);
+    setProjectCategory(project.category || 'Uncategorized');
     setCurrentProjectId(project.id);
     setShowLoadModal(false);
   };
+
+  const handleLoadVersion = (version) => {
+    setProjectName(version.project_name);
+    setAttendees(version.attendees);
+    setSeatingArrangement(version.seating_arrangement);
+    setTentStyle(version.tent_style);
+    setTentConfig(version.tent_config);
+    setShowVersionHistory(false);
+    alert(`Loaded version ${version.version_number}. Save to create a new version.`);
+  };
+
+  const categorizedProjects = savedProjects.reduce((acc, project) => {
+    const cat = project.category || 'Uncategorized';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(project);
+    return acc;
+  }, {});
 
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
@@ -343,15 +396,32 @@ export default function TentDesignAssistant() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Panel - Inputs */}
           <div className="col-span-1 lg:col-span-1 space-y-6">
-            {/* Project Name */}
+            {/* Project Name & Category */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <Label className="text-sm font-semibold">Project Name</Label>
-              <Input
-                type="text"
-                placeholder="Enter project name"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-              />
+              <div>
+                <Label className="text-sm font-semibold">Project Name</Label>
+                <Input
+                  type="text"
+                  placeholder="Enter project name"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-semibold">Category</Label>
+                <Input
+                  type="text"
+                  placeholder="Enter category (e.g., Wedding, Corporate)"
+                  value={projectCategory}
+                  onChange={(e) => setProjectCategory(e.target.value)}
+                  list="categories"
+                />
+                <datalist id="categories">
+                  {[...new Set(savedProjects.map(p => p.category).filter(Boolean))].map(cat => (
+                    <option key={cat} value={cat} />
+                  ))}
+                </datalist>
+              </div>
             </div>
 
             {/* Attendees Slider */}
@@ -525,7 +595,7 @@ export default function TentDesignAssistant() {
 
       {showLoadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-lg w-full max-w-3xl max-h-[80vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Load Project</h2>
@@ -536,18 +606,102 @@ export default function TentDesignAssistant() {
               {savedProjects.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">No saved projects yet</p>
               ) : (
+                <div className="space-y-6">
+                  {Object.entries(categorizedProjects).map(([category, projects]) => (
+                    <div key={category}>
+                      <h3 className="text-lg font-semibold mb-3 text-purple-700 border-b pb-2">
+                        {category}
+                      </h3>
+                      <div className="space-y-2">
+                        {projects.map((project) => (
+                          <div 
+                            key={project.id}
+                            className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                          >
+                            <div className="flex justify-between items-start">
+                              <div 
+                                className="flex-1 cursor-pointer"
+                                onClick={() => handleLoadProject(project)}
+                              >
+                                <h4 className="font-semibold text-lg">{project.project_name}</h4>
+                                <div className="text-sm text-gray-600 mt-2">
+                                  <p>Attendees: {project.attendees}</p>
+                                  <p>Arrangement: {project.seating_arrangement?.replace('_', ' ')}</p>
+                                  <p>Tent: {project.tent_width}' x {project.tent_length}' {project.tent_style}</p>
+                                  {project.version && <p className="text-purple-600 font-medium mt-1">Version: {project.version}</p>}
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setSelectedProjectForHistory(project);
+                                  setShowVersionHistory(true);
+                                }}
+                                className="ml-3"
+                              >
+                                History
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showVersionHistory && selectedProjectForHistory && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Version History</h2>
+                <Button variant="ghost" onClick={() => {
+                  setShowVersionHistory(false);
+                  setSelectedProjectForHistory(null);
+                }}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              <p className="text-sm text-gray-600 mb-4">
+                Project: <span className="font-semibold">{selectedProjectForHistory.project_name}</span>
+              </p>
+              {projectVersions.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">No version history available</p>
+              ) : (
                 <div className="space-y-3">
-                  {savedProjects.map((project) => (
+                  {projectVersions.map((version) => (
                     <div 
-                      key={project.id}
+                      key={version.id}
                       className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
-                      onClick={() => handleLoadProject(project)}
+                      onClick={() => handleLoadVersion(version)}
                     >
-                      <h3 className="font-semibold text-lg">{project.project_name}</h3>
-                      <div className="text-sm text-gray-600 mt-2">
-                        <p>Attendees: {project.attendees}</p>
-                        <p>Arrangement: {project.seating_arrangement?.replace('_', ' ')}</p>
-                        <p>Tent: {project.tent_width}' x {project.tent_length}' {project.tent_style}</p>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-semibold">Version {version.version_number}</h4>
+                          {version.description && (
+                            <p className="text-sm text-gray-600 mt-1">{version.description}</p>
+                          )}
+                          <div className="text-xs text-gray-500 mt-2">
+                            <p>Saved: {new Date(version.created_date).toLocaleString()}</p>
+                            <p>Attendees: {version.attendees} • {version.tent_width}' x {version.tent_length}'</p>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLoadVersion(version);
+                          }}
+                        >
+                          Restore
+                        </Button>
                       </div>
                     </div>
                   ))}
