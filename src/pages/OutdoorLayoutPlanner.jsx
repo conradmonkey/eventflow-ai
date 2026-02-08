@@ -6,11 +6,14 @@ import LayoutInputs from '@/components/layout/LayoutInputs';
 import Canvas2DRenderer from '@/components/layout/Canvas2DRenderer';
 import GearListModal from '@/components/layout/GearListModal';
 import View3DRenderer from '@/components/layout/View3DRenderer';
-import { Plus, Trash2, ZoomIn, ZoomOut, Save, FolderOpen, X, FileDown } from 'lucide-react';
+import { Plus, Trash2, ZoomIn, ZoomOut, Save, FolderOpen, X, FileDown, Lightbulb, Loader2, Lock } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { jsPDF } from 'jspdf';
 import { motion } from 'framer-motion';
+import { useSubscriptionStatus } from '@/components/useSubscriptionStatus';
+import SubscriptionModal from '@/components/SubscriptionModal';
+import AILayoutSuggestions from '@/components/AILayoutSuggestions';
 
 export default function OutdoorLayoutPlanner() {
   const [projectName, setProjectName] = useState('');
@@ -24,8 +27,14 @@ export default function OutdoorLayoutPlanner() {
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showAISuggestions, setShowAISuggestions] = useState(false);
+  const [aiSuggestions, setAISuggestions] = useState('');
+  const [aiLoading, setAILoading] = useState(false);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  const { isSubscribed } = useSubscriptionStatus();
 
   const queryClient = useQueryClient();
   const { data: savedProjects = [] } = useQuery({
@@ -167,7 +176,35 @@ export default function OutdoorLayoutPlanner() {
     setShowLoadModal(false);
   };
 
+  const handleGetAISuggestions = async () => {
+    setAILoading(true);
+    try {
+      const itemTypes = items.map(item => `${item.quantity} x ${item.type}`).join(', ');
+      const response = await base44.functions.invoke('getAILayoutSuggestions', {
+        designType: 'outdoor',
+        parameters: {
+          eventType: projectName,
+          attendeeCount: 'Not specified',
+          scale,
+          itemCount: items.length,
+          itemTypes: itemTypes || 'No items'
+        }
+      });
+      setAISuggestions(response.data.suggestions);
+      setShowAISuggestions(true);
+    } catch (error) {
+      alert('Error generating suggestions: ' + error.message);
+    } finally {
+      setAILoading(false);
+    }
+  };
+
   const handleExportPDF = () => {
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -285,28 +322,28 @@ export default function OutdoorLayoutPlanner() {
           <h1 className="text-4xl font-bold text-slate-900">Outdoor Event Planner</h1>
           <div className="flex gap-2">
             <Button
-              onClick={() => setShowLoadModal(true)}
+              onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
               variant="outline"
-              className="gap-2"
+              className={`gap-2 ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : ''}`}
             >
               <FolderOpen className="w-4 h-4" />
-              Load
+              Load {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
             </Button>
             {items.length > 0 && (
               <>
                 <Button
-                  onClick={() => setShowSaveModal(true)}
-                  className="gap-2 bg-green-600 hover:bg-green-700"
+                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
+                  className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
                 >
                   <Save className="w-4 h-4" />
-                  Save
+                  Save {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
                 </Button>
                 <Button
                   onClick={handleExportPDF}
-                  className="gap-2 bg-blue-600 hover:bg-blue-700"
+                  className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'}`}
                 >
                   <FileDown className="w-4 h-4" />
-                  Export PDF
+                  Export PDF {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
                 </Button>
               </>
             )}
@@ -404,6 +441,19 @@ export default function OutdoorLayoutPlanner() {
                     onClick={() => setShowGearList(true)}
                   >
                     Generate Gear List
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full bg-blue-50 hover:bg-blue-100"
+                    onClick={handleGetAISuggestions}
+                    disabled={aiLoading}
+                  >
+                    {aiLoading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Lightbulb className="w-4 h-4 mr-2" />
+                    )}
+                    AI Suggestions
                   </Button>
                 </>
               )}
