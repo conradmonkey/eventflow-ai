@@ -12,6 +12,7 @@ import { Sparkles, Plus, Camera, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function TentDesignAssistant() {
+  const [projectName, setProjectName] = useState('');
   const [attendees, setAttendees] = useState(100);
   const [seatingArrangement, setSeatingArrangement] = useState('');
   const [suggestedTent, setSuggestedTent] = useState(null);
@@ -293,6 +294,17 @@ export default function TentDesignAssistant() {
         <div className="grid grid-cols-3 gap-6">
           {/* Left Panel - Inputs */}
           <div className="col-span-1 space-y-6">
+            {/* Project Name */}
+            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
+              <Label className="text-sm font-semibold">Project Name</Label>
+              <Input
+                type="text"
+                placeholder="Enter project name"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+              />
+            </div>
+
             {/* Attendees Slider */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label className="text-sm font-semibold">Number of Attendees</Label>
