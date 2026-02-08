@@ -39,6 +39,45 @@ export default function TentDesignAssistant() {
   const [generatingImage, setGeneratingImage] = useState(false);
   const canvasRef = useRef(null);
 
+  const handleSaveProject = async () => {
+    if (!projectName.trim()) {
+      alert('Please enter a project name');
+      return;
+    }
+
+    const projectData = {
+      project_name: projectName,
+      attendees,
+      seating_arrangement: seatingArrangement,
+      tent_style: tentStyle,
+      tent_width: tentConfig.width,
+      tent_length: tentConfig.length,
+      tent_config: tentConfig
+    };
+
+    try {
+      if (currentProjectId) {
+        await base44.entities.TentProject.update(currentProjectId, projectData);
+      } else {
+        const newProject = await base44.entities.TentProject.create(projectData);
+        setCurrentProjectId(newProject.id);
+      }
+      alert('Project saved successfully!');
+    } catch (error) {
+      alert('Error saving project: ' + error.message);
+    }
+  };
+
+  const handleLoadProject = (project) => {
+    setProjectName(project.project_name);
+    setAttendees(project.attendees);
+    setSeatingArrangement(project.seating_arrangement);
+    setTentStyle(project.tent_style);
+    setTentConfig(project.tent_config);
+    setCurrentProjectId(project.id);
+    setShowLoadModal(false);
+  };
+
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
     try {
