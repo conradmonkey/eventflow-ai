@@ -26,13 +26,7 @@ const services = [
     description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
     href: "PermitInvestigator",
   },
-  {
-    icon: Tent,
-    title: "Tent Design",
-    description: "Plan perfect temporary structures from elegant sailcloth to grand clear-span marquees.",
-    href: "https://tent-plan-ai.base44.app/",
-    external: true,
-  },
+
 
   {
     icon: Building2,
