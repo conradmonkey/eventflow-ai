@@ -279,6 +279,8 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       ref={containerRef}
       className="bg-white rounded-lg shadow-lg border-2 border-slate-200 relative"
       style={{ height: '700px' }}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
     >
       <canvas
         ref={canvasRef}
@@ -291,7 +293,16 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       />
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
         Drag to move • Right-click to rotate
+        {selectedItem !== null && <span className="ml-4">• Press Delete to remove</span>}
       </div>
+      {selectedItem !== null && (
+        <button
+          onClick={handleDeleteItem}
+          className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+        >
+          Delete Item
+        </button>
+      )}
     </div>
   );
 }
