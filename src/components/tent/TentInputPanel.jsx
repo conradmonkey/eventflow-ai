@@ -103,7 +103,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
   const addBar = () => {
     setTentConfig(prev => ({
       ...prev,
-      bars: [...prev.bars, { width: 8, length: 3 }]
+      bars: [...prev.bars, { width: 8, length: 3, color: '#654321' }]
     }));
   };
 
@@ -118,7 +118,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     setTentConfig(prev => ({
       ...prev,
       bars: prev.bars.map((bar, i) => 
-        i === idx ? { ...bar, [field]: parseFloat(value) || 0 } : bar
+        i === idx ? { ...bar, [field]: field === 'color' ? value : parseFloat(value) || 0 } : bar
       )
     }));
   };
