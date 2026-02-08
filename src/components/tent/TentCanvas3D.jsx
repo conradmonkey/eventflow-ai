@@ -143,78 +143,79 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       }
     }
 
-    // Tent structure walls
+    // Tent structure walls - perspective view
     if (tentStyle === 'marquee') {
       // Marquee peaked roof
       const peakH = tentH + 5;
       
-      // Back wall
-      ctx.fillStyle = 'rgba(250, 250, 255, 0.15)';
+      // Right wall (visible from back)
+      ctx.fillStyle = 'rgba(250, 250, 255, 0.12)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(tentW / 2, -tentL / 2) * scale, centerY + perspY(tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, tentL / 2) * scale, centerY + perspY(tentW / 2, tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, tentL / 2) * scale, centerY + perspY(tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, -tentL / 2) * scale, centerY + perspY(tentW / 2, -tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
 
       // Left wall
-      ctx.fillStyle = 'rgba(245, 245, 255, 0.12)';
+      ctx.fillStyle = 'rgba(245, 245, 255, 0.1)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(-tentW / 2, -tentL / 2) * scale, centerY + perspY(-tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, tentL / 2) * scale, centerY + perspY(-tentW / 2, tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, tentL / 2) * scale, centerY + perspY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, -tentL / 2) * scale, centerY + perspY(-tentW / 2, -tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
 
-      // Peaked roof (two slopes)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      // Peaked roof (left slope visible)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(0, -tentL / 2) * scale, centerY + isoY(0, -tentL / 2, peakH) * scale);
-      ctx.lineTo(centerX + isoX(0, tentL / 2) * scale, centerY + isoY(0, tentL / 2, peakH) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(-tentW / 2, -tentL / 2) * scale, centerY + perspY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(0, -tentL / 2) * scale, centerY + perspY(0, -tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + perspX(0, tentL / 2) * scale, centerY + perspY(0, tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, tentL / 2) * scale, centerY + perspY(-tentW / 2, tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
 
-      ctx.fillStyle = 'rgba(245, 245, 250, 0.9)';
+      // Right slope
+      ctx.fillStyle = 'rgba(248, 248, 253, 0.9)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(0, -tentL / 2) * scale, centerY + isoY(0, -tentL / 2, peakH) * scale);
-      ctx.lineTo(centerX + isoX(0, tentL / 2) * scale, centerY + isoY(0, tentL / 2, peakH) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, tentL / 2) * scale, centerY + isoY(tentW / 2, tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(tentW / 2, -tentL / 2) * scale, centerY + perspY(tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(0, -tentL / 2) * scale, centerY + perspY(0, -tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + perspX(0, tentL / 2) * scale, centerY + perspY(0, tentL / 2, peakH) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, tentL / 2) * scale, centerY + perspY(tentW / 2, tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
     } else {
       // Frame tent - flat roof
-      // Back wall
-      ctx.fillStyle = 'rgba(250, 250, 255, 0.15)';
+      // Right wall
+      ctx.fillStyle = 'rgba(250, 250, 255, 0.12)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(tentW / 2, -tentL / 2) * scale, centerY + perspY(tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, tentL / 2) * scale, centerY + perspY(tentW / 2, tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, tentL / 2) * scale, centerY + perspY(tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, -tentL / 2) * scale, centerY + perspY(tentW / 2, -tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
 
       // Left wall
-      ctx.fillStyle = 'rgba(245, 245, 255, 0.12)';
+      ctx.fillStyle = 'rgba(245, 245, 255, 0.1)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, 0) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(-tentW / 2, -tentL / 2) * scale, centerY + perspY(-tentW / 2, -tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, tentL / 2) * scale, centerY + perspY(-tentW / 2, tentL / 2, 0) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, tentL / 2) * scale, centerY + perspY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, -tentL / 2) * scale, centerY + perspY(-tentW / 2, -tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
 
       // Flat roof
       ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
       ctx.beginPath();
-      ctx.moveTo(centerX + isoX(-tentW / 2, -tentL / 2) * scale, centerY + isoY(-tentW / 2, -tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, -tentL / 2) * scale, centerY + isoY(tentW / 2, -tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(tentW / 2, tentL / 2) * scale, centerY + isoY(tentW / 2, tentL / 2, tentH) * scale);
-      ctx.lineTo(centerX + isoX(-tentW / 2, tentL / 2) * scale, centerY + isoY(-tentW / 2, tentL / 2, tentH) * scale);
+      ctx.moveTo(centerX + perspX(-tentW / 2, -tentL / 2) * scale, centerY + perspY(-tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, -tentL / 2) * scale, centerY + perspY(tentW / 2, -tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(tentW / 2, tentL / 2) * scale, centerY + perspY(tentW / 2, tentL / 2, tentH) * scale);
+      ctx.lineTo(centerX + perspX(-tentW / 2, tentL / 2) * scale, centerY + perspY(-tentW / 2, tentL / 2, tentH) * scale);
       ctx.closePath();
       ctx.fill();
     }
