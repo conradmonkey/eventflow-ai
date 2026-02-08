@@ -220,27 +220,27 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       ctx.fill();
     }
 
-    // Stage
+    // Stage (far end from viewer)
     const stages = items.filter(item => item.type === 'stage');
     if (stages.length > 0) {
       const stageW = 20;
       const stageL = 16;
       const stageH = 3;
-      drawIsoRect(-stageW / 2, -tentL / 2 + 5, stageW, stageL, stageH, '#1a1a1a', '#0f0f0f', '#080808');
+      drawPerspRect(-stageW / 2, -tentL / 2 + 5, stageW, stageL, stageH, '#1a1a1a', '#0f0f0f', '#080808');
       
       // Stage lighting
       for (let i = 0; i < 3; i++) {
         const lx = -stageW / 2 + (stageW / 4) * (i + 0.5);
         const ly = -tentL / 2 + 12;
-        const sx = centerX + isoX(lx, ly) * scale;
-        const sy = centerY + isoY(lx, ly, stageH) * scale;
+        const sx = centerX + perspX(lx, ly) * scale;
+        const sy = centerY + perspY(lx, ly, stageH) * scale;
         
-        const spotGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 60 * scale);
-        spotGrad.addColorStop(0, 'rgba(255, 220, 150, 0.4)');
+        const spotGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 40 * scale);
+        spotGrad.addColorStop(0, 'rgba(255, 220, 150, 0.5)');
         spotGrad.addColorStop(1, 'rgba(255, 200, 120, 0)');
         ctx.fillStyle = spotGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, 60 * scale, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 40 * scale, 0, Math.PI * 2);
         ctx.fill();
       }
     }
