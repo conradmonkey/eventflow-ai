@@ -370,7 +370,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
           <input
             type="color"
             value={tentConfig.cocktailTables[0]?.color || '#8B4513'}
-            onChange={(e) => tentConfig.cocktailTables.forEach((_, i) => updateTableColor('cocktailTables', i, e.target.value))}
+            onChange={(e) => updateTableColor('cocktailTables', e.target.value)}
             className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
           />
         </div>
