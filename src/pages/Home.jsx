@@ -21,12 +21,6 @@ import { base44 } from "@/api/base44Client";
 const services = [
 
   {
-    icon: FileCheck,
-    title: "Permit Investigation",
-    description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
-    href: "PermitInvestigator",
-  },
-  {
     icon: Tent,
     title: "AI Tent Design Visualizer",
     description: "Design perfect tent layouts with AI-powered size suggestions and elegant 2D/3D visualizations.",
@@ -37,6 +31,12 @@ const services = [
     title: "AI Room Decor Designer",
     description: "Create elegant room layouts with professional 2D floor plans and stunning 3D renders.",
     href: "RoomDesigner",
+  },
+  {
+    icon: FileCheck,
+    title: "Permit Investigation",
+    description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
+    href: "PermitInvestigator",
   },
   {
     icon: Building2,
