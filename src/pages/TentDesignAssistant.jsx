@@ -287,6 +287,20 @@ export default function TentDesignAssistant() {
               </div>
             </div>
 
+            {/* Tent Style */}
+            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
+              <Label className="text-sm font-semibold">Tent Style</Label>
+              <Select value={tentStyle} onValueChange={setTentStyle}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select tent style" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="marquee">Marquee (Peaked)</SelectItem>
+                  <SelectItem value="frame">Frame (Modern)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Seating Arrangement */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label className="text-sm font-semibold">Seating Arrangement</Label>
