@@ -576,9 +576,9 @@ export default function TentDesignAssistant() {
     if (seatingArrangement === 'presentation') {
       const { rows, perRow } = tentConfig.chairs;
       let chairGroup = [];
-      const chairWidth = 2; // Chair width in feet
-      const gapBetweenChairs = 2.5; // 2.5 feet (2 feet + 6 inches) gap between chairs
-      const chairSpacing = chairWidth + gapBetweenChairs; // 4 feet center-to-center
+      const chairWidth = 1.5; // Chair width in feet
+      const gapBetweenChairs = 0.5; // 0.5 feet (6 inches) gap between chairs
+      const chairSpacing = chairWidth + gapBetweenChairs; // 2 feet center-to-center
       const rowSpacing = 3; // 3 feet between rows (aisle width)
       const totalRowWidth = (perRow * chairWidth) + ((perRow - 1) * gapBetweenChairs);
       const startX = (tentLength - totalRowWidth) / 2;
@@ -587,9 +587,9 @@ export default function TentDesignAssistant() {
         for (let col = 0; col < perRow; col++) {
           chairGroup.push({
             type: 'chair',
-            width: 2,
-            length: 2,
-            x: startX + col * chairSpacing,
+            width: 1.5,
+            length: 1.5,
+            x: startX + chairWidth / 2 + col * chairSpacing,
             y: startY + row * rowSpacing,
             rotation: 0,
             groupId: 'chairs'
