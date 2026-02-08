@@ -8,7 +8,7 @@ import TentInputPanel from '@/components/tent/TentInputPanel';
 import TentCanvas2D from '@/components/tent/TentCanvas2D';
 
 import TentGearList from '@/components/tent/TentGearList';
-import { Sparkles, Plus, Camera, X, Save, FolderOpen, FileDown } from 'lucide-react';
+import { Sparkles, Plus, Camera, X, Save, FolderOpen, FileDown, RotateCcw } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { jsPDF } from 'jspdf';
