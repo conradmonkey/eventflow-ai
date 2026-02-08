@@ -826,6 +826,14 @@ export default function TentDesignAssistant() {
                     Load Project
                   </Button>
                 </div>
+                <Button
+                  variant="outline"
+                  onClick={handleReset}
+                  className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Reset Everything
+                </Button>
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                      className="bg-blue-600 hover:bg-blue-700"
