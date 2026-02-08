@@ -791,17 +791,27 @@ export default function TentDesignAssistant() {
                     Load Project
                   </Button>
                 </div>
-                <Button
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={handleGenerateImage}
-                  disabled={items.length === 0 || generatingImage}
-                >
-                  <Camera className="w-4 h-4 mr-2" />
-                  {generatingImage ? 'Generating...' : 'A.I. Dreamer'}
-                </Button>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
-                  2D Render
-                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                     className="bg-blue-600 hover:bg-blue-700"
+                     onClick={handleGenerateImage}
+                     disabled={items.length === 0 || generatingImage}
+                   >
+                     <Camera className="w-4 h-4 mr-2" />
+                     {generatingImage ? 'Generating...' : 'Dreamer'}
+                   </Button>
+                   <Button
+                     className="bg-indigo-600 hover:bg-indigo-700"
+                     onClick={handleGenerateRealistic}
+                     disabled={items.length === 0 || generatingRealistic}
+                   >
+                     <Camera className="w-4 h-4 mr-2" />
+                     {generatingRealistic ? 'Generating...' : 'Realistic'}
+                   </Button>
+                </div>
+                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
+                   2D Render
+                 </Button>
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     variant="outline"
