@@ -42,24 +42,65 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     ctx.fillStyle = floorGradient;
     ctx.fillRect(0, horizon, w, h - horizon);
 
-    // Tent ceiling with elegant white draping
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(w, 0);
-    ctx.lineTo(w, horizon * 0.8);
-    ctx.quadraticCurveTo(w / 2, horizon * 1.1, 0, horizon * 0.8);
-    ctx.closePath();
-    ctx.fill();
+    // Tent ceiling - different styles
+    if (tentStyle === 'marquee') {
+      // Marquee: Peaked with elegant draping
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(w, 0);
+      ctx.lineTo(w, horizon * 0.8);
+      ctx.quadraticCurveTo(w / 2, horizon * 1.1, 0, horizon * 0.8);
+      ctx.closePath();
+      ctx.fill();
 
-    // Ceiling drape details
-    for (let i = 0; i < 8; i++) {
-      const x = (w / 8) * i;
-      ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
+      // Decorative drape lines
+      for (let i = 0; i < 8; i++) {
+        const x = (w / 8) * i;
+        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.quadraticCurveTo(w / 2, horizon * 0.9, w / 2, horizon);
+        ctx.stroke();
+      }
+
+      // Peak accent
+      ctx.fillStyle = 'rgba(220, 220, 230, 0.8)';
+      ctx.beginPath();
+      ctx.moveTo(w * 0.4, 0);
+      ctx.lineTo(w * 0.6, 0);
+      ctx.lineTo(w / 2, horizon * 0.3);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      // Frame: Clean, modern, taut ceiling
+      ctx.fillStyle = 'rgba(250, 250, 255, 0.95)';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(w, 0);
+      ctx.lineTo(w, horizon * 0.7);
+      ctx.lineTo(0, horizon * 0.7);
+      ctx.closePath();
+      ctx.fill();
+
+      // Modern structural lines
+      for (let i = 1; i < 8; i++) {
+        const x = (w / 8) * i;
+        ctx.strokeStyle = 'rgba(180, 180, 190, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, horizon * 0.7);
+        ctx.stroke();
+      }
+
+      // Horizontal frame lines
+      ctx.strokeStyle = 'rgba(160, 160, 170, 0.4)';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.quadraticCurveTo(w / 2, horizon * 0.9, w / 2, horizon);
+      ctx.moveTo(0, horizon * 0.35);
+      ctx.lineTo(w, horizon * 0.35);
       ctx.stroke();
     }
 
