@@ -172,6 +172,10 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       if (item.type === 'table5ft' || item.type === 'cocktailTable') {
         const r = (item.diameter || 5) / 2 * scale;
         if (dist < r) return i;
+      } else if (item.type === 'chair') {
+        const w = 1.5 * scale;
+        const h = 1.5 * scale;
+        if (Math.abs(dx) < w && Math.abs(dy) < h) return i;
       } else {
         const w = (item.width || 2) * scale / 2;
         const h = (item.length || item.height || 2) * scale / 2;
