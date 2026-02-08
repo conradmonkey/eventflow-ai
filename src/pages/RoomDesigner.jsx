@@ -269,10 +269,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const handleExportPDF = () => {
-    if (!isSubscribed) {
-      setShowSubscriptionModal(true);
-      return;
-    }
+    // Remove subscription check - allow authenticated users
 
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
