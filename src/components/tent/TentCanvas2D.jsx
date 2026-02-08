@@ -87,7 +87,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
         } else if (item.type === 'bar') {
           const w = item.width * scale;
           const h = item.length * scale;
-          ctx.fillStyle = '#654321';
+          ctx.fillStyle = item.color || '#654321';
           ctx.fillRect(-w / 2, -h / 2, w, h);
           ctx.strokeStyle = '#000000';
           ctx.strokeRect(-w / 2, -h / 2, w, h);
