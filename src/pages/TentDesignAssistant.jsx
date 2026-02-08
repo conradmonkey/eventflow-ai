@@ -314,20 +314,6 @@ export default function TentDesignAssistant() {
               </div>
             </div>
 
-            {/* Tent Style */}
-            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <Label className="text-sm font-semibold">Tent Style</Label>
-              <Select value={tentStyle} onValueChange={setTentStyle}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select tent style" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="marquee">Marquee (Peaked)</SelectItem>
-                  <SelectItem value="frame">Frame (Modern)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             {/* Seating Arrangement */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label className="text-sm font-semibold">Seating Arrangement</Label>
@@ -345,9 +331,23 @@ export default function TentDesignAssistant() {
               </Select>
 
               {suggestedTent && (
-                <div className="mt-4 p-3 bg-purple-50 rounded-lg">
-                  <p className="text-sm font-semibold text-purple-900">Suggested Tent:</p>
-                  <p className="text-lg font-bold text-purple-700">{suggestedTent.type} ft</p>
+                <div className="mt-4 p-3 bg-purple-50 rounded-lg space-y-3">
+                  <div>
+                    <p className="text-sm font-semibold text-purple-900">Suggested Tent:</p>
+                    <p className="text-lg font-bold text-purple-700">{suggestedTent.type} ft</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-semibold">Tent Style</Label>
+                    <Select value={tentStyle} onValueChange={setTentStyle}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select tent style" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="marquee">Marquee (Peaked)</SelectItem>
+                        <SelectItem value="frame">Frame (Modern)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               )}
             </div>
