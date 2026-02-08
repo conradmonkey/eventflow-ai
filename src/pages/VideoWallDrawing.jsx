@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 
 export default function VideoWallDrawing() {
   const [formData, setFormData] = useState({
+    project_name: "",
     country: "",
     province: "",
     city: "",
@@ -220,6 +221,7 @@ Style:
 
   const handleReset = () => {
     setFormData({
+      project_name: "",
       country: "",
       province: "",
       city: "",
@@ -258,6 +260,17 @@ Style:
           className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8 mb-8"
         >
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Project Name */}
+            <div>
+              <Label className="text-zinc-400 text-sm">Project Name</Label>
+              <Input
+                value={formData.project_name}
+                onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
+                className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-cyan-500/50 h-11 rounded-lg mt-2"
+                placeholder="e.g., Corporate Event 2026"
+              />
+            </div>
+
             {/* Location */}
             <div>
               <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
