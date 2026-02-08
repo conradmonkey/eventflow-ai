@@ -264,31 +264,6 @@ export default function TentDesignAssistant() {
     // Add tent
     pdf.text(`• Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`, 25, yPos);
     yPos += 6;
-    pdf.text(`Category: ${projectCategory}`, 20, yPos);
-    yPos += 6;
-    pdf.text(`Attendees: ${attendees}`, 20, yPos);
-    yPos += 6;
-    pdf.text(`Seating: ${seatingArrangement?.replace('_', ' ') || 'N/A'}`, 20, yPos);
-    yPos += 6;
-    pdf.text(`Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`, 20, yPos);
-    yPos += 10;
-
-    // Equipment List
-    pdf.setFontSize(16);
-    pdf.text('Equipment List', 20, yPos);
-    yPos += 8;
-
-    const itemCounts = {};
-    items.forEach(item => {
-      const key = item.type;
-      itemCounts[key] = (itemCounts[key] || 0) + 1;
-    });
-
-    pdf.setFontSize(10);
-    
-    // Add tent
-    pdf.text(`• Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`, 25, yPos);
-    yPos += 6;
 
     // Add items
     Object.entries(itemCounts).forEach(([type, count]) => {
@@ -301,7 +276,7 @@ export default function TentDesignAssistant() {
       }
     });
 
-    yPos += 5;
+    yPos += 10;
 
     // Add 2D Layout if available
     if (canvasRef.current && items.length > 0) {
