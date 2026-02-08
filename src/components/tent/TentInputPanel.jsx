@@ -31,7 +31,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
   const addVideoWall = () => {
     setTentConfig(prev => ({
       ...prev,
-      videoWalls: [...prev.videoWalls, { length: 10, height: 8 }]
+      videoWalls: [...prev.videoWalls, { length: 10, height: 8, color: '#1E90FF' }]
     }));
   };
 
