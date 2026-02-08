@@ -26,6 +26,12 @@ const services = [
     description: "Navigate permits and regulations with AI assistance for noise, assembly, and vendor requirements.",
     href: "PermitInvestigator",
   },
+  {
+    icon: Tent,
+    title: "AI Tent Design Visualizer",
+    description: "Design perfect tent layouts with AI-powered size suggestions and elegant 2D/3D visualizations.",
+    href: "TentDesignAssistant",
+  },
 
 
   {
