@@ -324,26 +324,35 @@ export default function TentDesignAssistant() {
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
     try {
-      // Build detailed prompt based on equipment
+      // Build detailed prompt based on items on canvas
       let equipmentDetails = [];
+      const itemCounts = {};
       
-      if (tentConfig.stages?.length > 0) {
-        equipmentDetails.push('a glamorous professional stage with dramatic lighting and LED panels');
+      // Count items from canvas
+      items.forEach(item => {
+        itemCounts[item.type] = (itemCounts[item.type] || 0) + 1;
+      });
+
+      if (itemCounts.stage > 0) {
+        equipmentDetails.push('glamorous professional stages with dramatic lighting and LED panels');
       }
-      if (tentConfig.danceFloors?.length > 0) {
-        equipmentDetails.push('an elegant dance floor with geometric LED patterns and dramatic uplighting');
+      if (itemCounts.danceFloor > 0) {
+        equipmentDetails.push('elegant dance floors with geometric LED patterns and dramatic uplighting');
       }
-      if (tentConfig.bars?.length > 0) {
-        equipmentDetails.push('a luxurious modern bar with backlit shelves and premium finishes');
+      if (itemCounts.bar > 0) {
+        equipmentDetails.push('luxurious modern bars with backlit shelves and premium finishes');
       }
-      if (tentConfig.tables8ft?.length > 0 || tentConfig.tables6ft?.length > 0 || tentConfig.tables5ft?.length > 0) {
-        equipmentDetails.push(`elegant round tables with ${tentConfig.linenColor || 'white'} linens, centerpieces with flowers and candles`);
+      if (itemCounts.table8ft > 0 || itemCounts.table6ft > 0 || itemCounts.table5ft > 0) {
+        equipmentDetails.push(`elegant round and rectangular tables with ${tentConfig.linenColor || 'white'} linens, centerpieces with flowers and candles`);
       }
-      if (tentConfig.videoWalls?.length > 0) {
+      if (itemCounts.videoWall > 0) {
         equipmentDetails.push('large LED video walls displaying elegant graphics');
       }
-      if (tentConfig.cocktailTables?.length > 0) {
+      if (itemCounts.cocktailTable > 0) {
         equipmentDetails.push('cocktail tables with ambient lighting');
+      }
+      if (itemCounts.chair > 0) {
+        equipmentDetails.push('elegantly arranged seating throughout the space');
       }
 
       const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent with peaked ceiling and draped fabric' : 'modern frame tent with high ceilings';
