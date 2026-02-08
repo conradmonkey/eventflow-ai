@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FileCheck, Loader2, MapPin, Search, Save, FolderOpen, X } from "lucide-react";
+import { FileCheck, Loader2, MapPin, Search, Save, FolderOpen, X, FileDown } from "lucide-react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { jsPDF } from "jspdf";
 
 export default function PermitInvestigator() {
   const [formData, setFormData] = useState({
@@ -119,6 +120,87 @@ Be thorough and specific to the location provided.`;
     });
     setResults(search.results);
     setShowLoadModal(false);
+  };
+
+  const handleExportPDF = () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = margin;
+
+    // Title
+    pdf.setFontSize(22);
+    pdf.setTextColor(37, 99, 235); // Blue
+    pdf.text('Event Permit Requirements', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Event Details
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Event Information', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    if (formData.event_name) {
+      pdf.text(`Event Name: ${formData.event_name}`, margin, yPos);
+      yPos += 6;
+    }
+    pdf.text(`Location: ${formData.city}, ${formData.province}, ${formData.country}`, margin, yPos);
+    yPos += 10;
+
+    // Selected Features
+    const selectedFeatures = Object.entries(formData.features)
+      .filter(([_, checked]) => checked)
+      .map(([key, _]) => key.replace(/_/g, ' '));
+
+    if (selectedFeatures.length > 0) {
+      pdf.setFontSize(12);
+      pdf.text('Event Features:', margin, yPos);
+      yPos += 6;
+      pdf.setFontSize(10);
+      selectedFeatures.forEach(feature => {
+        pdf.text(`• ${feature}`, margin + 5, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+    }
+
+    // Results
+    pdf.setFontSize(14);
+    pdf.text('Permit Requirements & Regulations', margin, yPos);
+    yPos += 8;
+
+    // Split results into lines and add to PDF
+    pdf.setFontSize(10);
+    const lines = pdf.splitTextToSize(results, pageWidth - 2 * margin);
+    
+    lines.forEach(line => {
+      if (yPos > pageHeight - margin) {
+        pdf.addPage();
+        yPos = margin;
+      }
+      pdf.text(line, margin, yPos);
+      yPos += 5;
+    });
+
+    // Footer
+    const totalPages = pdf.internal.pages.length - 1;
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(
+        `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+    }
+
+    // Save PDF
+    const fileName = `permit-requirements-${formData.city}-${Date.now()}.pdf`;
+    pdf.save(fileName);
   };
 
   return (
@@ -338,13 +420,23 @@ Be thorough and specific to the location provided.`;
                 <FileCheck className="w-6 h-6 text-blue-400" />
                 Required Permits & Regulations
               </h2>
-              <Button
-                onClick={() => setShowSaveModal(true)}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                Save Search
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleExportPDF}
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                >
+                  <FileDown className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
+                <Button
+                  onClick={() => setShowSaveModal(true)}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Search
+                </Button>
+              </div>
             </div>
             <div className="prose prose-invert prose-zinc max-w-none">
               <ReactMarkdown
