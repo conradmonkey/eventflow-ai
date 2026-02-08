@@ -464,6 +464,7 @@ export default function TentDesignAssistant() {
       });
       setItems([]);
       setGeneratedImage(null);
+      setRealisticImage(null);
       setCurrentProjectId(null);
       setProjectCategory('Uncategorized');
     }
