@@ -276,10 +276,10 @@ export default function TentDesignAssistant() {
       }
     });
 
-    yPos += 10;
-
     // Add 2D Layout if available
     if (canvasRef.current && items.length > 0) {
+      yPos += 10;
+      
       if (yPos > pageHeight - 100) {
         pdf.addPage();
         yPos = 20;
