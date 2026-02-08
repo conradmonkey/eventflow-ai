@@ -10,6 +10,7 @@ import InteractiveRoomCanvas from "@/components/room/InteractiveRoomCanvas";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
+    project_name: "",
     country: "",
     province: "",
     city: "",
@@ -170,6 +171,17 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
             className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
           >
             <form onSubmit={handleGenerate2D} className="space-y-6">
+              {/* Project Name */}
+              <div>
+                <Label className="text-zinc-400 text-sm">Project Name</Label>
+                <Input
+                  value={formData.project_name}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
+                  className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
+                  placeholder="e.g., Summer Gala 2026"
+                />
+              </div>
+
               {/* Location */}
               <div>
                 <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
