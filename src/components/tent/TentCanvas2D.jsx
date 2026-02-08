@@ -238,6 +238,19 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     setDragStart(null);
   };
 
+  const handleDeleteItem = () => {
+    if (selectedItem !== null) {
+      setItems(prev => prev.filter((_, idx) => idx !== selectedItem));
+      setSelectedItem(null);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedItem !== null) {
+      handleDeleteItem();
+    }
+  };
+
   const handleContextMenu = (e) => {
     e.preventDefault();
     const rect = canvasRef.current.getBoundingClientRect();
