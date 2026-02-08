@@ -8,7 +8,8 @@ import TentInputPanel from '@/components/tent/TentInputPanel';
 import TentCanvas2D from '@/components/tent/TentCanvas2D';
 
 import TentGearList from '@/components/tent/TentGearList';
-import { Sparkles, Plus } from 'lucide-react';
+import { Sparkles, Plus, Camera, X } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 
 export default function TentDesignAssistant() {
   const [attendees, setAttendees] = useState(100);
@@ -33,6 +34,8 @@ export default function TentDesignAssistant() {
 
   const [showGearList, setShowGearList] = useState(false);
   const [items, setItems] = useState([]);
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [generatingImage, setGeneratingImage] = useState(false);
   const canvasRef = useRef(null);
   const [customEquipment, setCustomEquipment] = useState({
     name: '',
@@ -48,6 +51,45 @@ export default function TentDesignAssistant() {
       customEquipment: [...(prev.customEquipment || []), { ...customEquipment }]
     }));
     setCustomEquipment({ name: '', width: 10, length: 10, color: '#888888' });
+  };
+
+  const handleGenerateImage = async () => {
+    setGeneratingImage(true);
+    try {
+      // Build detailed prompt based on equipment
+      let equipmentDetails = [];
+      
+      if (tentConfig.stages?.length > 0) {
+        equipmentDetails.push('a glamorous professional stage with dramatic lighting and LED panels');
+      }
+      if (tentConfig.danceFloors?.length > 0) {
+        equipmentDetails.push('an elegant dance floor with geometric LED patterns and dramatic uplighting');
+      }
+      if (tentConfig.bars?.length > 0) {
+        equipmentDetails.push('a luxurious modern bar with backlit shelves and premium finishes');
+      }
+      if (tentConfig.tables8ft?.length > 0 || tentConfig.tables6ft?.length > 0 || tentConfig.tables5ft?.length > 0) {
+        equipmentDetails.push(`elegant round tables with ${tentConfig.linenColor || 'white'} linens, centerpieces with flowers and candles`);
+      }
+      if (tentConfig.videoWalls?.length > 0) {
+        equipmentDetails.push('large LED video walls displaying elegant graphics');
+      }
+      if (tentConfig.cocktailTables?.length > 0) {
+        equipmentDetails.push('cocktail tables with ambient lighting');
+      }
+
+      const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent with peaked ceiling and draped fabric' : 'modern frame tent with high ceilings';
+      const equipmentText = equipmentDetails.length > 0 ? equipmentDetails.join(', ') : 'elegant setup';
+
+      const prompt = `Ultra-realistic professional photograph of a luxury event inside a ${suggestedTent?.type || '40x60'} ft ${tentTypeDesc}. The event space features ${equipmentText}. Warm ambient lighting with chandeliers, sophisticated atmosphere, ${attendees} guests enjoying the space. Professional event photography, high-end venue styling, cinematic lighting, 8k quality, photorealistic.`;
+
+      const response = await base44.integrations.Core.GenerateImage({ prompt });
+      setGeneratedImage(response.url);
+    } catch (error) {
+      console.error('Failed to generate image:', error);
+    } finally {
+      setGeneratingImage(false);
+    }
   };
 
   const tentData = {
@@ -398,6 +440,15 @@ export default function TentDesignAssistant() {
                 >
                   Gear List
                 </Button>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleGenerateImage}
+                  disabled={items.length === 0 || generatingImage}
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  {generatingImage ? 'Generating...' : 'Camera'}
+                </Button>
               </div>
             )}
           </div>
@@ -421,6 +472,22 @@ export default function TentDesignAssistant() {
           items={items}
           onClose={() => setShowGearList(false)}
         />
+      )}
+
+      {generatedImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-8">
+          <div className="bg-white rounded-lg w-full h-full max-w-6xl max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h3 className="text-xl font-bold text-slate-900">Generated Event Visualization</h3>
+              <Button variant="ghost" size="icon" onClick={() => setGeneratedImage(null)}>
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex-1 p-4 overflow-auto flex items-center justify-center">
+              <img src={generatedImage} alt="Generated event" className="max-w-full max-h-full rounded-lg shadow-lg" />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
