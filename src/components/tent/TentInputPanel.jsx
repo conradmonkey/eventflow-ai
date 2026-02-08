@@ -252,19 +252,73 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
       {/* Tables */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
         <Label className="text-sm font-semibold">Tables</Label>
-        <Button size="sm" variant="outline" className="w-full" onClick={addTable8ft}>
-          Add 8ft Table
-        </Button>
-        <Button size="sm" variant="outline" className="w-full" onClick={addTable6ft}>
-          Add 6ft Table
-        </Button>
-        <Button size="sm" variant="outline" className="w-full" onClick={addTable5ft}>
-          Add 5ft Round Table
-        </Button>
-        <div className="text-xs text-gray-600">
-          <p>8ft Tables: {tentConfig.tables8ft.length}</p>
-          <p>6ft Tables: {tentConfig.tables6ft.length}</p>
-          <p>5ft Round Tables: {tentConfig.tables5ft.length}</p>
+        <div className="grid grid-cols-3 gap-2">
+          <div>
+            <Label className="text-xs">8ft Tables</Label>
+            <Input 
+              type="number" 
+              min="0"
+              value={tentConfig.tables8ft.length}
+              onChange={(e) => {
+                const target = Math.max(0, parseInt(e.target.value) || 0);
+                const current = tentConfig.tables8ft.length;
+                if (target > current) {
+                  for (let i = current; i < target; i++) {
+                    addTable8ft();
+                  }
+                } else if (target < current) {
+                  setTentConfig(prev => ({
+                    ...prev,
+                    tables8ft: prev.tables8ft.slice(0, target)
+                  }));
+                }
+              }}
+            />
+          </div>
+          <div>
+            <Label className="text-xs">6ft Tables</Label>
+            <Input 
+              type="number" 
+              min="0"
+              value={tentConfig.tables6ft.length}
+              onChange={(e) => {
+                const target = Math.max(0, parseInt(e.target.value) || 0);
+                const current = tentConfig.tables6ft.length;
+                if (target > current) {
+                  for (let i = current; i < target; i++) {
+                    addTable6ft();
+                  }
+                } else if (target < current) {
+                  setTentConfig(prev => ({
+                    ...prev,
+                    tables6ft: prev.tables6ft.slice(0, target)
+                  }));
+                }
+              }}
+            />
+          </div>
+          <div>
+            <Label className="text-xs">5ft Round</Label>
+            <Input 
+              type="number" 
+              min="0"
+              value={tentConfig.tables5ft.length}
+              onChange={(e) => {
+                const target = Math.max(0, parseInt(e.target.value) || 0);
+                const current = tentConfig.tables5ft.length;
+                if (target > current) {
+                  for (let i = current; i < target; i++) {
+                    addTable5ft();
+                  }
+                } else if (target < current) {
+                  setTentConfig(prev => ({
+                    ...prev,
+                    tables5ft: prev.tables5ft.slice(0, target)
+                  }));
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
 
@@ -304,13 +358,26 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
 
       {/* Cocktail Tables */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Cocktail Tables</Label>
-          <Button size="sm" variant="outline" onClick={addCocktailTable}>
-            <Plus className="w-4 h-4" />
-          </Button>
-        </div>
-        <p className="text-xs text-gray-600">Count: {tentConfig.cocktailTables.length}</p>
+        <Label className="text-sm font-semibold">Cocktail Tables</Label>
+        <Input 
+          type="number" 
+          min="0"
+          value={tentConfig.cocktailTables.length}
+          onChange={(e) => {
+            const target = Math.max(0, parseInt(e.target.value) || 0);
+            const current = tentConfig.cocktailTables.length;
+            if (target > current) {
+              for (let i = current; i < target; i++) {
+                addCocktailTable();
+              }
+            } else if (target < current) {
+              setTentConfig(prev => ({
+                ...prev,
+                cocktailTables: prev.cocktailTables.slice(0, target)
+              }));
+            }
+          }}
+        />
       </div>
 
       {/* Presentation Chairs */}
