@@ -14,6 +14,7 @@ export default function TentDesignAssistant() {
   const [attendees, setAttendees] = useState(100);
   const [seatingArrangement, setSeatingArrangement] = useState('');
   const [suggestedTent, setSuggestedTent] = useState(null);
+  const [tentStyle, setTentStyle] = useState('marquee');
   const [tentConfig, setTentConfig] = useState({
     length: 0,
     width: 0,
