@@ -122,14 +122,14 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
         const brightness = ((i + j) % 10 === 0) ? 5 : 0;
         const tileColor = `rgba(255, 255, 255, ${0.02 + brightness * 0.008})`;
         
-        const tx1 = centerX + isoX(tileX, tileY) * scale;
-        const ty1 = centerY + isoY(tileX, tileY, 0) * scale;
-        const tx2 = centerX + isoX(tileX + 5, tileY) * scale;
-        const ty2 = centerY + isoY(tileX + 5, tileY, 0) * scale;
-        const tx3 = centerX + isoX(tileX + 5, tileY + 5) * scale;
-        const ty3 = centerY + isoY(tileX + 5, tileY + 5, 0) * scale;
-        const tx4 = centerX + isoX(tileX, tileY + 5) * scale;
-        const ty4 = centerY + isoY(tileX, tileY + 5, 0) * scale;
+        const tx1 = centerX + perspX(tileX, tileY) * scale;
+        const ty1 = centerY + perspY(tileX, tileY, 0) * scale;
+        const tx2 = centerX + perspX(tileX + 5, tileY) * scale;
+        const ty2 = centerY + perspY(tileX + 5, tileY, 0) * scale;
+        const tx3 = centerX + perspX(tileX + 5, tileY + 5) * scale;
+        const ty3 = centerY + perspY(tileX + 5, tileY + 5, 0) * scale;
+        const tx4 = centerX + perspX(tileX, tileY + 5) * scale;
+        const ty4 = centerY + perspY(tileX, tileY + 5, 0) * scale;
 
         ctx.strokeStyle = tileColor;
         ctx.lineWidth = 0.5;
