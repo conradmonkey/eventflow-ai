@@ -39,6 +39,7 @@ export default function TentDesignAssistant() {
   const [items, setItems] = useState([]);
   const [generatedImage, setGeneratedImage] = useState(null);
   const [generatingImage, setGeneratingImage] = useState(false);
+  const [generatingRealistic, setGeneratingRealistic] = useState(false);
   const canvasRef = useRef(null);
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [showLoadModal, setShowLoadModal] = useState(false);
