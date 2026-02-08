@@ -271,13 +271,13 @@ export default function TentDesignAssistant() {
       }
     }
 
-    // Add AI Generated Image if available
+    // Add AI Generated Image (Dreamer) if available
     if (imageToUse) {
       pdf.addPage();
       yPos = 20;
 
       pdf.setFontSize(16);
-      pdf.text('AI Generated Design', 20, yPos);
+      pdf.text('AI Dreamer Design', 20, yPos);
       yPos += 10;
 
       try {
@@ -299,8 +299,41 @@ export default function TentDesignAssistant() {
 
         pdf.addImage(imageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
       } catch (error) {
-        console.error('Error adding generated image to PDF:', error);
-        pdf.text('(Generated image could not be loaded)', 20, yPos);
+        console.error('Error adding dreamer image to PDF:', error);
+        pdf.text('(Dreamer image could not be loaded)', 20, yPos);
+      }
+    }
+
+    // Add Realistic Image if available
+    if (realisticImage) {
+      pdf.addPage();
+      yPos = 20;
+
+      pdf.setFontSize(16);
+      pdf.text('Realistic Rendering', 20, yPos);
+      yPos += 10;
+
+      try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = realisticImage;
+        
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+
+        const imgWidth = pageWidth - 40;
+        const imgHeight = (img.height * imgWidth) / img.width;
+        const maxHeight = pageHeight - 40;
+        
+        const finalHeight = Math.min(imgHeight, maxHeight);
+        const finalWidth = (img.width * finalHeight) / img.height;
+
+        pdf.addImage(realisticImage, 'JPEG', 20, yPos, finalWidth, finalHeight);
+      } catch (error) {
+        console.error('Error adding realistic image to PDF:', error);
+        pdf.text('(Realistic image could not be loaded)', 20, yPos);
       }
     }
 
