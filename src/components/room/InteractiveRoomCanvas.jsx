@@ -47,14 +47,18 @@ export default function InteractiveRoomCanvas({ formData }) {
     // Create items array
     const newItems = [];
     let itemId = 0;
+    const actualRoomLength = isRotated ? roomWidth : roomLength;
+    const actualRoomWidth = isRotated ? roomLength : roomWidth;
 
     // Add stage
     if (formData.stage_length && formData.stage_width) {
+      const stageLength = isRotated ? parseFloat(formData.stage_width) : parseFloat(formData.stage_length);
+      const stageWidth = isRotated ? parseFloat(formData.stage_length) : parseFloat(formData.stage_width);
       newItems.push({
         id: `stage-${itemId++}`,
         type: 'stage',
-        length: parseFloat(formData.stage_length),
-        width: parseFloat(formData.stage_width),
+        length: stageLength,
+        width: stageWidth,
         x: padding + 50,
         y: padding + 50,
         rotation: 0,
@@ -64,11 +68,13 @@ export default function InteractiveRoomCanvas({ formData }) {
 
     // Add dance floor
     if (formData.dance_floor_length && formData.dance_floor_width) {
+      const dfLength = isRotated ? parseFloat(formData.dance_floor_width) : parseFloat(formData.dance_floor_length);
+      const dfWidth = isRotated ? parseFloat(formData.dance_floor_length) : parseFloat(formData.dance_floor_width);
       newItems.push({
         id: `dancefloor-${itemId++}`,
         type: 'dancefloor',
-        length: parseFloat(formData.dance_floor_length),
-        width: parseFloat(formData.dance_floor_width),
+        length: dfLength,
+        width: dfWidth,
         x: scaledRoomLength / 2,
         y: scaledRoomWidth / 2,
         rotation: 0,
@@ -78,11 +84,13 @@ export default function InteractiveRoomCanvas({ formData }) {
 
     // Add bar
     if (formData.bar_length && formData.bar_width) {
+      const barLength = isRotated ? parseFloat(formData.bar_width) : parseFloat(formData.bar_length);
+      const barWidth = isRotated ? parseFloat(formData.bar_length) : parseFloat(formData.bar_width);
       newItems.push({
         id: `bar-${itemId++}`,
         type: 'bar',
-        length: parseFloat(formData.bar_length),
-        width: parseFloat(formData.bar_width),
+        length: barLength,
+        width: barWidth,
         x: scaledRoomLength - padding - 100,
         y: padding + 50,
         rotation: 0,
@@ -94,11 +102,13 @@ export default function InteractiveRoomCanvas({ formData }) {
     if (formData.video_wall_height && formData.video_wall_width) {
       const videoWallLength = parseFloat(formData.video_wall_width) * 3.28084; // m to ft
       const videoWallHeight = parseFloat(formData.video_wall_height) * 3.28084;
+      const vwLength = isRotated ? videoWallHeight : videoWallLength;
+      const vwWidth = isRotated ? videoWallLength : videoWallHeight;
       newItems.push({
         id: `videowall-${itemId++}`,
         type: 'videowall',
-        length: videoWallLength,
-        width: videoWallHeight,
+        length: vwLength,
+        width: vwWidth,
         x: padding + 50,
         y: scaledRoomWidth - padding - 50,
         rotation: 0,
