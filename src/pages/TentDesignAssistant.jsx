@@ -439,6 +439,7 @@ export default function TentDesignAssistant() {
         type: 'videoWall',
         width: wall.length,
         height: wall.height,
+        color: wall.color || '#1E90FF',
         x: tentLength * 0.5 + idx * (wall.length + 3),
         y: tentWidth * 0.15,
         rotation: 0
