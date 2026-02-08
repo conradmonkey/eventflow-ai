@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
       customerId = customer.id;
     }
 
-    // Create checkout session
+    // Create checkout session with 1 month free trial
     const session = await stripeClient.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
@@ -36,6 +36,9 @@ Deno.serve(async (req) => {
           quantity: 1
         }
       ],
+      subscription_data: {
+        trial_period_days: 30
+      },
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: {
