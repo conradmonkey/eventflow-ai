@@ -306,23 +306,24 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     for (let i = 0; i < 6; i++) {
       const lx = -tentW / 3 + (tentW / 3) * (i % 3);
       const ly = -tentL / 4 + (tentL / 2) * Math.floor(i / 3);
-      const sx = centerX + isoX(lx, ly) * scale;
-      const sy = centerY + isoY(lx, ly, tentH - 1) * scale;
+      const sx = centerX + perspX(lx, ly) * scale;
+      const sy = centerY + perspY(lx, ly, tentH - 1) * scale;
+      const pScale = perspectiveScale(ly);
       
       // Chandelier crystal
       ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
       ctx.beginPath();
-      ctx.arc(sx, sy, 3, 0, Math.PI * 2);
+      ctx.arc(sx, sy, 2 * pScale, 0, Math.PI * 2);
       ctx.fill();
       
       // Warm glow
-      const chandelierGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 80 * scale);
-      chandelierGrad.addColorStop(0, 'rgba(255, 245, 220, 0.3)');
-      chandelierGrad.addColorStop(0.5, 'rgba(255, 235, 200, 0.15)');
+      const chandelierGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 60 * scale * pScale);
+      chandelierGrad.addColorStop(0, 'rgba(255, 245, 220, 0.4)');
+      chandelierGrad.addColorStop(0.5, 'rgba(255, 235, 200, 0.2)');
       chandelierGrad.addColorStop(1, 'rgba(255, 220, 180, 0)');
       ctx.fillStyle = chandelierGrad;
       ctx.beginPath();
-      ctx.arc(sx, sy, 80 * scale, 0, Math.PI * 2);
+      ctx.arc(sx, sy, 60 * scale * pScale, 0, Math.PI * 2);
       ctx.fill();
     }
 
