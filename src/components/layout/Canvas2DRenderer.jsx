@@ -46,7 +46,7 @@ export default function Canvas2DRenderer({
       ctx.translate(item.x * zoom, item.y * zoom);
       ctx.rotate((item.rotation * Math.PI) / 180);
 
-      ctx.fillStyle = selectedItem === idx ? '#00FF00' : size.color;
+      ctx.fillStyle = selectedItem === idx ? '#00FF00' : (item.type === 'video_wall' && item.color ? item.color : size.color);
       ctx.fillRect(-width / 2, -height / 2, width, height);
 
       ctx.strokeStyle = selectedItem === idx ? '#00AA00' : '#000000';
