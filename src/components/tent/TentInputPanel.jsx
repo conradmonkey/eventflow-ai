@@ -74,25 +74,21 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     }));
   };
 
-  const addTable8ft = () => {
-    setTentConfig(prev => ({
-      ...prev,
-      tables8ft: [...prev.tables8ft, { color: '#8B4513' }]
-    }));
-  };
-
-  const addTable6ft = () => {
-    setTentConfig(prev => ({
-      ...prev,
-      tables6ft: [...prev.tables6ft, { color: '#8B4513' }]
-    }));
-  };
-
-  const addTable5ft = () => {
-    setTentConfig(prev => ({
-      ...prev,
-      tables5ft: [...prev.tables5ft, { color: '#8B4513' }]
-    }));
+  const updateTableCount = (tableType, count) => {
+    const numCount = Math.max(0, parseInt(count) || 0);
+    setTentConfig(prev => {
+      const currentCount = prev[tableType].length;
+      const newConfig = { ...prev };
+      
+      if (numCount > currentCount) {
+        const toAdd = numCount - currentCount;
+        newConfig[tableType] = [...prev[tableType], ...Array(toAdd).fill({ color: '#8B4513' })];
+      } else if (numCount < currentCount) {
+        newConfig[tableType] = prev[tableType].slice(0, numCount);
+      }
+      
+      return newConfig;
+    });
   };
 
   const addBar = () => {
@@ -118,12 +114,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     }));
   };
 
-  const addCocktailTable = () => {
-    setTentConfig(prev => ({
-      ...prev,
-      cocktailTables: [...prev.cocktailTables, { color: '#000000' }]
-    }));
-  };
+
 
 
 
@@ -252,19 +243,34 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
       {/* Tables */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
         <Label className="text-sm font-semibold">Tables</Label>
-        <Button size="sm" variant="outline" className="w-full" onClick={addTable8ft}>
-          Add 8ft Table
-        </Button>
-        <Button size="sm" variant="outline" className="w-full" onClick={addTable6ft}>
-          Add 6ft Table
-        </Button>
-        <Button size="sm" variant="outline" className="w-full" onClick={addTable5ft}>
-          Add 5ft Round Table
-        </Button>
-        <div className="text-xs text-gray-600">
-          <p>8ft Tables: {tentConfig.tables8ft.length}</p>
-          <p>6ft Tables: {tentConfig.tables6ft.length}</p>
-          <p>5ft Round Tables: {tentConfig.tables5ft.length}</p>
+        <div className="space-y-3">
+          <div>
+            <Label className="text-xs">8ft Tables</Label>
+            <Input
+              type="number"
+              min="0"
+              value={tentConfig.tables8ft.length}
+              onChange={(e) => updateTableCount('tables8ft', e.target.value)}
+            />
+          </div>
+          <div>
+            <Label className="text-xs">6ft Tables</Label>
+            <Input
+              type="number"
+              min="0"
+              value={tentConfig.tables6ft.length}
+              onChange={(e) => updateTableCount('tables6ft', e.target.value)}
+            />
+          </div>
+          <div>
+            <Label className="text-xs">5ft Round Tables</Label>
+            <Input
+              type="number"
+              min="0"
+              value={tentConfig.tables5ft.length}
+              onChange={(e) => updateTableCount('tables5ft', e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
@@ -304,13 +310,13 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
 
       {/* Cocktail Tables */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Cocktail Tables</Label>
-          <Button size="sm" variant="outline" onClick={addCocktailTable}>
-            <Plus className="w-4 h-4" />
-          </Button>
-        </div>
-        <p className="text-xs text-gray-600">Count: {tentConfig.cocktailTables.length}</p>
+        <Label className="text-sm font-semibold">Cocktail Tables</Label>
+        <Input
+          type="number"
+          min="0"
+          value={tentConfig.cocktailTables.length}
+          onChange={(e) => updateTableCount('cocktailTables', e.target.value)}
+        />
       </div>
 
       {/* Presentation Chairs */}
