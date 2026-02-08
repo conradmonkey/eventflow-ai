@@ -5,6 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 export default function TentInputPanel({ tentConfig, setTentConfig, seatingArrangement, attendees }) {
+  // Auto-calculate presentation chairs when seating arrangement changes to presentation
+  React.useEffect(() => {
+    if (seatingArrangement === 'presentation' && attendees) {
+      const rows = Math.ceil(tentConfig.tentLength / 5) || 1;
+      const perRow = Math.ceil(attendees / rows) || 0;
+      
+      setTentConfig(prev => ({
+        ...prev,
+        chairs: { rows, perRow }
+      }));
+    }
+  }, [seatingArrangement, attendees, tentConfig.tentLength, setTentConfig]);
   const addStage = () => {
     setTentConfig(prev => ({
       ...prev,
