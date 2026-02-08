@@ -46,7 +46,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     setTentConfig(prev => ({
       ...prev,
       videoWalls: prev.videoWalls.map((wall, i) => 
-        i === idx ? { ...wall, [field]: parseFloat(value) || 0 } : wall
+        i === idx ? { ...wall, [field]: field === 'color' ? value : parseFloat(value) || 0 } : wall
       )
     }));
   };
