@@ -6,9 +6,14 @@ import LayoutInputs from '@/components/layout/LayoutInputs';
 import Canvas2DRenderer from '@/components/layout/Canvas2DRenderer';
 import GearListModal from '@/components/layout/GearListModal';
 import View3DRenderer from '@/components/layout/View3DRenderer';
-import { Plus, Trash2, ZoomIn, ZoomOut } from 'lucide-react';
+import { Plus, Trash2, ZoomIn, ZoomOut, Save, FolderOpen, X, FileDown } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { jsPDF } from 'jspdf';
+import { motion } from 'framer-motion';
 
 export default function OutdoorLayoutPlanner() {
+  const [projectName, setProjectName] = useState('');
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [scale, setScale] = useState(10); // feet per pixel
   const [items, setItems] = useState([]);
@@ -16,8 +21,17 @@ export default function OutdoorLayoutPlanner() {
   const [zoom, setZoom] = useState(1);
   const [showGearList, setShowGearList] = useState(false);
   const [show3D, setShow3D] = useState(false);
+  const [currentProjectId, setCurrentProjectId] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  const queryClient = useQueryClient();
+  const { data: savedProjects = [] } = useQuery({
+    queryKey: ['outdoor-layout-projects'],
+    queryFn: () => base44.entities.OutdoorLayoutProject.list('-updated_date')
+  });
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -113,14 +127,206 @@ export default function OutdoorLayoutPlanner() {
     return { total, details };
   };
 
+  const handleSaveProject = async () => {
+    if (!projectName.trim()) {
+      alert('Please enter a project name');
+      return;
+    }
+
+    try {
+      const canvasImage = canvasRef.current?.toDataURL('image/png') || '';
+      const projectData = {
+        project_name: projectName,
+        scale,
+        items,
+        background_image: backgroundImage || '',
+        canvas_drawing: canvasImage
+      };
+
+      if (currentProjectId) {
+        await base44.entities.OutdoorLayoutProject.update(currentProjectId, projectData);
+      } else {
+        const newProject = await base44.entities.OutdoorLayoutProject.create(projectData);
+        setCurrentProjectId(newProject.id);
+      }
+
+      queryClient.invalidateQueries(['outdoor-layout-projects']);
+      setShowSaveModal(false);
+      alert('Project saved successfully!');
+    } catch (error) {
+      alert('Error saving project: ' + error.message);
+    }
+  };
+
+  const handleLoadProject = (project) => {
+    setProjectName(project.project_name);
+    setScale(project.scale || 10);
+    setItems(project.items || []);
+    setBackgroundImage(project.background_image || null);
+    setCurrentProjectId(project.id);
+    setShowLoadModal(false);
+  };
+
+  const handleExportPDF = () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = margin;
+
+    // Title
+    pdf.setFontSize(22);
+    pdf.setTextColor(59, 130, 246);
+    pdf.text('Outdoor Event Layout Report', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Project Details
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Project Information', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    if (projectName) {
+      pdf.text(`Project: ${projectName}`, margin, yPos);
+      yPos += 6;
+    }
+    pdf.text(`Scale: 1 pixel = ${scale} feet`, margin, yPos);
+    yPos += 6;
+    pdf.text(`Total Items: ${items.length}`, margin, yPos);
+    yPos += 10;
+
+    // Items Summary
+    if (items.length > 0) {
+      pdf.setFontSize(14);
+      pdf.text('Items Summary', margin, yPos);
+      yPos += 8;
+
+      pdf.setFontSize(10);
+      items.forEach(item => {
+        if (yPos > pageHeight - 20) {
+          pdf.addPage();
+          yPos = margin;
+        }
+        const typeLabel = item.type.replace(/_/g, ' ').toUpperCase();
+        pdf.text(`• ${typeLabel}: ${item.quantity} units`, margin + 5, yPos);
+        yPos += 6;
+      });
+      yPos += 5;
+    }
+
+    // Cost Breakdown
+    const priceData = calculatePrice();
+    if (Object.keys(priceData.details).length > 0) {
+      if (yPos > pageHeight - 50) {
+        pdf.addPage();
+        yPos = margin;
+      }
+
+      pdf.setFontSize(14);
+      pdf.text('Cost Breakdown', margin, yPos);
+      yPos += 8;
+
+      pdf.setFontSize(10);
+      Object.entries(priceData.details).forEach(([name, data]) => {
+        if (yPos > pageHeight - 20) {
+          pdf.addPage();
+          yPos = margin;
+        }
+        pdf.text(`${name}: $${data.price.toLocaleString()}`, margin, yPos);
+        yPos += 6;
+      });
+
+      yPos += 5;
+      pdf.setFontSize(12);
+      pdf.setTextColor(59, 130, 246);
+      pdf.text(`Total: $${priceData.total.toLocaleString()}`, margin, yPos);
+      pdf.setTextColor(0, 0, 0);
+    }
+
+    // Canvas Drawing
+    if (canvasRef.current) {
+      pdf.addPage();
+      yPos = margin;
+
+      pdf.setFontSize(14);
+      pdf.text('Layout Drawing', margin, yPos);
+      yPos += 10;
+
+      const canvasImage = canvasRef.current.toDataURL('image/png');
+      const imgWidth = pageWidth - 2 * margin;
+      const imgHeight = (canvasRef.current.height * imgWidth) / canvasRef.current.width;
+
+      pdf.addImage(canvasImage, 'PNG', margin, yPos, imgWidth, imgHeight);
+    }
+
+    // Footer
+    const totalPages = pdf.internal.pages.length - 1;
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(
+        `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+    }
+
+    const fileName = `${projectName || 'outdoor-layout'}-${Date.now()}.pdf`;
+    pdf.save(fileName);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-slate-900 mb-8">Outdoor Event Planner</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-slate-900">Outdoor Event Planner</h1>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setShowLoadModal(true)}
+              variant="outline"
+              className="gap-2"
+            >
+              <FolderOpen className="w-4 h-4" />
+              Load
+            </Button>
+            {items.length > 0 && (
+              <>
+                <Button
+                  onClick={() => setShowSaveModal(true)}
+                  className="gap-2 bg-green-600 hover:bg-green-700"
+                >
+                  <Save className="w-4 h-4" />
+                  Save
+                </Button>
+                <Button
+                  onClick={handleExportPDF}
+                  className="gap-2 bg-blue-600 hover:bg-blue-700"
+                >
+                  <FileDown className="w-4 h-4" />
+                  Export PDF
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
           {/* Controls Panel */}
           <div className="lg:col-span-1 space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+            {/* Project Name */}
+            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
+              <Label className="text-sm font-semibold">Project Name</Label>
+              <Input
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                placeholder="e.g., Summer Festival 2026"
+                className="h-10"
+              />
+            </div>
+
             {/* Image Upload */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label className="text-sm font-semibold">Background Image</Label>
@@ -268,6 +474,95 @@ export default function OutdoorLayoutPlanner() {
           scale={scale}
           onClose={() => setShow3D(false)}
         />
+      )}
+
+      {/* Save Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-6 w-full max-w-md"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-slate-900">
+                {currentProjectId ? 'Update Project' : 'Save Project'}
+              </h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowSaveModal(false)}
+                className="text-slate-400"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <p className="text-slate-600 text-sm mb-4">
+              {projectName ? `Saving: ${projectName}` : 'Please enter a project name'}
+            </p>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setShowSaveModal(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSaveProject}
+                disabled={!projectName}
+                className="flex-1 bg-green-600 hover:bg-green-700"
+              >
+                {currentProjectId ? 'Update' : 'Save'}
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Load Modal */}
+      {showLoadModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-slate-900">Load Project</h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowLoadModal(false)}
+                className="text-slate-400"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            {savedProjects.length === 0 ? (
+              <p className="text-slate-500 text-center py-8">No saved projects yet</p>
+            ) : (
+              <div className="space-y-3">
+                {savedProjects.map((project) => (
+                  <div
+                    key={project.id}
+                    onClick={() => handleLoadProject(project)}
+                    className="border border-slate-200 rounded-lg p-4 hover:bg-slate-50 cursor-pointer transition-colors"
+                  >
+                    <h4 className="font-semibold text-slate-900 mb-2">{project.project_name}</h4>
+                    <div className="text-sm text-slate-600 space-y-1">
+                      <p>Items: {project.items?.length || 0}</p>
+                      <p>Scale: 1px = {project.scale} feet</p>
+                      <p className="text-xs text-slate-500 mt-2">
+                        Saved: {new Date(project.created_date).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        </div>
       )}
     </div>
   );
