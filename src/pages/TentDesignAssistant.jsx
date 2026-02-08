@@ -399,7 +399,7 @@ export default function TentDesignAssistant() {
       const prompt = `Realistic photograph of an event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc} with ${elementsText}. Standard event lighting, practical decor with ${tentConfig.linenColor || 'white'} linens, ${attendees} guests present. Natural daylight mixed with standard uplighting. Actual venue photography style, authentic event setup, professional quality, no stylization.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
-      setGeneratedImage(response.url);
+      setRealisticImage(response.url);
     } catch (error) {
       console.error('Failed to generate realistic image:', error);
     } finally {
