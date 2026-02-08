@@ -32,8 +32,12 @@ const services = [
     description: "Design perfect tent layouts with AI-powered size suggestions and elegant 2D/3D visualizations.",
     href: "TentDesignAssistant",
   },
-
-
+  {
+    icon: Sparkles,
+    title: "AI Room Decor Designer",
+    description: "Create elegant room layouts with professional 2D floor plans and stunning 3D renders.",
+    href: "RoomDesigner",
+  },
   {
     icon: Building2,
     title: "Venue Scouting",
@@ -45,12 +49,6 @@ const services = [
     title: "Video Wall Drawing Generator",
     description: "Generate technical drawings, 3D renders, and equipment lists for LED video wall installations.",
     href: "VideoWallDrawing",
-  },
-  {
-    icon: Sparkles,
-    title: "AI Room Decor Designer",
-    description: "Create elegant room layouts with professional 2D floor plans and stunning 3D renders.",
-    href: "RoomDesigner",
   },
   {
     icon: Grid3x3,
