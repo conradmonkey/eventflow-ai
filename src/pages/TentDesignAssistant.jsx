@@ -506,6 +506,7 @@ export default function TentDesignAssistant() {
         type: 'bar',
         width: bar.width,
         length: bar.length,
+        color: bar.color || '#654321',
         x: tentLength * 0.85,
         y: tentWidth * 0.2 + idx * (bar.length + 5),
         rotation: 0
