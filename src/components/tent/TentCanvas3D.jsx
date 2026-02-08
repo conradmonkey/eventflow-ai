@@ -271,7 +271,7 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       }
     }
 
-    // Tables with elegant styling
+    // Tables with elegant styling - closer to viewer
     const tables = items.filter(item => 
       item.type === 'table8ft' || item.type === 'table6ft' || item.type === 'table5ft'
     );
@@ -284,20 +284,21 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       const tableSize = table.type === 'table5ft' ? 4 : 6;
       
       // Table top
-      drawIsoRect(tableX - tableSize / 2, tableY - tableSize / 2, tableSize, tableSize, 2.5, 
+      drawPerspRect(tableX - tableSize / 2, tableY - tableSize / 2, tableSize, tableSize, 2.5, 
         tentConfig.linenColor || '#ffffff', 
         'rgba(230, 230, 235, 0.95)', 
         'rgba(225, 225, 230, 0.9)');
       
       // Centerpiece glow
-      const tx = centerX + isoX(tableX, tableY) * scale;
-      const ty = centerY + isoY(tableX, tableY, 3) * scale;
-      const cpGrad = ctx.createRadialGradient(tx, ty, 0, tx, ty, 15);
-      cpGrad.addColorStop(0, 'rgba(255, 215, 0, 0.8)');
+      const tx = centerX + perspX(tableX, tableY) * scale;
+      const ty = centerY + perspY(tableX, tableY, 3) * scale;
+      const pScale = perspectiveScale(tableY);
+      const cpGrad = ctx.createRadialGradient(tx, ty, 0, tx, ty, 15 * pScale);
+      cpGrad.addColorStop(0, 'rgba(255, 215, 0, 0.9)');
       cpGrad.addColorStop(1, 'rgba(255, 180, 50, 0)');
       ctx.fillStyle = cpGrad;
       ctx.beginPath();
-      ctx.arc(tx, ty, 15, 0, Math.PI * 2);
+      ctx.arc(tx, ty, 15 * pScale, 0, Math.PI * 2);
       ctx.fill();
     });
 
