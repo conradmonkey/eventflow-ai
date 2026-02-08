@@ -91,12 +91,10 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     });
   };
 
-  const updateTableColor = (tableType, index, color) => {
+  const updateTableColor = (tableType, color) => {
     setTentConfig(prev => ({
       ...prev,
-      [tableType]: prev[tableType].map((table, i) => 
-        i === index ? { ...table, color } : table
-      )
+      [tableType]: prev[tableType].map(table => ({ ...table, color }))
     }));
   };
 
