@@ -33,34 +33,47 @@ export default function TentDesignAssistant() {
   const [items, setItems] = useState([]);
   const canvasRef = useRef(null);
 
+  const tentData = {
+    "20x20": { standing: 60, presentation: 70, seated_5ft: 40, seated_8ft: 50, width: 20, length: 20 },
+    "30x20": { standing: 90, presentation: 110, seated_5ft: 60, seated_8ft: 75, width: 30, length: 20 },
+    "20x40": { standing: 120, presentation: 140, seated_5ft: 80, seated_8ft: 100, width: 20, length: 40 },
+    "30x30": { standing: 150, presentation: 180, seated_5ft: 90, seated_8ft: 110, width: 30, length: 30 },
+    "30x45": { standing: 225, presentation: 270, seated_5ft: 130, seated_8ft: 165, width: 30, length: 45 },
+    "30x60": { standing: 300, presentation: 360, seated_5ft: 180, seated_8ft: 220, width: 30, length: 60 },
+    "40x40": { standing: 250, presentation: 320, seated_5ft: 160, seated_8ft: 200, width: 40, length: 40 },
+    "40x60": { standing: 400, presentation: 480, seated_5ft: 240, seated_8ft: 300, width: 40, length: 60 },
+    "40x80": { standing: 530, presentation: 640, seated_5ft: 320, seated_8ft: 400, width: 40, length: 80 },
+    "40x100": { standing: 660, presentation: 800, seated_5ft: 400, seated_8ft: 500, width: 40, length: 100 },
+    "60x60": { standing: 690, presentation: 720, seated_5ft: 360, seated_8ft: 450, width: 60, length: 60 },
+    "60x80": { standing: 800, presentation: 960, seated_5ft: 480, seated_8ft: 600, width: 60, length: 80 },
+    "60x100": { standing: 1000, presentation: 1200, seated_5ft: 600, seated_8ft: 750, width: 60, length: 100 },
+    "60x120": { standing: 1200, presentation: 1440, seated_5ft: 720, seated_8ft: 900, width: 60, length: 120 }
+  };
+
   const getSuggestedTent = (people, arrangement) => {
-    // This will be enhanced when spreadsheet data is loaded
-    let sqftPerPerson = 10;
+    const capacityKey = arrangement;
     
-    switch(arrangement) {
-      case 'standing':
-        sqftPerPerson = 6;
-        break;
-      case 'seated_8ft':
-        sqftPerPerson = 12;
-        break;
-      case 'seated_6ft':
-        sqftPerPerson = 10;
-        break;
-      case 'seated_5ft':
-        sqftPerPerson = 10;
-        break;
-      case 'presentation':
-        sqftPerPerson = 8;
-        break;
+    // Find the smallest tent that can accommodate the number of people
+    let bestTent = null;
+    let smallestSize = Infinity;
+    
+    Object.entries(tentData).forEach(([tentSize, data]) => {
+      const capacity = data[capacityKey];
+      if (capacity >= people) {
+        const sqft = data.width * data.length;
+        if (sqft < smallestSize) {
+          smallestSize = sqft;
+          bestTent = { width: data.width, length: data.length, type: tentSize };
+        }
+      }
+    });
+
+    // If no tent is large enough, return the largest one
+    if (!bestTent) {
+      bestTent = { width: 60, length: 120, type: "60x120" };
     }
 
-    const totalSqft = people * sqftPerPerson;
-    const side = Math.sqrt(totalSqft);
-    const width = Math.round(side / 10) * 10;
-    const length = Math.round(totalSqft / width / 10) * 10;
-
-    return { width, length, type: `${width}x${length}` };
+    return bestTent;
   };
 
   const handleSeatingChange = (arrangement) => {
