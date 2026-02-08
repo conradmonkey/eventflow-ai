@@ -528,7 +528,7 @@ export default function TentDesignAssistant() {
     if (seatingArrangement === 'presentation') {
       const { rows, perRow } = tentConfig.chairs;
       let chairGroup = [];
-      const chairSpacing = 0.25; // 3 inches between chairs in same row
+      const chairSpacing = 2.5; // 2.5 feet between chairs in same row
       const rowSpacing = 3; // 3 feet between rows
       const startX = (tentLength - (perRow * chairSpacing)) / 2;
       for (let row = 0; row < rows; row++) {
