@@ -763,11 +763,11 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
-                  className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
+                  onClick={() => setShowLoadModal(true)}
+                  className="h-12 rounded-lg border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
                 >
                   <FolderOpen className="w-5 h-5 mr-2" />
-                  Load {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
+                  Load
                 </Button>
               </div>
               {showCanvas && (
