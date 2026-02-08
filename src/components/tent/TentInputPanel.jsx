@@ -23,7 +23,7 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     setTentConfig(prev => ({
       ...prev,
       stages: prev.stages.map((stage, i) => 
-        i === idx ? { ...stage, [field]: parseFloat(value) || 0 } : stage
+        i === idx ? { ...stage, [field]: field === 'color' ? value : parseFloat(value) || 0 } : stage
       )
     }));
   };
