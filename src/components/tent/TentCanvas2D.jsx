@@ -106,6 +106,19 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
           ctx.fillRect(-w / 2, -h / 2, w, h);
           ctx.strokeStyle = '#000000';
           ctx.strokeRect(-w / 2, -h / 2, w, h);
+        } else if (item.type === 'customEquipment') {
+          const w = item.width * scale;
+          const h = item.length * scale;
+          ctx.fillStyle = item.color;
+          ctx.fillRect(-w / 2, -h / 2, w, h);
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(-w / 2, -h / 2, w, h);
+          // Draw label
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 12px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(item.name, 0, 0);
         }
 
         ctx.restore();

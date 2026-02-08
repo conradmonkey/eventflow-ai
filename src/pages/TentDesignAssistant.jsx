@@ -26,7 +26,8 @@ export default function TentDesignAssistant() {
     bars: [],
     cocktailTables: [],
     linenColor: '#FFFFFF',
-    chairs: { rows: 0, perRow: 0 }
+    chairs: { rows: 0, perRow: 0 },
+    customEquipment: []
   });
   const [show3D, setShow3D] = useState(false);
   const [showGearList, setShowGearList] = useState(false);
@@ -209,6 +210,22 @@ export default function TentDesignAssistant() {
         }
       }
       newItems.push(...chairGroup);
+    }
+
+    // Add custom equipment
+    if (tentConfig.customEquipment) {
+      tentConfig.customEquipment.forEach((equipment, idx) => {
+        newItems.push({
+          type: 'customEquipment',
+          name: equipment.name,
+          width: equipment.width,
+          length: equipment.length,
+          color: equipment.color,
+          x: 250 + idx * 50,
+          y: 250,
+          rotation: 0
+        });
+      });
     }
 
     setItems(newItems);
