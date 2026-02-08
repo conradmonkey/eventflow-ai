@@ -144,41 +144,41 @@ export default function TentDesignAssistant() {
   }, {});
 
   const handleExportPDF = async () => {
-    // Generate realistic render if not already generated
+    // Generate AI image if not already generated
     let imageToUse = generatedImage;
     if (!imageToUse) {
       try {
-        setGeneratingImage(true);
-        const itemCounts = {};
-        items.forEach(item => {
-          itemCounts[item.type] = (itemCounts[item.type] || 0) + 1;
-        });
+        let equipmentDetails = [];
+        
+        if (tentConfig.stages?.length > 0) {
+          equipmentDetails.push('a glamorous professional stage with dramatic lighting and LED panels');
+        }
+        if (tentConfig.danceFloors?.length > 0) {
+          equipmentDetails.push('an elegant dance floor with geometric LED patterns and dramatic uplighting');
+        }
+        if (tentConfig.bars?.length > 0) {
+          equipmentDetails.push('a luxurious modern bar with backlit shelves and premium finishes');
+        }
+        if (tentConfig.tables8ft?.length > 0 || tentConfig.tables6ft?.length > 0 || tentConfig.tables5ft?.length > 0) {
+          equipmentDetails.push(`elegant round tables with ${tentConfig.linenColor || 'white'} linens, centerpieces with flowers and candles`);
+        }
+        if (tentConfig.videoWalls?.length > 0) {
+          equipmentDetails.push('large LED video walls displaying elegant graphics');
+        }
+        if (tentConfig.cocktailTables?.length > 0) {
+          equipmentDetails.push('cocktail tables with ambient lighting');
+        }
 
-        let setupDescription = 'A functional event space with';
-        let elements = [];
+        const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent with peaked ceiling and draped fabric' : 'modern frame tent with high ceilings';
+        const equipmentText = equipmentDetails.length > 0 ? equipmentDetails.join(', ') : 'elegant setup';
 
-        if (itemCounts.stage > 0) elements.push(`${itemCounts.stage} stage(s)`);
-        if (itemCounts.danceFloor > 0) elements.push(`${itemCounts.danceFloor} dance floor(s)`);
-        if (itemCounts.bar > 0) elements.push(`${itemCounts.bar} bar(s)`);
-        if (itemCounts.table8ft > 0) elements.push(`${itemCounts.table8ft} 8ft tables`);
-        if (itemCounts.table6ft > 0) elements.push(`${itemCounts.table6ft} 6ft tables`);
-        if (itemCounts.table5ft > 0) elements.push(`${itemCounts.table5ft} round tables`);
-        if (itemCounts.cocktailTable > 0) elements.push(`${itemCounts.cocktailTable} cocktail tables`);
-        if (itemCounts.videoWall > 0) elements.push(`${itemCounts.videoWall} video wall(s)`);
-        if (itemCounts.chair > 0) elements.push(`${itemCounts.chair} chairs`);
-
-        const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent' : 'frame tent';
-        const elementsText = elements.length > 0 ? elements.join(', ') : 'basic setup';
-
-        const prompt = `Realistic photograph of an event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc} with ${elementsText}. Standard event lighting, practical decor with ${tentConfig.linenColor || 'white'} linens, ${attendees} guests present. Natural daylight mixed with standard uplighting. Actual venue photography style, authentic event setup, professional quality, no stylization.`;
+        const prompt = `Ultra-realistic professional photograph of a luxury event inside a ${suggestedTent?.type || '40x60'} ft ${tentTypeDesc}. The event space features ${equipmentText}. Warm ambient lighting with chandeliers, sophisticated atmosphere, ${attendees} guests enjoying the space. Professional event photography, high-end venue styling, cinematic lighting, 8k quality, photorealistic.`;
 
         const response = await base44.integrations.Core.GenerateImage({ prompt });
         imageToUse = response.url;
         setGeneratedImage(imageToUse);
       } catch (error) {
         console.error('Failed to generate image for PDF:', error);
-      } finally {
-        setGeneratingImage(false);
       }
     }
 
