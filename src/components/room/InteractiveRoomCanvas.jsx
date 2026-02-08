@@ -17,21 +17,31 @@ export default function InteractiveRoomCanvas({ formData }) {
     const roomLength = parseFloat(formData.room_length);
     const roomWidth = parseFloat(formData.room_width);
     
-    // Calculate scale to fit room in container with padding
-    const padding = 40;
-    const scaleX = (containerWidth - padding * 2) / roomLength;
-    const scaleY = (containerHeight - padding * 2) / roomWidth;
-    const scale = Math.min(scaleX, scaleY);
+    // Calculate scale for both orientations and pick the one that maximizes room size
+    const padding = 20;
+    const scaleNormal = Math.min(
+      (containerWidth - padding * 2) / roomLength,
+      (containerHeight - padding * 2) / roomWidth
+    );
+    const scaleRotated = Math.min(
+      (containerWidth - padding * 2) / roomWidth,
+      (containerHeight - padding * 2) / roomLength
+    );
     
-    const scaledRoomLength = roomLength * scale;
-    const scaledRoomWidth = roomWidth * scale;
+    // Use rotated orientation if it gives larger scale
+    const isRotated = scaleRotated > scaleNormal;
+    const scale = Math.max(scaleNormal, scaleRotated);
+    
+    const scaledRoomLength = (isRotated ? roomWidth : roomLength) * scale;
+    const scaledRoomWidth = (isRotated ? roomLength : roomWidth) * scale;
     
     setCanvasSize({ 
       width: scaledRoomLength, 
       height: scaledRoomWidth,
       scale,
       offsetX: (containerWidth - scaledRoomLength) / 2,
-      offsetY: (containerHeight - scaledRoomWidth) / 2
+      offsetY: (containerHeight - scaledRoomWidth) / 2,
+      isRotated
     });
 
     // Create items array
