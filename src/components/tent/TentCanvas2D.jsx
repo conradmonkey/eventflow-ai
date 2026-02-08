@@ -100,12 +100,37 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
           ctx.strokeStyle = '#000000';
           ctx.stroke();
         } else if (item.type === 'chair') {
-          const w = 2 * scale;
-          const h = 2 * scale;
-          ctx.fillStyle = selectedGroup === item.groupId ? '#00FF00' : '#8B4513';
-          ctx.fillRect(-w / 2, -h / 2, w, h);
+          const w = 1.5 * scale;
+          const h = 1.5 * scale;
+          const seatColor = selectedGroup === item.groupId ? '#00FF00' : '#8B4513';
+          
+          // Draw chair back
+          ctx.fillStyle = seatColor;
+          ctx.fillRect(-w / 2, -h / 2 - 0.3 * scale, w, 0.4 * scale);
           ctx.strokeStyle = '#000000';
-          ctx.strokeRect(-w / 2, -h / 2, w, h);
+          ctx.strokeRect(-w / 2, -h / 2 - 0.3 * scale, w, 0.4 * scale);
+          
+          // Draw seat
+          ctx.fillStyle = seatColor;
+          ctx.fillRect(-w / 2, -h / 4, w, h / 2);
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(-w / 2, -h / 4, w, h / 2);
+          
+          // Draw legs
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
+          const legX1 = -w / 3;
+          const legX2 = w / 3;
+          const legTop = h / 4;
+          const legBottom = h / 2;
+          ctx.beginPath();
+          ctx.moveTo(legX1, legTop);
+          ctx.lineTo(legX1, legBottom);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(legX2, legTop);
+          ctx.lineTo(legX2, legBottom);
+          ctx.stroke();
         } else if (item.type === 'customEquipment') {
           const w = item.width * scale;
           const h = item.length * scale;
