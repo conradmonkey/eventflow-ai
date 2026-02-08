@@ -42,6 +42,15 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     }));
   };
 
+  const updateVideoWall = (idx, field, value) => {
+    setTentConfig(prev => ({
+      ...prev,
+      videoWalls: prev.videoWalls.map((wall, i) => 
+        i === idx ? { ...wall, [field]: parseFloat(value) || 0 } : wall
+      )
+    }));
+  };
+
   const addDanceFloor = () => {
     setTentConfig(prev => ({
       ...prev,
@@ -53,6 +62,15 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     setTentConfig(prev => ({
       ...prev,
       danceFloors: prev.danceFloors.filter((_, i) => i !== idx)
+    }));
+  };
+
+  const updateDanceFloor = (idx, field, value) => {
+    setTentConfig(prev => ({
+      ...prev,
+      danceFloors: prev.danceFloors.map((floor, i) => 
+        i === idx ? { ...floor, [field]: field === 'color' ? value : parseFloat(value) || 0 } : floor
+      )
     }));
   };
 
@@ -81,6 +99,22 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     setTentConfig(prev => ({
       ...prev,
       bars: [...prev.bars, { width: 8, length: 3 }]
+    }));
+  };
+
+  const removeBar = (idx) => {
+    setTentConfig(prev => ({
+      ...prev,
+      bars: prev.bars.filter((_, i) => i !== idx)
+    }));
+  };
+
+  const updateBar = (idx, field, value) => {
+    setTentConfig(prev => ({
+      ...prev,
+      bars: prev.bars.map((bar, i) => 
+        i === idx ? { ...bar, [field]: parseFloat(value) || 0 } : bar
+      )
     }));
   };
 
@@ -194,8 +228,18 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
               </button>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Input type="number" placeholder="Length" value={wall.length} />
-              <Input type="number" placeholder="Height" value={wall.height} />
+              <Input 
+                type="number" 
+                placeholder="Length" 
+                value={wall.length}
+                onChange={(e) => updateVideoWall(idx, 'length', e.target.value)}
+              />
+              <Input 
+                type="number" 
+                placeholder="Height" 
+                value={wall.height}
+                onChange={(e) => updateVideoWall(idx, 'height', e.target.value)}
+              />
             </div>
           </div>
         ))}
@@ -218,10 +262,24 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
               </button>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Input type="number" placeholder="Width" value={floor.width} />
-              <Input type="number" placeholder="Length" value={floor.length} />
+              <Input 
+                type="number" 
+                placeholder="Width" 
+                value={floor.width}
+                onChange={(e) => updateDanceFloor(idx, 'width', e.target.value)}
+              />
+              <Input 
+                type="number" 
+                placeholder="Length" 
+                value={floor.length}
+                onChange={(e) => updateDanceFloor(idx, 'length', e.target.value)}
+              />
             </div>
-            <Input type="color" value={floor.color} />
+            <Input 
+              type="color" 
+              value={floor.color}
+              onChange={(e) => updateDanceFloor(idx, 'color', e.target.value)}
+            />
           </div>
         ))}
       </div>
@@ -253,6 +311,30 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
             <Plus className="w-4 h-4" />
           </Button>
         </div>
+        {tentConfig.bars.map((bar, idx) => (
+          <div key={idx} className="border rounded p-2 space-y-2">
+            <div className="flex justify-between">
+              <span className="text-xs font-medium">Bar {idx + 1}</span>
+              <button onClick={() => removeBar(idx)} className="text-red-500">
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Input 
+                type="number" 
+                placeholder="Width" 
+                value={bar.width}
+                onChange={(e) => updateBar(idx, 'width', e.target.value)}
+              />
+              <Input 
+                type="number" 
+                placeholder="Length" 
+                value={bar.length}
+                onChange={(e) => updateBar(idx, 'length', e.target.value)}
+              />
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Cocktail Tables */}
