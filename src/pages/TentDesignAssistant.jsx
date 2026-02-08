@@ -411,6 +411,7 @@ export default function TentDesignAssistant() {
         <TentCanvas3D
           tentConfig={tentConfig}
           items={items}
+          attendees={attendees}
           onClose={() => setShow3D(false)}
         />
       )}
