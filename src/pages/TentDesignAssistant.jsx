@@ -528,7 +528,8 @@ export default function TentDesignAssistant() {
     if (seatingArrangement === 'presentation') {
       const { rows, perRow } = tentConfig.chairs;
       let chairGroup = [];
-      const chairSpacing = 2.2;
+      const chairSpacing = 0.25; // 3 inches between chairs in same row
+      const rowSpacing = 3; // 3 feet between rows
       const startX = (tentLength - (perRow * chairSpacing)) / 2;
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < perRow; col++) {
@@ -537,7 +538,7 @@ export default function TentDesignAssistant() {
             width: 2,
             length: 2,
             x: startX + col * chairSpacing,
-            y: tentWidth * 0.5 + row * 3,
+            y: tentWidth * 0.5 + row * rowSpacing,
             rotation: 0,
             groupId: 'chairs'
           });
