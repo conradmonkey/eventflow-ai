@@ -366,37 +366,6 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
         </div>
       </div>
 
-      {/* Presentation Chairs */}
-      {seatingArrangement === 'presentation' && (
-        <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-          <Label className="text-sm font-semibold">Presentation Chairs</Label>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Rows</Label>
-              <Input
-                type="number"
-                value={tentConfig.chairs.rows}
-                onChange={(e) => setTentConfig(prev => ({
-                  ...prev,
-                  chairs: { ...prev.chairs, rows: parseInt(e.target.value) || 0 }
-                }))}
-              />
-            </div>
-            <div>
-              <Label className="text-xs">Per Row</Label>
-              <Input
-                type="number"
-                value={tentConfig.chairs.perRow}
-                onChange={(e) => setTentConfig(prev => ({
-                  ...prev,
-                  chairs: { ...prev.chairs, perRow: parseInt(e.target.value) || 0 }
-                }))}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Linen Color */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
         <Label className="text-sm font-semibold">Linen Color</Label>
