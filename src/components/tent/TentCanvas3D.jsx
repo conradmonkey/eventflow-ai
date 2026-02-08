@@ -163,14 +163,16 @@ export default function TentCanvas3D({ tentConfig, items, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-8">
-      <div className="bg-white rounded-lg w-full h-full max-w-6xl max-h-[90vh] flex flex-col">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h3 className="text-xl font-bold">3D Tent Visualization</h3>
+      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-lg w-full h-full max-w-6xl max-h-[90vh] flex flex-col">
+        <div className="flex justify-between items-center p-4 border-b border-slate-700">
+          <h3 className="text-xl font-bold text-white">Artistic Event Visualization</h3>
           <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-white" />
           </Button>
         </div>
-        <div ref={mountRef} className="flex-1" />
+        <div className="flex-1 p-4">
+          <canvas ref={canvasRef} className="w-full h-full rounded-lg" />
+        </div>
       </div>
     </div>
   );
