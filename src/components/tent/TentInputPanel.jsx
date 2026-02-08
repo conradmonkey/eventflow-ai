@@ -129,29 +129,6 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
 
   return (
     <div className="space-y-4 max-h-[calc(100vh-500px)] overflow-y-auto">
-      {/* Tent Dimensions */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <Label className="text-sm font-semibold">Tent Dimensions</Label>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label className="text-xs">Length (ft)</Label>
-            <Input
-              type="number"
-              value={tentConfig.length}
-              onChange={(e) => setTentConfig(prev => ({ ...prev, length: parseFloat(e.target.value) || 0 }))}
-            />
-          </div>
-          <div>
-            <Label className="text-xs">Width (ft)</Label>
-            <Input
-              type="number"
-              value={tentConfig.width}
-              onChange={(e) => setTentConfig(prev => ({ ...prev, width: parseFloat(e.target.value) || 0 }))}
-            />
-          </div>
-        </div>
-      </div>
-
       {/* Stages */}
       <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
         <div className="flex justify-between items-center">

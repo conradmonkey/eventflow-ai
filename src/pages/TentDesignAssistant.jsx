@@ -348,6 +348,27 @@ export default function TentDesignAssistant() {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div>
+                    <Label className="text-sm font-semibold">Tent Dimensions</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs">Length (ft)</Label>
+                        <Input
+                          type="number"
+                          value={tentConfig.length}
+                          onChange={(e) => setTentConfig(prev => ({ ...prev, length: parseFloat(e.target.value) || 0 }))}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs">Width (ft)</Label>
+                        <Input
+                          type="number"
+                          value={tentConfig.width}
+                          onChange={(e) => setTentConfig(prev => ({ ...prev, width: parseFloat(e.target.value) || 0 }))}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
