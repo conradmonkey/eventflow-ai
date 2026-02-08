@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown, Lock } from "lucide-react";
+import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown, Lock, Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
 import InteractiveRoomCanvas from "@/components/room/InteractiveRoomCanvas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { jsPDF } from "jspdf";
 import { useSubscriptionStatus } from "@/components/useSubscriptionStatus";
 import SubscriptionModal from "@/components/SubscriptionModal";
+import AILayoutSuggestions from "@/components/AILayoutSuggestions";
 
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
@@ -44,6 +45,9 @@ export default function RoomDesigner() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showAISuggestions, setShowAISuggestions] = useState(false);
+  const [aiSuggestions, setAISuggestions] = useState('');
+  const [aiLoading, setAILoading] = useState(false);
   const render3DRef = useRef(null);
 
   const { isSubscribed } = useSubscriptionStatus();
@@ -232,6 +236,41 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
       });
     }
     setShowLoadModal(false);
+  };
+
+  const handleGetAISuggestions = async () => {
+    setAILoading(true);
+    try {
+      const response = await base44.functions.invoke('getAILayoutSuggestions', {
+        designType: 'room',
+        parameters: {
+          roomLength: formData.room_length,
+          roomWidth: formData.room_width,
+          eventType: formData.project_name,
+          attendeeCount: 'To be estimated',
+          stageLength: formData.stage_length,
+          stageWidth: formData.stage_width,
+          danceFloorLength: formData.dance_floor_length,
+          danceFloorWidth: formData.dance_floor_width,
+          barLength: formData.bar_length,
+          barWidth: formData.bar_width,
+          videoWallHeight: formData.video_wall_height,
+          videoWallWidth: formData.video_wall_width,
+          table8ft: formData.table_8ft,
+          table6ft: formData.table_6ft,
+          table5ftRound: formData.table_5ft_round,
+          table6ftRound: formData.table_6ft_round,
+          cocktailTables: formData.cocktail_tables,
+          tableColor: formData.table_color
+        }
+      });
+      setAISuggestions(response.data.suggestions);
+      setShowAISuggestions(true);
+    } catch (error) {
+      alert('Error generating suggestions: ' + error.message);
+    } finally {
+      setAILoading(false);
+    }
   };
 
   const handleExportPDF = () => {
@@ -777,26 +816,40 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 </h2>
                 <InteractiveRoomCanvas formData={formData} />
                 
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-col">
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={handleGenerate3D}
+                      disabled={isLoading3D}
+                      className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
+                    >
+                      {isLoading3D ? (
+                        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                      ) : (
+                        <Box className="w-5 h-5 mr-2" />
+                      )}
+                      Generate 3D Render
+                    </Button>
+                    <Button
+                      onClick={() => setShowGearList(!showGearList)}
+                      variant="outline"
+                      className="flex-1 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                    >
+                      <DollarSign className="w-5 h-5 mr-2" />
+                      {showGearList ? 'Hide' : 'Show'} Gear List
+                    </Button>
+                  </div>
                   <Button
-                    onClick={handleGenerate3D}
-                    disabled={isLoading3D}
-                    className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
+                    onClick={handleGetAISuggestions}
+                    disabled={aiLoading}
+                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold h-12 rounded-lg"
                   >
-                    {isLoading3D ? (
+                    {aiLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin mr-2" />
                     ) : (
-                      <Box className="w-5 h-5 mr-2" />
+                      <Lightbulb className="w-5 h-5 mr-2" />
                     )}
-                    Generate 3D Render
-                  </Button>
-                  <Button
-                    onClick={() => setShowGearList(!showGearList)}
-                    variant="outline"
-                    className="flex-1 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
-                  >
-                    <DollarSign className="w-5 h-5 mr-2" />
-                    {showGearList ? 'Hide' : 'Show'} Gear List
+                    Get AI Suggestions
                   </Button>
                 </div>
               </div>
@@ -1028,6 +1081,14 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
               alert('Error starting checkout: ' + error.message);
             }
           }}
+        />
+
+        {/* AI Suggestions Modal */}
+        <AILayoutSuggestions
+          isOpen={showAISuggestions}
+          onClose={() => setShowAISuggestions(false)}
+          suggestions={aiSuggestions}
+          isLoading={aiLoading}
         />
       </div>
     </div>
