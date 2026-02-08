@@ -11,8 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box } from "lucide-react";
+import { MonitorPlay, Loader2, MapPin, Ruler, Sparkles, FileText, Box, Save, FolderOpen, X, FileDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { jsPDF } from "jspdf";
 
 export default function VideoWallDrawing() {
   const [formData, setFormData] = useState({
@@ -30,6 +32,15 @@ export default function VideoWallDrawing() {
   const [isGeneratingGear, setIsGeneratingGear] = useState(false);
   const [renderUrl, setRenderUrl] = useState(null);
   const [isGeneratingRender, setIsGeneratingRender] = useState(false);
+  const [currentProjectId, setCurrentProjectId] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { data: savedProjects = [] } = useQuery({
+    queryKey: ['video-wall-projects'],
+    queryFn: () => base44.entities.VideoWallProject.list('-updated_date')
+  });
 
   const heightOffGroundInFeet = formData.height_off_ground ? parseFloat(formData.height_off_ground) * 3.28084 : 0;
 
@@ -234,6 +245,194 @@ Style:
     setRenderUrl(null);
   };
 
+  const handleSaveProject = async () => {
+    if (!formData.project_name.trim()) {
+      alert('Please enter a project name');
+      return;
+    }
+
+    try {
+      const projectData = {
+        project_name: formData.project_name,
+        country: formData.country,
+        province: formData.province,
+        city: formData.city,
+        wall_height: formData.wall_height,
+        wall_width: formData.wall_width,
+        height_off_ground: formData.height_off_ground,
+        drawing_url: drawingUrl || "",
+        render_url: renderUrl || ""
+      };
+
+      if (currentProjectId) {
+        await base44.entities.VideoWallProject.update(currentProjectId, projectData);
+      } else {
+        const newProject = await base44.entities.VideoWallProject.create(projectData);
+        setCurrentProjectId(newProject.id);
+      }
+
+      queryClient.invalidateQueries(['video-wall-projects']);
+      setShowSaveModal(false);
+      alert('Project saved successfully!');
+    } catch (error) {
+      alert('Error saving project: ' + error.message);
+    }
+  };
+
+  const handleLoadProject = (project) => {
+    setFormData({
+      project_name: project.project_name,
+      country: project.country,
+      province: project.province,
+      city: project.city,
+      wall_height: project.wall_height,
+      wall_width: project.wall_width,
+      height_off_ground: project.height_off_ground
+    });
+    setDrawingUrl(project.drawing_url || null);
+    setRenderUrl(project.render_url || null);
+    setCurrentProjectId(project.id);
+    setShowLoadModal(false);
+  };
+
+  const handleExportPDF = () => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = margin;
+
+    // Title
+    pdf.setFontSize(22);
+    pdf.setTextColor(34, 197, 94);
+    pdf.text('Video Wall Setup Report', pageWidth / 2, yPos, { align: 'center' });
+    yPos += 15;
+
+    // Project Details
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text('Project Information', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    if (formData.project_name) {
+      pdf.text(`Project: ${formData.project_name}`, margin, yPos);
+      yPos += 6;
+    }
+    pdf.text(`Location: ${formData.city}, ${formData.province}, ${formData.country}`, margin, yPos);
+    yPos += 10;
+
+    // Specifications
+    pdf.setFontSize(14);
+    pdf.text('Specifications', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    pdf.text(`Screen Height: ${formData.wall_height}m`, margin, yPos);
+    yPos += 6;
+    pdf.text(`Screen Width: ${formData.wall_width}m`, margin, yPos);
+    yPos += 6;
+    const heightFt = (parseFloat(formData.height_off_ground) * 3.28084).toFixed(1);
+    pdf.text(`Height Off Ground: ${formData.height_off_ground}m (${heightFt}ft)`, margin, yPos);
+    yPos += 10;
+
+    // Gear List
+    if (gearList) {
+      pdf.setFontSize(14);
+      pdf.text('Equipment & Costs', margin, yPos);
+      yPos += 8;
+
+      pdf.setFontSize(10);
+      pdf.text(`LED Video Panels: ${gearList.videoPanels.count} panels (${gearList.videoPanels.dimensions}) - $${gearList.videoPanels.cost.toLocaleString()}`, margin, yPos);
+      yPos += 6;
+
+      if (gearList.stageDecks) {
+        pdf.text(`Stage Decks: ${gearList.stageDecks.count} decks - $${gearList.stageDecks.cost.toLocaleString()}`, margin, yPos);
+        yPos += 6;
+      }
+
+      if (gearList.box) {
+        pdf.text(`Support Box: $${gearList.box.cost.toLocaleString()}`, margin, yPos);
+        yPos += 6;
+      }
+
+      yPos += 3;
+      pdf.setFontSize(12);
+      pdf.setTextColor(34, 197, 94);
+      pdf.text(`Total Estimated Cost: $${gearList.totalCost.toLocaleString()}`, margin, yPos);
+      pdf.setTextColor(0, 0, 0);
+      yPos += 10;
+    }
+
+    // Drawing
+    if (drawingUrl) {
+      if (yPos > pageHeight - 100) {
+        pdf.addPage();
+        yPos = margin;
+      }
+
+      pdf.setFontSize(14);
+      pdf.text('Setup Drawing', margin, yPos);
+      yPos += 10;
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = drawingUrl;
+
+      img.onload = () => {
+        const imgWidth = pageWidth - 2 * margin;
+        const imgHeight = (img.height * imgWidth) / img.width;
+        const maxHeight = pageHeight - yPos - 30;
+        
+        const finalHeight = Math.min(imgHeight, maxHeight);
+        const finalWidth = (img.width * finalHeight) / img.height;
+
+        pdf.addImage(drawingUrl, 'JPEG', margin, yPos, finalWidth, finalHeight);
+
+        // Add footer and save
+        const totalPages = pdf.internal.pages.length - 1;
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(8);
+          pdf.setTextColor(150, 150, 150);
+          pdf.text(
+            `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+            pageWidth / 2,
+            pageHeight - 10,
+            { align: 'center' }
+          );
+        }
+
+        const fileName = `${formData.project_name || 'video-wall'}-${Date.now()}.pdf`;
+        pdf.save(fileName);
+      };
+
+      img.onerror = () => {
+        savePDFWithoutImage();
+      };
+    } else {
+      savePDFWithoutImage();
+    }
+
+    function savePDFWithoutImage() {
+      const totalPages = pdf.internal.pages.length - 1;
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text(
+          `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${totalPages}`,
+          pageWidth / 2,
+          pageHeight - 10,
+          { align: 'center' }
+        );
+      }
+
+      const fileName = `${formData.project_name || 'video-wall'}-${Date.now()}.pdf`;
+      pdf.save(fileName);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950">
       <div className="max-w-6xl mx-auto px-6 py-12">
@@ -384,30 +583,53 @@ Style:
 
 
 
-            <div className="flex gap-3">
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold h-12 rounded-lg"
-              >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Generate Drawing
-                  </>
-                )}
-              </Button>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold h-12 rounded-lg"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      Generate Drawing
+                    </>
+                  )}
+                </Button>
 
-              <Button
-                type="button"
-                onClick={handleReset}
-                variant="outline"
-                className="bg-transparent border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white h-12 rounded-lg px-6"
-              >
-                Reset
-              </Button>
+                <Button
+                  type="button"
+                  onClick={() => setShowLoadModal(true)}
+                  variant="outline"
+                  className="bg-transparent border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white h-12 rounded-lg px-6"
+                >
+                  <FolderOpen className="w-5 h-5 mr-2" />
+                  Load
+                </Button>
+
+                <Button
+                  type="button"
+                  onClick={handleReset}
+                  variant="outline"
+                  className="bg-transparent border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white h-12 rounded-lg px-6"
+                >
+                  Reset
+                </Button>
+              </div>
+
+              {drawingUrl && (
+                <Button
+                  type="button"
+                  onClick={() => setShowSaveModal(true)}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold h-12 rounded-lg"
+                >
+                  <Save className="w-5 h-5 mr-2" />
+                  Save Project
+                </Button>
+              )}
             </div>
           </form>
         </motion.div>
@@ -427,7 +649,7 @@ Style:
               <img src={drawingUrl} alt="Video wall setup drawing" className="w-full h-auto" />
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-3 mt-6 flex-wrap">
               {!gearList && (
                 <Button
                   onClick={handleGenerateGearList}
@@ -454,6 +676,14 @@ Style:
                   <Box className="w-5 h-5 mr-2" />
                 )}
                 Generate 3D Render
+              </Button>
+
+              <Button
+                onClick={handleExportPDF}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12 rounded-lg"
+              >
+                <FileDown className="w-5 h-5 mr-2" />
+                Export PDF
               </Button>
             </div>
           </motion.div>
@@ -549,6 +779,97 @@ Style:
               </div>
             </div>
           </motion.div>
+        )}
+
+        {/* Save Modal */}
+        {showSaveModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-md"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">
+                  {currentProjectId ? 'Update Project' : 'Save Project'}
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowSaveModal(false)}
+                  className="text-zinc-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="space-y-4">
+                <p className="text-zinc-300 text-sm">
+                  {formData.project_name ? `Saving: ${formData.project_name}` : 'Please enter a project name first'}
+                </p>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setShowSaveModal(false)}
+                    variant="outline"
+                    className="flex-1 border-zinc-700 text-zinc-300"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSaveProject}
+                    disabled={!formData.project_name}
+                    className="flex-1 bg-green-600 hover:bg-green-700"
+                  >
+                    {currentProjectId ? 'Update' : 'Save'}
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Load Modal */}
+        {showLoadModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Load Project</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowLoadModal(false)}
+                  className="text-zinc-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              {savedProjects.length === 0 ? (
+                <p className="text-zinc-400 text-center py-8">No saved projects yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {savedProjects.map((project) => (
+                    <div
+                      key={project.id}
+                      onClick={() => handleLoadProject(project)}
+                      className="border border-zinc-800 rounded-xl p-4 hover:bg-zinc-800/50 cursor-pointer transition-colors"
+                    >
+                      <h4 className="font-semibold text-white mb-2">{project.project_name}</h4>
+                      <div className="text-sm text-zinc-400 space-y-1">
+                        <p>Location: {project.city}, {project.province}, {project.country}</p>
+                        <p>Screen: {project.wall_width}m × {project.wall_height}m</p>
+                        <p className="text-xs text-zinc-500 mt-2">
+                          Saved: {new Date(project.created_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </div>
         )}
       </div>
     </div>
