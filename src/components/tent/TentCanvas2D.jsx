@@ -51,7 +51,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
         } else if (item.type === 'videoWall') {
           const w = item.width * scale;
           const h = 1 * scale;
-          ctx.fillStyle = '#1E90FF';
+          ctx.fillStyle = item.color || '#1E90FF';
           ctx.fillRect(-w / 2, -h / 2, w, h);
           ctx.strokeStyle = '#000000';
           ctx.strokeRect(-w / 2, -h / 2, w, h);
