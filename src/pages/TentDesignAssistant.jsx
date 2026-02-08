@@ -412,6 +412,7 @@ export default function TentDesignAssistant() {
           tentConfig={tentConfig}
           items={items}
           attendees={attendees}
+          tentType={suggestedTent?.type}
           onClose={() => setShow3D(false)}
         />
       )}
