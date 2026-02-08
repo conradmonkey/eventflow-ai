@@ -143,6 +143,44 @@ export default function TentDesignAssistant() {
   }, {});
 
   const handleExportPDF = async () => {
+    // Generate AI image if not already generated
+    let imageToUse = generatedImage;
+    if (!imageToUse) {
+      try {
+        let equipmentDetails = [];
+        
+        if (tentConfig.stages?.length > 0) {
+          equipmentDetails.push('a glamorous professional stage with dramatic lighting and LED panels');
+        }
+        if (tentConfig.danceFloors?.length > 0) {
+          equipmentDetails.push('an elegant dance floor with geometric LED patterns and dramatic uplighting');
+        }
+        if (tentConfig.bars?.length > 0) {
+          equipmentDetails.push('a luxurious modern bar with backlit shelves and premium finishes');
+        }
+        if (tentConfig.tables8ft?.length > 0 || tentConfig.tables6ft?.length > 0 || tentConfig.tables5ft?.length > 0) {
+          equipmentDetails.push(`elegant round tables with ${tentConfig.linenColor || 'white'} linens, centerpieces with flowers and candles`);
+        }
+        if (tentConfig.videoWalls?.length > 0) {
+          equipmentDetails.push('large LED video walls displaying elegant graphics');
+        }
+        if (tentConfig.cocktailTables?.length > 0) {
+          equipmentDetails.push('cocktail tables with ambient lighting');
+        }
+
+        const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent with peaked ceiling and draped fabric' : 'modern frame tent with high ceilings';
+        const equipmentText = equipmentDetails.length > 0 ? equipmentDetails.join(', ') : 'elegant setup';
+
+        const prompt = `Ultra-realistic professional photograph of a luxury event inside a ${suggestedTent?.type || '40x60'} ft ${tentTypeDesc}. The event space features ${equipmentText}. Warm ambient lighting with chandeliers, sophisticated atmosphere, ${attendees} guests enjoying the space. Professional event photography, high-end venue styling, cinematic lighting, 8k quality, photorealistic.`;
+
+        const response = await base44.integrations.Core.GenerateImage({ prompt });
+        imageToUse = response.url;
+        setGeneratedImage(imageToUse);
+      } catch (error) {
+        console.error('Failed to generate image for PDF:', error);
+      }
+    }
+
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -232,7 +270,7 @@ export default function TentDesignAssistant() {
     }
 
     // Add AI Generated Image if available
-    if (generatedImage) {
+    if (imageToUse) {
       pdf.addPage();
       yPos = 20;
 
@@ -243,7 +281,7 @@ export default function TentDesignAssistant() {
       try {
         const img = new Image();
         img.crossOrigin = 'anonymous';
-        img.src = generatedImage;
+        img.src = imageToUse;
         
         await new Promise((resolve, reject) => {
           img.onload = resolve;
@@ -257,7 +295,7 @@ export default function TentDesignAssistant() {
         const finalHeight = Math.min(imgHeight, maxHeight);
         const finalWidth = (img.width * finalHeight) / img.height;
 
-        pdf.addImage(generatedImage, 'JPEG', 20, yPos, finalWidth, finalHeight);
+        pdf.addImage(imageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
       } catch (error) {
         console.error('Error adding generated image to PDF:', error);
         pdf.text('(Generated image could not be loaded)', 20, yPos);
@@ -697,11 +735,11 @@ export default function TentDesignAssistant() {
                   <Button
                     variant="outline"
                     onClick={handleExportPDF}
-                    disabled={items.length === 0}
+                    disabled={items.length === 0 || generatingImage}
                     className="bg-slate-50"
                   >
                     <FileDown className="w-4 h-4 mr-2" />
-                    Export PDF
+                    {generatingImage ? 'Generating...' : 'Export PDF'}
                   </Button>
                 </div>
               </div>
