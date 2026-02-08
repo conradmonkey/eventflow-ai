@@ -266,7 +266,17 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       ctx.fillStyle = beamGradient;
       ctx.fillRect(beamX - 30, horizon * 0.5, 60, h * 0.3);
     }
-  }, [tentConfig, items, attendees]);
+
+    // Display tent type information
+    if (tentType) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.font = 'bold 18px Arial';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${tentType} Tent`, w - 20, 30);
+      ctx.font = '14px Arial';
+      ctx.fillText(`${attendees} Guests`, w - 20, 52);
+    }
+  }, [tentConfig, items, attendees, tentType]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-8">
