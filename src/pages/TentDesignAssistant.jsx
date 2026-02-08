@@ -760,7 +760,7 @@ export default function TentDesignAssistant() {
                   disabled={items.length === 0 || generatingImage}
                 >
                   <Camera className="w-4 h-4 mr-2" />
-                  {generatingImage ? 'Generating...' : 'A.I. Designer'}
+                  {generatingImage ? 'Generating...' : 'A.I. Dreamer'}
                 </Button>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   2D Render
