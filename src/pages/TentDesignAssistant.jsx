@@ -406,6 +406,35 @@ export default function TentDesignAssistant() {
     }
   };
 
+  const handleReset = () => {
+    if (window.confirm('Are you sure you want to reset everything? This will clear all items and start fresh.')) {
+      setProjectName('');
+      setAttendees(100);
+      setSeatingArrangement('');
+      setSuggestedTent(null);
+      setTentStyle('marquee');
+      setTentConfig({
+        length: 0,
+        width: 0,
+        stages: [],
+        videoWalls: [],
+        danceFloors: [],
+        tables8ft: [],
+        tables6ft: [],
+        tables5ft: [],
+        bars: [],
+        cocktailTables: [],
+        linenColor: '#FFFFFF',
+        chairs: { rows: 0, perRow: 0 },
+        customEquipment: []
+      });
+      setItems([]);
+      setGeneratedImage(null);
+      setCurrentProjectId(null);
+      setProjectCategory('Uncategorized');
+    }
+  };
+
   const tentData = {
     "20x20": { standing: 60, presentation: 70, seated_5ft: 40, seated_8ft: 50, width: 20, length: 20 },
     "30x20": { standing: 90, presentation: 110, seated_5ft: 60, seated_8ft: 75, width: 30, length: 20 },
