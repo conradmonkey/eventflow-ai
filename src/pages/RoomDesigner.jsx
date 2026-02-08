@@ -195,10 +195,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const handleLoadProject = (project) => {
-    if (!isSubscribed) {
-      setShowSubscriptionModal(true);
-      return;
-    }
+    // Remove subscription check - allow authenticated users
 
     setFormData({
       project_name: project.project_name,
