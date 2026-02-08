@@ -57,10 +57,10 @@ import RoomDesigner from './pages/RoomDesigner';
 import SoundDesign from './pages/SoundDesign';
 import StageDesign from './pages/StageDesign';
 import TentDesign from './pages/TentDesign';
-import TentDesignAssistant from './pages/TentDesignAssistant';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
+import TentDesignAssistant from './pages/TentDesignAssistant';
 
 
 export const PAGES = {
@@ -74,10 +74,10 @@ export const PAGES = {
     "SoundDesign": SoundDesign,
     "StageDesign": StageDesign,
     "TentDesign": TentDesign,
-    "TentDesignAssistant": TentDesignAssistant,
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
     "VideoWallDrawing": VideoWallDrawing,
+    "TentDesignAssistant": TentDesignAssistant,
 }
 
 export const pagesConfig = {
