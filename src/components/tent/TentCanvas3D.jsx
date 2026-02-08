@@ -57,16 +57,16 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
     const tentL = Math.max(tentConfig.length || 60, 40);
     const tentH = 12;
 
-    // Draw ground/floor plane (luxury flooring)
-    const drawIsoRect = (x, y, width, length, z, color1, color2, color3) => {
-      const x1 = centerX + isoX(x, y) * scale;
-      const y1 = centerY + isoY(x, y, z) * scale;
-      const x2 = centerX + isoX(x + width, y) * scale;
-      const y2 = centerY + isoY(x + width, y, z) * scale;
-      const x3 = centerX + isoX(x + width, y + length) * scale;
-      const y3 = centerY + isoY(x + width, y + length, z) * scale;
-      const x4 = centerX + isoX(x, y + length) * scale;
-      const y4 = centerY + isoY(x, y + length, z) * scale;
+    // Draw perspective rectangle (luxury flooring)
+    const drawPerspRect = (x, y, width, length, z, color1, color2, color3) => {
+      const x1 = centerX + perspX(x, y) * scale;
+      const y1 = centerY + perspY(x, y, z) * scale;
+      const x2 = centerX + perspX(x + width, y) * scale;
+      const y2 = centerY + perspY(x + width, y, z) * scale;
+      const x3 = centerX + perspX(x + width, y + length) * scale;
+      const y3 = centerY + perspY(x + width, y + length, z) * scale;
+      const x4 = centerX + perspX(x, y + length) * scale;
+      const y4 = centerY + perspY(x, y + length, z) * scale;
 
       // Top face
       ctx.fillStyle = color1;
@@ -78,30 +78,34 @@ export default function TentCanvas3D({ tentConfig, items, onClose, attendees, te
       ctx.closePath();
       ctx.fill();
 
-      // Right face
-      if (color2) {
-        const x5 = centerX + isoX(x + width, y + length) * scale;
-        const y5 = centerY + isoY(x + width, y + length, 0) * scale;
+      // Right face (vertical drop)
+      if (color2 && z > 0) {
+        const x2b = centerX + perspX(x + width, y) * scale;
+        const y2b = centerY + perspY(x + width, y, 0) * scale;
+        const x3b = centerX + perspX(x + width, y + length) * scale;
+        const y3b = centerY + perspY(x + width, y + length, 0) * scale;
         ctx.fillStyle = color2;
         ctx.beginPath();
         ctx.moveTo(x2, y2);
         ctx.lineTo(x3, y3);
-        ctx.lineTo(x5, y5);
-        ctx.lineTo(centerX + isoX(x + width, y) * scale, centerY + isoY(x + width, y, 0) * scale);
+        ctx.lineTo(x3b, y3b);
+        ctx.lineTo(x2b, y2b);
         ctx.closePath();
         ctx.fill();
       }
 
-      // Left face
-      if (color3) {
-        const x6 = centerX + isoX(x, y + length) * scale;
-        const y6 = centerY + isoY(x, y + length, 0) * scale;
+      // Left face (vertical drop)
+      if (color3 && z > 0) {
+        const x1b = centerX + perspX(x, y) * scale;
+        const y1b = centerY + perspY(x, y, 0) * scale;
+        const x4b = centerX + perspX(x, y + length) * scale;
+        const y4b = centerY + perspY(x, y + length, 0) * scale;
         ctx.fillStyle = color3;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x4, y4);
-        ctx.lineTo(x6, y6);
-        ctx.lineTo(centerX + isoX(x, y) * scale, centerY + isoY(x, y, 0) * scale);
+        ctx.lineTo(x4b, y4b);
+        ctx.lineTo(x1b, y1b);
         ctx.closePath();
         ctx.fill();
       }
