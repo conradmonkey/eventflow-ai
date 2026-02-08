@@ -92,7 +92,15 @@ export default function Home() {
               <span className="text-sm text-amber-200">AI-Powered Event Planning</span>
             </div>
 
-
+            {isAuthenticated === false && (
+              <div className="mb-6">
+                <div className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 border border-amber-500/30">
+                  <p className="text-2xl font-bold text-amber-400">$20 per year</p>
+                  <p className="text-sm text-amber-200/80">First month free</p>
+                </div>
+              </div>
+            )}
+            
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
               Bring Your Event
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
