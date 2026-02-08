@@ -5,6 +5,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
   const [dragging, setDragging] = useState(null);
   const [dragStart, setDragStart] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current) return;
