@@ -901,11 +901,11 @@ export default function TentDesignAssistant() {
                   <Button
                     variant="outline"
                     onClick={handleExportPDF}
-                    disabled={items.length === 0 || generatingImage}
+                    disabled={items.length === 0 || generatingImage || generatingRealistic}
                     className="bg-slate-50"
                   >
                     <FileDown className="w-4 h-4 mr-2" />
-                    {generatingImage ? 'Generating...' : 'Export PDF'}
+                    {generatingImage || generatingRealistic ? 'Generating...' : 'Export PDF'}
                   </Button>
                 </div>
               </div>
