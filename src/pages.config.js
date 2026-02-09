@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import EventPlannerProfile from './pages/EventPlannerProfile';
+import Home from './pages/Home';
 import LightingDesign from './pages/LightingDesign';
 import OutdoorLayoutPlanner from './pages/OutdoorLayoutPlanner';
 import PermitInvestigation from './pages/PermitInvestigation';
@@ -60,11 +61,11 @@ import TentDesignAssistant from './pages/TentDesignAssistant';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
-import Home from './pages/Home';
 
 
 export const PAGES = {
     "EventPlannerProfile": EventPlannerProfile,
+    "Home": Home,
     "LightingDesign": LightingDesign,
     "OutdoorLayoutPlanner": OutdoorLayoutPlanner,
     "PermitInvestigation": PermitInvestigation,
@@ -77,7 +78,6 @@ export const PAGES = {
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
     "VideoWallDrawing": VideoWallDrawing,
-    "Home": Home,
 }
 
 export const pagesConfig = {
