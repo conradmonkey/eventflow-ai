@@ -121,10 +121,7 @@ export default function OutdoorLayoutPlanner() {
           details['Cooking Sinks'] = { qty: item.quantity, price: 450 * item.quantity };
           break;
         case 'stage':
-          if (item.isSlage) {
-            total += 5000 * item.quantity;
-            details['SL 100 Stages'] = { qty: item.quantity, price: 5000 * item.quantity };
-          } else {
+          if (!item.isSlage) {
             const stageSqFt = (item.width || 10) * (item.length || 10);
             total += 5 * stageSqFt * item.quantity;
             details['Custom Stages'] = { qty: item.quantity, price: 5 * stageSqFt * item.quantity };
