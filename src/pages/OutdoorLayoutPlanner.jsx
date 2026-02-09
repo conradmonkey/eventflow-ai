@@ -121,7 +121,10 @@ export default function OutdoorLayoutPlanner() {
           details['Cooking Sinks'] = { qty: item.quantity, price: 450 * item.quantity };
           break;
         case 'stage':
-          if (!item.isSlage) {
+          if (item.isSlage) {
+            total += 5000 * item.quantity;
+            details['SL 100 Stages'] = { qty: item.quantity, price: 5000 * item.quantity };
+          } else {
             const stageSqFt = (item.width || 10) * (item.length || 10);
             total += 5 * stageSqFt * item.quantity;
             details['Custom Stages'] = { qty: item.quantity, price: 5 * stageSqFt * item.quantity };
@@ -386,22 +389,17 @@ export default function OutdoorLayoutPlanner() {
             {/* Scale Input */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label htmlFor="scale" className="text-sm font-semibold">
-                Scale
+                Scale (feet per pixel)
               </Label>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-slate-700">1m is</span>
-                <Input
-                  id="scale"
-                  type="number"
-                  value={scale}
-                  onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
-                  min="1"
-                  max="999"
-                  step="1"
-                  className="w-20 text-center"
-                />
-                <span className="text-sm text-slate-700">cm on uploaded image</span>
-              </div>
+              <Input
+                id="scale"
+                type="number"
+                value={scale}
+                onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
+                min="0.1"
+                step="0.5"
+              />
+              <p className="text-xs text-slate-500">1 pixel = {scale} feet</p>
             </div>
 
             {/* Item Inputs */}
