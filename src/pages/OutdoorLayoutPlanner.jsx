@@ -18,7 +18,7 @@ import AILayoutSuggestions from '@/components/AILayoutSuggestions';
 export default function OutdoorLayoutPlanner() {
   const [projectName, setProjectName] = useState('');
   const [backgroundImage, setBackgroundImage] = useState(null);
-  const [scale, setScale] = useState(10); // feet per pixel
+  const [scale, setScale] = useState(10); // feet per cm
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [zoom, setZoom] = useState(1);
@@ -228,7 +228,7 @@ export default function OutdoorLayoutPlanner() {
       pdf.text(`Project: ${projectName}`, margin, yPos);
       yPos += 6;
     }
-    pdf.text(`Scale: 1 pixel = ${scale} feet`, margin, yPos);
+    pdf.text(`Scale: 1 cm = ${scale} feet`, margin, yPos);
     yPos += 6;
     pdf.text(`Total Items: ${items.length}`, margin, yPos);
     yPos += 10;
@@ -389,7 +389,7 @@ export default function OutdoorLayoutPlanner() {
             {/* Scale Input */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <Label htmlFor="scale" className="text-sm font-semibold">
-                Scale (feet per pixel)
+                Scale (feet per cm)
               </Label>
               <Input
                 id="scale"
@@ -398,8 +398,9 @@ export default function OutdoorLayoutPlanner() {
                 onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
                 min="0.1"
                 step="0.5"
+                className="w-24"
               />
-              <p className="text-xs text-slate-500">1 pixel = {scale} feet</p>
+              <p className="text-xs text-slate-500">1 cm = {scale} feet</p>
             </div>
 
             {/* Item Inputs */}
@@ -602,7 +603,7 @@ export default function OutdoorLayoutPlanner() {
                     <h4 className="font-semibold text-slate-900 mb-2">{project.project_name}</h4>
                     <div className="text-sm text-slate-600 space-y-1">
                       <p>Items: {project.items?.length || 0}</p>
-                      <p>Scale: 1px = {project.scale} feet</p>
+                      <p>Scale: 1 cm = {project.scale} feet</p>
                       <p className="text-xs text-slate-500 mt-2">
                         Saved: {new Date(project.created_date).toLocaleDateString()}
                       </p>
