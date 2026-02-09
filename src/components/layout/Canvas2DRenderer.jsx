@@ -31,17 +31,17 @@ export default function Canvas2DRenderer({
       const size = ITEM_SIZES[item.type];
       if (!size) return;
 
-      // Convert feet to cm on canvas: (feet / scale) * 37.795 pixels per cm
-      const CM_TO_PIXELS = 37.795276; // 1cm = 37.795 pixels at 96 DPI
-      let width = (size.width / scale) * CM_TO_PIXELS * zoom;
-      let height = (size.height / scale) * CM_TO_PIXELS * zoom;
+      // Convert feet to inches on canvas: (feet / scale) * 96 pixels per inch
+      const INCH_TO_PIXELS = 96; // 1 inch = 96 pixels at 96 DPI
+      let width = (size.width / scale) * INCH_TO_PIXELS * zoom;
+      let height = (size.height / scale) * INCH_TO_PIXELS * zoom;
 
       if (item.type === 'video_wall' && item.width && item.height) {
-        width = (item.width / scale) * CM_TO_PIXELS * zoom;
-        height = (item.height / scale) * CM_TO_PIXELS * zoom;
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.height / scale) * INCH_TO_PIXELS * zoom;
       } else if (item.type === 'stage' && item.width && item.length) {
-        width = (item.width / scale) * CM_TO_PIXELS * zoom;
-        height = (item.length / scale) * CM_TO_PIXELS * zoom;
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       }
 
       ctx.save();
@@ -102,16 +102,16 @@ export default function Canvas2DRenderer({
       const size = ITEM_SIZES[item.type];
       if (!size) continue;
 
-      const CM_TO_PIXELS = 37.795276;
-      let width = (size.width / scale) * CM_TO_PIXELS * zoom;
-      let height = (size.height / scale) * CM_TO_PIXELS * zoom;
+      const INCH_TO_PIXELS = 96;
+      let width = (size.width / scale) * INCH_TO_PIXELS * zoom;
+      let height = (size.height / scale) * INCH_TO_PIXELS * zoom;
 
       if (item.type === 'video_wall' && item.width && item.height) {
-        width = (item.width / scale) * CM_TO_PIXELS * zoom;
-        height = (item.height / scale) * CM_TO_PIXELS * zoom;
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.height / scale) * INCH_TO_PIXELS * zoom;
       } else if (item.type === 'stage' && item.width && item.length) {
-        width = (item.width / scale) * CM_TO_PIXELS * zoom;
-        height = (item.length / scale) * CM_TO_PIXELS * zoom;
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       }
 
       const itemX = item.x * zoom;
