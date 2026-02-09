@@ -14,6 +14,7 @@ import { motion } from 'framer-motion';
 import { useSubscriptionStatus } from '@/components/useSubscriptionStatus';
 import SubscriptionModal from '@/components/SubscriptionModal';
 import AILayoutSuggestions from '@/components/AILayoutSuggestions';
+import GuidedTour from '@/components/layout/GuidedTour';
 
 export default function OutdoorLayoutPlanner() {
   const [projectName, setProjectName] = useState('');
