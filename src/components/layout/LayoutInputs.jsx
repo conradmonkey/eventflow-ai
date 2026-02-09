@@ -15,7 +15,7 @@ export default function LayoutInputs({ onAddItems }) {
     toilet: 0,
     handwash: 0,
     sink: 0,
-    stage: { count: 0, width: 16, length: 20, isSl100: false },
+    stage: { count: 0, width: 16, length: 20 },
   });
 
   const handleTentChange = (tentType, value) => {
@@ -40,7 +40,7 @@ export default function LayoutInputs({ onAddItems }) {
       ...prev,
       stage: {
         ...prev.stage,
-        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : field === 'isSl100' ? value : parseFloat(value) || 0
+        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : parseFloat(value) || 0
       }
     }));
   };
@@ -87,7 +87,6 @@ export default function LayoutInputs({ onAddItems }) {
         type: 'stage',
         width: inputs.stage.width,
         length: inputs.stage.length,
-        isSl100: inputs.stage.isSl100,
         x: Math.random() * 300,
         y: Math.random() * 300,
         rotation: 0
@@ -107,7 +106,7 @@ export default function LayoutInputs({ onAddItems }) {
       toilet: 0,
       handwash: 0,
       sink: 0,
-      stage: { count: 0, width: 16, length: 20, isSl100: false },
+      stage: { count: 0, width: 16, length: 20 },
     });
   };
 
@@ -210,27 +209,16 @@ export default function LayoutInputs({ onAddItems }) {
           <Label htmlFor="stage_count" className="text-xs">Quantity</Label>
           <Input type="number" id="stage_count" value={inputs.stage.count} onChange={(e) => handleStageChange('count', e.target.value)} min="0" className="h-8 text-sm w-16" />
         </div>
-        <label className="flex items-center space-x-2 text-xs">
-          <input
-            type="checkbox"
-            checked={inputs.stage.isSl100}
-            onChange={(e) => handleStageChange('isSl100', e.target.checked)}
-            className="w-3 h-3"
-          />
-          <span>SL 100 Stage Line</span>
-        </label>
-        {!inputs.stage.isSl100 && (
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <Label htmlFor="stage_width" className="text-xs">Width (ft)</Label>
-              <Input type="number" id="stage_width" value={inputs.stage.width} onChange={(e) => handleStageChange('width', e.target.value)} min="1" className="h-8 text-sm w-16" />
-            </div>
-            <div>
-              <Label htmlFor="stage_length" className="text-xs">Length (ft)</Label>
-              <Input type="number" id="stage_length" value={inputs.stage.length} onChange={(e) => handleStageChange('length', e.target.value)} min="1" className="h-8 text-sm w-16" />
-            </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <Label htmlFor="stage_width" className="text-xs">Width (ft)</Label>
+            <Input type="number" id="stage_width" value={inputs.stage.width} onChange={(e) => handleStageChange('width', e.target.value)} min="1" className="h-8 text-sm w-16" />
           </div>
-        )}
+          <div>
+            <Label htmlFor="stage_length" className="text-xs">Length (ft)</Label>
+            <Input type="number" id="stage_length" value={inputs.stage.length} onChange={(e) => handleStageChange('length', e.target.value)} min="1" className="h-8 text-sm w-16" />
+          </div>
+        </div>
       </div>
 
       <Button onClick={handleAddItems} className="w-full h-8 text-sm bg-green-600 hover:bg-green-700">
