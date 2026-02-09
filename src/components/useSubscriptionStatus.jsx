@@ -12,6 +12,14 @@ export function useSubscriptionStatus() {
         const user = await base44.auth.me();
         if (user && user.email) {
           setUserEmail(user.email);
+          
+          // Admin users bypass the paywall
+          if (user.role === 'admin') {
+            setIsSubscribed(true);
+            setIsLoading(false);
+            return;
+          }
+          
           const response = await base44.functions.invoke('checkSubscription', {
             email: user.email
           });
