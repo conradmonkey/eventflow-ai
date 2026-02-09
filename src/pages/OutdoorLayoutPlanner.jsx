@@ -240,17 +240,36 @@ export default function OutdoorLayoutPlanner() {
     // Items Summary
     if (items.length > 0) {
       pdf.setFontSize(14);
-      pdf.text('Items Summary', margin, yPos);
+      pdf.text('Equipment List', margin, yPos);
       yPos += 8;
 
-      pdf.setFontSize(10);
+      // Count items by type
+      const itemCounts = {};
       items.forEach(item => {
+        const key = item.type;
+        if (!itemCounts[key]) {
+          itemCounts[key] = { count: 0, details: item };
+        }
+        itemCounts[key].count += 1;
+      });
+
+      pdf.setFontSize(10);
+      Object.entries(itemCounts).forEach(([type, data]) => {
         if (yPos > pageHeight - 20) {
           pdf.addPage();
           yPos = margin;
         }
-        const typeLabel = item.type.replace(/_/g, ' ').toUpperCase();
-        pdf.text(`• ${typeLabel}: ${item.quantity} units`, margin + 5, yPos);
+        
+        let label = type.replace(/_/g, ' ').toUpperCase();
+        if (type === 'frame_tent' && data.details.width && data.details.length) {
+          label = `FRAME TENT ${data.details.width}x${data.details.length}`;
+        } else if (type === 'stage' && data.details.width && data.details.length) {
+          label = `STAGE ${data.details.width}x${data.details.length}`;
+        } else if (type === 'video_wall' && data.details.width && data.details.height) {
+          label = `VIDEO WALL ${data.details.width}x${data.details.height}`;
+        }
+        
+        pdf.text(`• ${label}: ${data.count} unit${data.count > 1 ? 's' : ''}`, margin + 5, yPos);
         yPos += 6;
       });
       yPos += 5;
