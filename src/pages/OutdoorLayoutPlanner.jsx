@@ -356,131 +356,133 @@ export default function OutdoorLayoutPlanner() {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
           {/* Controls Panel */}
-          <div className="lg:col-span-1 space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
-            {/* Project Name */}
-            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <Label className="text-sm font-semibold">Project Name</Label>
-              <Input
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                placeholder="e.g., Summer Festival 2026"
-                className="h-10"
-              />
-            </div>
-
-            {/* Image Upload */}
-            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <Label className="text-sm font-semibold">Background Image</Label>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                variant="outline"
-                className="w-full"
-              >
-                Upload Image
-              </Button>
-              {backgroundImage && (
-                <p className="text-xs text-green-600">✓ Image uploaded</p>
-              )}
-            </div>
-
-            {/* Scale Input */}
-            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <Label htmlFor="scale" className="text-sm font-semibold">
-                Scale (feet per inch)
-              </Label>
-              <Input
-                id="scale"
-                type="number"
-                value={scale}
-                onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
-                min="0.1"
-                step="0.5"
-                className="w-24"
-              />
-              <p className="text-xs text-slate-500">1 inch = {scale} feet</p>
+          <div className="lg:col-span-1 space-y-3 overflow-y-auto max-h-[calc(100vh-200px)]">
+            {/* Project Name & Image Upload */}
+            <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
+              <div>
+                <Label className="text-xs font-semibold">Project Name</Label>
+                <Input
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  placeholder="e.g., Summer Festival 2026"
+                  className="h-8 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-xs font-semibold">Background Image</Label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  variant="outline"
+                  className="w-full h-8 text-xs mt-1"
+                >
+                  Upload Image
+                </Button>
+                {backgroundImage && (
+                  <p className="text-xs text-green-600 mt-1">✓ Image uploaded</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="scale" className="text-xs font-semibold">
+                  Scale (feet per inch)
+                </Label>
+                <Input
+                  id="scale"
+                  type="number"
+                  value={scale}
+                  onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
+                  min="0.1"
+                  step="0.5"
+                  className="w-24 h-8 text-sm mt-1"
+                />
+                <p className="text-xs text-slate-500 mt-1">1 inch = {scale} feet</p>
+              </div>
             </div>
 
             {/* Item Inputs */}
             <LayoutInputs onAddItems={handleAddItems} />
 
             {/* Render Controls */}
-            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+            <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
+              <Button className="w-full h-8 text-sm bg-blue-600 hover:bg-blue-700">
                 Render
               </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => handleZoom('in')}
-              >
-                <ZoomIn className="w-4 h-4 mr-2" />
-                Zoom In
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => handleZoom('out')}
-              >
-                <ZoomOut className="w-4 h-4 mr-2" />
-                Zoom Out
-              </Button>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  className="h-8 text-xs"
+                  onClick={() => handleZoom('in')}
+                >
+                  <ZoomIn className="w-3 h-3 mr-1" />
+                  Zoom In
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-8 text-xs"
+                  onClick={() => handleZoom('out')}
+                >
+                  <ZoomOut className="w-3 h-3 mr-1" />
+                  Zoom Out
+                </Button>
+              </div>
               {items.length > 0 && (
-                <>
+                <div className="grid grid-cols-2 gap-2">
                   <Button
                     variant="outline"
-                    className="w-full bg-purple-50 hover:bg-purple-100"
+                    className="h-8 text-xs bg-purple-50 hover:bg-purple-100"
                     onClick={() => setShow3D(true)}
                   >
                     3D Render
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full bg-green-50 hover:bg-green-100"
+                    className="h-8 text-xs bg-green-50 hover:bg-green-100"
                     onClick={() => setShowGearList(true)}
                   >
-                    Generate Gear List
+                    Gear List
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full bg-blue-50 hover:bg-blue-100"
-                    onClick={handleGetAISuggestions}
-                    disabled={aiLoading}
-                  >
-                    {aiLoading ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Lightbulb className="w-4 h-4 mr-2" />
-                    )}
-                    AI Suggestions
-                  </Button>
-                </>
+                </div>
+              )}
+              {items.length > 0 && (
+                <Button
+                  variant="outline"
+                  className="w-full h-8 text-xs bg-blue-50 hover:bg-blue-100"
+                  onClick={handleGetAISuggestions}
+                  disabled={aiLoading}
+                >
+                  {aiLoading ? (
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                  ) : (
+                    <Lightbulb className="w-3 h-3 mr-1" />
+                  )}
+                  AI Suggestions
+                </Button>
               )}
             </div>
 
             {/* Items List */}
             {items.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="font-semibold text-sm mb-3">Items ({items.length})</h3>
-                <div className="space-y-2 max-h-96 overflow-y-auto">
+              <div className="bg-white rounded-lg shadow-md p-3">
+                <h3 className="font-semibold text-xs mb-2">Items ({items.length})</h3>
+                <div className="space-y-1 max-h-96 overflow-y-auto">
                   {items.map((item, idx) => (
                     <div
                       key={idx}
-                      className={`p-2 rounded text-xs cursor-pointer transition-colors ${
+                      className={`p-1.5 rounded text-xs cursor-pointer transition-colors ${
                         selectedItem === idx
-                          ? 'bg-blue-100 border-l-4 border-blue-500'
+                          ? 'bg-blue-100 border-l-2 border-blue-500'
                           : 'bg-slate-50 hover:bg-slate-100'
                       }`}
                       onClick={() => setSelectedItem(idx)}
                     >
                       <div className="flex justify-between items-start">
-                        <span className="font-medium">{item.type}</span>
+                        <span className="font-medium text-xs">{item.type}</span>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -491,7 +493,7 @@ export default function OutdoorLayoutPlanner() {
                           <Trash2 className="w-3 h-3" />
                         </button>
                       </div>
-                      <p className="text-slate-600">Qty: {item.quantity}</p>
+                      <p className="text-slate-600 text-xs">Qty: {item.quantity}</p>
                     </div>
                   ))}
                 </div>
