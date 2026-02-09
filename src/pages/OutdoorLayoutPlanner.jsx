@@ -349,6 +349,7 @@ export default function OutdoorLayoutPlanner() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+      <GuidedTour />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-slate-900">Outdoor Event Planner</h1>
@@ -371,6 +372,7 @@ export default function OutdoorLayoutPlanner() {
                   Save {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
                 </Button>
                 <Button
+                  id="export-btn"
                   onClick={handleExportPDF}
                   className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'}`}
                 >
@@ -406,6 +408,7 @@ export default function OutdoorLayoutPlanner() {
                   className="hidden"
                 />
                 <Button
+                  id="upload-btn"
                   onClick={() => fileInputRef.current?.click()}
                   variant="outline"
                   className="w-full h-8 text-xs mt-1"
@@ -416,7 +419,7 @@ export default function OutdoorLayoutPlanner() {
                   <p className="text-xs text-green-600 mt-1">✓ Image uploaded</p>
                 )}
               </div>
-              <div>
+              <div id="scale-input">
                 <Label htmlFor="scale" className="text-xs font-semibold">
                   Scale (feet per inch)
                 </Label>
@@ -434,7 +437,9 @@ export default function OutdoorLayoutPlanner() {
             </div>
 
             {/* Item Inputs */}
-            <LayoutInputs onAddItems={handleAddItems} />
+            <div id="add-items-section">
+              <LayoutInputs onAddItems={handleAddItems} />
+            </div>
 
             {/* Render Controls */}
             <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
