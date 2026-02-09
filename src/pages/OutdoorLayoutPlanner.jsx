@@ -399,7 +399,7 @@ export default function OutdoorLayoutPlanner() {
                   onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
                   min="0.1"
                   step="0.5"
-                  className="w-24 h-8 text-sm mt-1"
+                  className="w-16 h-8 text-sm mt-1"
                 />
                 <p className="text-xs text-slate-500 mt-1">1 inch = {scale} feet</p>
               </div>

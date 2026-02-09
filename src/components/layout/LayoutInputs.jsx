@@ -121,11 +121,11 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Label htmlFor="tent_10x10" className="text-xs">10x10</Label>
-            <Input type="number" id="tent_10x10" value={inputs.tent_10x10} onChange={(e) => handleTentChange('tent_10x10', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="tent_10x10" value={inputs.tent_10x10} onChange={(e) => handleTentChange('tent_10x10', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="tent_10x20" className="text-xs">10x20</Label>
-            <Input type="number" id="tent_10x20" value={inputs.tent_10x20} onChange={(e) => handleTentChange('tent_10x20', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="tent_10x20" value={inputs.tent_10x20} onChange={(e) => handleTentChange('tent_10x20', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
         </div>
       </div>
@@ -135,15 +135,15 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="grid grid-cols-3 gap-2">
           <div>
             <Label htmlFor="tent_15x15" className="text-xs">15x15</Label>
-            <Input type="number" id="tent_15x15" value={inputs.tent_15x15} onChange={(e) => handleTentChange('tent_15x15', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="tent_15x15" value={inputs.tent_15x15} onChange={(e) => handleTentChange('tent_15x15', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="tent_20x20" className="text-xs">20x20</Label>
-            <Input type="number" id="tent_20x20" value={inputs.tent_20x20} onChange={(e) => handleTentChange('tent_20x20', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="tent_20x20" value={inputs.tent_20x20} onChange={(e) => handleTentChange('tent_20x20', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="tent_20x30" className="text-xs">20x30</Label>
-            <Input type="number" id="tent_20x30" value={inputs.tent_20x30} onChange={(e) => handleTentChange('tent_20x30', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="tent_20x30" value={inputs.tent_20x30} onChange={(e) => handleTentChange('tent_20x30', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Label htmlFor="vw_count" className="text-xs">Qty</Label>
-            <Input type="number" id="vw_count" value={inputs.video_wall.count} onChange={(e) => handleVideoWallChange('count', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="vw_count" value={inputs.video_wall.count} onChange={(e) => handleVideoWallChange('count', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="vw_color" className="text-xs">Color</Label>
@@ -175,11 +175,11 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Label htmlFor="vw_width" className="text-xs">Width (ft)</Label>
-            <Input type="number" id="vw_width" value={inputs.video_wall.width} onChange={(e) => handleVideoWallChange('width', e.target.value)} min="1" step="0.5" className="h-8 text-sm" />
+            <Input type="number" id="vw_width" value={inputs.video_wall.width} onChange={(e) => handleVideoWallChange('width', e.target.value)} min="1" step="0.5" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="vw_height" className="text-xs">Height (ft)</Label>
-            <Input type="number" id="vw_height" value={inputs.video_wall.height} onChange={(e) => handleVideoWallChange('height', e.target.value)} min="1" step="0.5" className="h-8 text-sm" />
+            <Input type="number" id="vw_height" value={inputs.video_wall.height} onChange={(e) => handleVideoWallChange('height', e.target.value)} min="1" step="0.5" className="h-8 text-sm w-16" />
           </div>
         </div>
       </div>
@@ -190,15 +190,15 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="grid grid-cols-3 gap-2">
           <div>
             <Label htmlFor="toilet" className="text-xs">Toilets</Label>
-            <Input type="number" id="toilet" value={inputs.toilet} onChange={(e) => handleTentChange('toilet', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="toilet" value={inputs.toilet} onChange={(e) => handleTentChange('toilet', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="handwash" className="text-xs">Handwash</Label>
-            <Input type="number" id="handwash" value={inputs.handwash} onChange={(e) => handleTentChange('handwash', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="handwash" value={inputs.handwash} onChange={(e) => handleTentChange('handwash', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
           <div>
             <Label htmlFor="sink" className="text-xs">Sinks</Label>
-            <Input type="number" id="sink" value={inputs.sink} onChange={(e) => handleTentChange('sink', e.target.value)} min="0" className="h-8 text-sm" />
+            <Input type="number" id="sink" value={inputs.sink} onChange={(e) => handleTentChange('sink', e.target.value)} min="0" className="h-8 text-sm w-16" />
           </div>
         </div>
       </div>
@@ -208,7 +208,7 @@ export default function LayoutInputs({ onAddItems }) {
         <h4 className="text-xs font-semibold text-slate-600">Stages</h4>
         <div>
           <Label htmlFor="stage_count" className="text-xs">Quantity</Label>
-          <Input type="number" id="stage_count" value={inputs.stage.count} onChange={(e) => handleStageChange('count', e.target.value)} min="0" className="h-8 text-sm" />
+          <Input type="number" id="stage_count" value={inputs.stage.count} onChange={(e) => handleStageChange('count', e.target.value)} min="0" className="h-8 text-sm w-16" />
         </div>
         <label className="flex items-center space-x-2 text-xs">
           <input
@@ -223,11 +223,11 @@ export default function LayoutInputs({ onAddItems }) {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <Label htmlFor="stage_width" className="text-xs">Width (ft)</Label>
-              <Input type="number" id="stage_width" value={inputs.stage.width} onChange={(e) => handleStageChange('width', e.target.value)} min="1" className="h-8 text-sm" />
+              <Input type="number" id="stage_width" value={inputs.stage.width} onChange={(e) => handleStageChange('width', e.target.value)} min="1" className="h-8 text-sm w-16" />
             </div>
             <div>
               <Label htmlFor="stage_length" className="text-xs">Length (ft)</Label>
-              <Input type="number" id="stage_length" value={inputs.stage.length} onChange={(e) => handleStageChange('length', e.target.value)} min="1" className="h-8 text-sm" />
+              <Input type="number" id="stage_length" value={inputs.stage.length} onChange={(e) => handleStageChange('length', e.target.value)} min="1" className="h-8 text-sm w-16" />
             </div>
           </div>
         )}
