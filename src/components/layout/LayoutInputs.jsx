@@ -21,6 +21,22 @@ export default function LayoutInputs({ onAddItems }) {
     stage: { count: 0, width: 16, length: 20 },
   });
 
+  const [previousInputs, setPreviousInputs] = useState({
+    tent_8x8: 0,
+    tent_10x10: 0,
+    tent_10x20: 0,
+    tent_15x15: 0,
+    tent_20x20: 0,
+    tent_20x30: 0,
+    tent_30x30: 0,
+    frame_tent: { count: 0, width: 20, length: 30 },
+    video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
+    toilet: 0,
+    handwash: 0,
+    sink: 0,
+    stage: { count: 0, width: 16, length: 20 },
+  });
+
   const handleTentChange = (tentType, value) => {
     setInputs(prev => ({
       ...prev,
@@ -61,8 +77,10 @@ export default function LayoutInputs({ onAddItems }) {
   const handleAddItems = () => {
     const newItems = [];
 
+    // Only add the difference between current and previous inputs
     ['tent_8x8', 'tent_10x10', 'tent_10x20', 'tent_15x15', 'tent_20x20', 'tent_20x30', 'tent_30x30'].forEach(tent => {
-      for (let i = 0; i < inputs[tent]; i++) {
+      const toAdd = Math.max(0, inputs[tent] - previousInputs[tent]);
+      for (let i = 0; i < toAdd; i++) {
         newItems.push({
           type: tent,
           x: Math.random() * 300,
@@ -72,7 +90,8 @@ export default function LayoutInputs({ onAddItems }) {
       }
     });
 
-    for (let i = 0; i < inputs.frame_tent.count; i++) {
+    const frameTentToAdd = Math.max(0, inputs.frame_tent.count - previousInputs.frame_tent.count);
+    for (let i = 0; i < frameTentToAdd; i++) {
       newItems.push({
         type: 'frame_tent',
         width: inputs.frame_tent.width,
@@ -83,7 +102,8 @@ export default function LayoutInputs({ onAddItems }) {
       });
     }
 
-    for (let i = 0; i < inputs.video_wall.count; i++) {
+    const videoWallToAdd = Math.max(0, inputs.video_wall.count - previousInputs.video_wall.count);
+    for (let i = 0; i < videoWallToAdd; i++) {
       newItems.push({
         type: 'video_wall',
         width: inputs.video_wall.width,
@@ -96,7 +116,8 @@ export default function LayoutInputs({ onAddItems }) {
     }
 
     ['toilet', 'handwash', 'sink'].forEach(item => {
-      for (let i = 0; i < inputs[item]; i++) {
+      const toAdd = Math.max(0, inputs[item] - previousInputs[item]);
+      for (let i = 0; i < toAdd; i++) {
         newItems.push({
           type: item,
           x: Math.random() * 300,
@@ -106,7 +127,8 @@ export default function LayoutInputs({ onAddItems }) {
       }
     });
 
-    for (let i = 0; i < inputs.stage.count; i++) {
+    const stageToAdd = Math.max(0, inputs.stage.count - previousInputs.stage.count);
+    for (let i = 0; i < stageToAdd; i++) {
       newItems.push({
         type: 'stage',
         width: inputs.stage.width,
@@ -119,21 +141,21 @@ export default function LayoutInputs({ onAddItems }) {
 
     onAddItems(newItems);
     
-    // Reset inputs
-    setInputs({
-      tent_8x8: 0,
-      tent_10x10: 0,
-      tent_10x20: 0,
-      tent_15x15: 0,
-      tent_20x20: 0,
-      tent_20x30: 0,
-      tent_30x30: 0,
-      frame_tent: { count: 0, width: 20, length: 30 },
-      video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
-      toilet: 0,
-      handwash: 0,
-      sink: 0,
-      stage: { count: 0, width: 16, length: 20 },
+    // Update previous inputs to current values
+    setPreviousInputs({
+      tent_8x8: inputs.tent_8x8,
+      tent_10x10: inputs.tent_10x10,
+      tent_10x20: inputs.tent_10x20,
+      tent_15x15: inputs.tent_15x15,
+      tent_20x20: inputs.tent_20x20,
+      tent_20x30: inputs.tent_20x30,
+      tent_30x30: inputs.tent_30x30,
+      frame_tent: { ...inputs.frame_tent },
+      video_wall: { ...inputs.video_wall },
+      toilet: inputs.toilet,
+      handwash: inputs.handwash,
+      sink: inputs.sink,
+      stage: { ...inputs.stage },
     });
   };
 

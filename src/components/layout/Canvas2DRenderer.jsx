@@ -185,6 +185,22 @@ export default function Canvas2DRenderer({
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Delete' && selectedItem !== null) {
+      const newItems = items.filter((_, i) => i !== selectedItem);
+      onUpdateItem(null, null); // Clear selection
+      // Notify parent to update items
+      if (window.onDeleteSelectedItem) {
+        window.onDeleteSelectedItem(selectedItem);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedItem, items]);
+
   return (
     <div
       ref={containerRef}
@@ -201,7 +217,7 @@ export default function Canvas2DRenderer({
         className="w-full h-full cursor-move block"
       />
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
-        Drag to move • Right-click to rotate
+        Drag to move • Right-click to rotate • Delete key to remove
       </div>
       
       {/* Color Legend */}

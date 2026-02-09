@@ -38,6 +38,15 @@ export default function OutdoorLayoutPlanner() {
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+    window.onDeleteSelectedItem = (index) => {
+      handleDeleteItem(index);
+    };
+    return () => {
+      window.onDeleteSelectedItem = null;
+    };
+  }, [items]);
+
   const { isSubscribed } = useSubscriptionStatus();
 
   const queryClient = useQueryClient();
