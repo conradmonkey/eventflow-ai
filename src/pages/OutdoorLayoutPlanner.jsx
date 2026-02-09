@@ -247,6 +247,32 @@ export default function OutdoorLayoutPlanner() {
     pdf.text(`Total Items: ${items.length}`, margin, yPos);
     yPos += 10;
 
+    // Color Legend
+    pdf.setFontSize(14);
+    pdf.text('Color Legend', margin, yPos);
+    yPos += 8;
+
+    const legend = [
+      { color: [59, 130, 246], label: 'Popup Tents' },
+      { color: [59, 130, 246], label: 'Marquee Tents' },
+      { color: [37, 99, 235], label: 'Frame Tents' },
+      { color: [239, 68, 68], label: 'Stage' },
+      { color: [30, 144, 255], label: 'Video Wall' },
+      { color: [0, 0, 0], label: 'Toilet' },
+      { color: [65, 105, 225], label: 'Handwash' },
+      { color: [32, 178, 170], label: 'Sink' }
+    ];
+
+    pdf.setFontSize(10);
+    legend.forEach(item => {
+      pdf.setFillColor(...item.color);
+      pdf.rect(margin, yPos - 3, 4, 4, 'F');
+      pdf.setTextColor(0, 0, 0);
+      pdf.text(item.label, margin + 6, yPos);
+      yPos += 6;
+    });
+    yPos += 5;
+
     // Items Summary
     if (items.length > 0) {
       pdf.setFontSize(14);
