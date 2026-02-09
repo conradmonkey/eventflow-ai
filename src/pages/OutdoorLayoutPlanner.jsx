@@ -444,9 +444,6 @@ export default function OutdoorLayoutPlanner() {
 
             {/* Render Controls */}
             <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
-              <Button className="w-full h-8 text-sm bg-blue-600 hover:bg-blue-700">
-                Render
-              </Button>
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
