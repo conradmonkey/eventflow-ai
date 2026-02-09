@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const ITEM_SIZES = {
+  tent_8x8: { width: 8, height: 8, color: '#3B82F6', label: '8x8 Tent' },
   tent_10x10: { width: 10, height: 10, color: '#3B82F6', label: '10x10 Tent' },
   tent_10x20: { width: 10, height: 20, color: '#3B82F6', label: '10x20 Tent' },
   tent_15x15: { width: 15, height: 15, color: '#3B82F6', label: '15x15 Tent' },
   tent_20x20: { width: 20, height: 20, color: '#3B82F6', label: '20x20 Tent' },
   tent_20x30: { width: 20, height: 30, color: '#3B82F6', label: '20x30 Tent' },
+  tent_30x30: { width: 30, height: 30, color: '#3B82F6', label: '30x30 Tent' },
+  frame_tent: { width: 20, height: 30, color: '#2563EB', label: 'Frame Tent' },
   video_wall: { width: 10, height: 8, color: '#1E90FF', label: 'Video Wall' },
   toilet: { width: 5, height: 5, color: '#000000', label: 'Toilet' },
   handwash: { width: 3, height: 3, color: '#4169E1', label: 'Handwash' },
@@ -110,6 +113,9 @@ export default function Canvas2DRenderer({
         width = (item.width / scale) * INCH_TO_PIXELS * zoom;
         height = (item.height / scale) * INCH_TO_PIXELS * zoom;
       } else if (item.type === 'stage' && item.width && item.length) {
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.length / scale) * INCH_TO_PIXELS * zoom;
+      } else if (item.type === 'frame_tent' && item.width && item.length) {
         width = (item.width / scale) * INCH_TO_PIXELS * zoom;
         height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       }

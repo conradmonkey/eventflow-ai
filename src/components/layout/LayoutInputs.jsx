@@ -6,11 +6,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 export default function LayoutInputs({ onAddItems }) {
   const [inputs, setInputs] = useState({
+    tent_8x8: 0,
     tent_10x10: 0,
     tent_10x20: 0,
     tent_15x15: 0,
     tent_20x20: 0,
     tent_20x30: 0,
+    tent_30x30: 0,
+    frame_tent: { count: 0, width: 20, length: 30 },
     video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
     toilet: 0,
     handwash: 0,
@@ -45,10 +48,20 @@ export default function LayoutInputs({ onAddItems }) {
     }));
   };
 
+  const handleFrameTentChange = (field, value) => {
+    setInputs(prev => ({
+      ...prev,
+      frame_tent: {
+        ...prev.frame_tent,
+        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : parseFloat(value) || 0
+      }
+    }));
+  };
+
   const handleAddItems = () => {
     const newItems = [];
 
-    ['tent_10x10', 'tent_10x20', 'tent_15x15', 'tent_20x20', 'tent_20x30'].forEach(tent => {
+    ['tent_8x8', 'tent_10x10', 'tent_10x20', 'tent_15x15', 'tent_20x20', 'tent_20x30', 'tent_30x30'].forEach(tent => {
       for (let i = 0; i < inputs[tent]; i++) {
         newItems.push({
           type: tent,
@@ -58,6 +71,17 @@ export default function LayoutInputs({ onAddItems }) {
         });
       }
     });
+
+    for (let i = 0; i < inputs.frame_tent.count; i++) {
+      newItems.push({
+        type: 'frame_tent',
+        width: inputs.frame_tent.width,
+        length: inputs.frame_tent.length,
+        x: Math.random() * 300,
+        y: Math.random() * 300,
+        rotation: 0
+      });
+    }
 
     for (let i = 0; i < inputs.video_wall.count; i++) {
       newItems.push({
@@ -97,11 +121,14 @@ export default function LayoutInputs({ onAddItems }) {
     
     // Reset inputs
     setInputs({
+      tent_8x8: 0,
       tent_10x10: 0,
       tent_10x20: 0,
       tent_15x15: 0,
       tent_20x20: 0,
       tent_20x30: 0,
+      tent_30x30: 0,
+      frame_tent: { count: 0, width: 20, length: 30 },
       video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
       toilet: 0,
       handwash: 0,
@@ -117,7 +144,11 @@ export default function LayoutInputs({ onAddItems }) {
       {/* Tents */}
       <div className="space-y-1.5">
         <h4 className="text-xs font-semibold text-slate-600">Popup Tents</h4>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
+          <div>
+            <Label htmlFor="tent_8x8" className="text-xs">8x8</Label>
+            <Input type="number" id="tent_8x8" value={inputs.tent_8x8} onChange={(e) => handleTentChange('tent_8x8', e.target.value)} min="0" className="h-8 text-sm w-16" />
+          </div>
           <div>
             <Label htmlFor="tent_10x10" className="text-xs">10x10</Label>
             <Input type="number" id="tent_10x10" value={inputs.tent_10x10} onChange={(e) => handleTentChange('tent_10x10', e.target.value)} min="0" className="h-8 text-sm w-16" />
@@ -131,7 +162,7 @@ export default function LayoutInputs({ onAddItems }) {
 
       <div className="space-y-1.5">
         <h4 className="text-xs font-semibold text-slate-600">Marquee Tents</h4>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <div>
             <Label htmlFor="tent_15x15" className="text-xs">15x15</Label>
             <Input type="number" id="tent_15x15" value={inputs.tent_15x15} onChange={(e) => handleTentChange('tent_15x15', e.target.value)} min="0" className="h-8 text-sm w-16" />
@@ -143,6 +174,29 @@ export default function LayoutInputs({ onAddItems }) {
           <div>
             <Label htmlFor="tent_20x30" className="text-xs">20x30</Label>
             <Input type="number" id="tent_20x30" value={inputs.tent_20x30} onChange={(e) => handleTentChange('tent_20x30', e.target.value)} min="0" className="h-8 text-sm w-16" />
+          </div>
+          <div>
+            <Label htmlFor="tent_30x30" className="text-xs">30x30</Label>
+            <Input type="number" id="tent_30x30" value={inputs.tent_30x30} onChange={(e) => handleTentChange('tent_30x30', e.target.value)} min="0" className="h-8 text-sm w-16" />
+          </div>
+        </div>
+      </div>
+
+      {/* Frame Tents */}
+      <div className="space-y-1.5">
+        <h4 className="text-xs font-semibold text-slate-600">Frame Tents</h4>
+        <div>
+          <Label htmlFor="frame_tent_count" className="text-xs">Quantity</Label>
+          <Input type="number" id="frame_tent_count" value={inputs.frame_tent.count} onChange={(e) => handleFrameTentChange('count', e.target.value)} min="0" className="h-8 text-sm w-16" />
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <Label htmlFor="frame_tent_width" className="text-xs">Width (ft)</Label>
+            <Input type="number" id="frame_tent_width" value={inputs.frame_tent.width} onChange={(e) => handleFrameTentChange('width', e.target.value)} min="10" step="10" className="h-8 text-sm w-16" />
+          </div>
+          <div>
+            <Label htmlFor="frame_tent_length" className="text-xs">Length (ft)</Label>
+            <Input type="number" id="frame_tent_length" value={inputs.frame_tent.length} onChange={(e) => handleFrameTentChange('length', e.target.value)} min="10" step="10" className="h-8 text-sm w-16" />
           </div>
         </div>
       </div>
