@@ -217,7 +217,7 @@ export default function LayoutInputs({ onAddItems }) {
             onChange={(e) => handleStageChange('isSl100', e.target.checked)}
             className="w-3 h-3"
           />
-          <span>SL 100 ($5000 ea)</span>
+          <span>SL 100 Stage Line</span>
         </label>
         {!inputs.stage.isSl100 && (
           <div className="grid grid-cols-2 gap-2">
