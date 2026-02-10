@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown, Lock, Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
 import InteractiveRoomCanvas from "@/components/room/InteractiveRoomCanvas";
+import RoomItemInputs from "@/components/room/RoomItemInputs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { jsPDF } from "jspdf";
 import { useSubscriptionStatus } from "@/components/useSubscriptionStatus";
@@ -48,6 +49,8 @@ export default function RoomDesigner() {
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState('');
   const [aiLoading, setAILoading] = useState(false);
+  const [roomItems, setRoomItems] = useState([]);
+  const [tableColor, setTableColor] = useState('white');
   const render3DRef = useRef(null);
 
   const { isSubscribed } = useSubscriptionStatus();
@@ -62,16 +65,38 @@ export default function RoomDesigner() {
     setShowCanvas(true);
   };
 
-  const calculateGearList = () => {
-    const stageArea = parseFloat(formData.stage_length || 0) * parseFloat(formData.stage_width || 0);
-    const danceFloorArea = parseFloat(formData.dance_floor_length || 0) * parseFloat(formData.dance_floor_width || 0);
-    const videoWallAreaM2 = parseFloat(formData.video_wall_height || 0) * parseFloat(formData.video_wall_width || 0);
+  const handleAddItems = (newItems, color) => {
+    const itemsWithIds = newItems.map((item, idx) => ({
+      ...item,
+      id: `${item.type}-${Date.now()}-${idx}`,
+      x: Math.random() * 200 + 50,
+      y: Math.random() * 200 + 50,
+      rotation: 0
+    }));
+    setRoomItems(prev => [...prev, ...itemsWithIds]);
+    setTableColor(color);
+  };
 
-    const table8ftCount = parseInt(formData.table_8ft || 0);
-    const table6ftCount = parseInt(formData.table_6ft || 0);
-    const table5ftRoundCount = parseInt(formData.table_5ft_round || 0);
-    const table6ftRoundCount = parseInt(formData.table_6ft_round || 0);
-    const cocktailTableCount = parseInt(formData.cocktail_tables || 0);
+  const calculateGearList = () => {
+    // Calculate from roomItems instead of formData
+    const stages = roomItems.filter(item => item.type === 'stage');
+    const danceFloors = roomItems.filter(item => item.type === 'dancefloor');
+    const videoWalls = roomItems.filter(item => item.type === 'videowall');
+    const tables8ft = roomItems.filter(item => item.type === 'table_8ft');
+    const tables6ft = roomItems.filter(item => item.type === 'table_6ft');
+    const tables5ftRound = roomItems.filter(item => item.type === 'table_5ft_round');
+    const tables6ftRound = roomItems.filter(item => item.type === 'table_6ft_round');
+    const cocktailTables = roomItems.filter(item => item.type === 'cocktail');
+
+    const stageArea = stages.reduce((sum, s) => sum + (s.length * s.width), 0);
+    const danceFloorArea = danceFloors.reduce((sum, df) => sum + (df.length * df.width), 0);
+    const videoWallAreaM2 = videoWalls.reduce((sum, vw) => sum + (vw.height * vw.width), 0);
+
+    const table8ftCount = tables8ft.length;
+    const table6ftCount = tables6ft.length;
+    const table5ftRoundCount = tables5ftRound.length;
+    const table6ftRoundCount = tables6ftRound.length;
+    const cocktailTableCount = cocktailTables.length;
 
     const totalTables = table8ftCount + table6ftCount + table5ftRoundCount + table6ftRoundCount + cocktailTableCount;
 
@@ -178,7 +203,9 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
     try {
       const projectData = {
         ...formData,
-        render_3d_url: render3D?.url || ""
+        render_3d_url: render3D?.url || "",
+        room_items: roomItems,
+        table_color: tableColor
       };
 
       if (currentProjectId) {
@@ -224,6 +251,8 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
       cocktail_tables: project.cocktail_tables || "0",
       table_color: project.table_color || "white"
     });
+    setRoomItems(project.room_items || []);
+    setTableColor(project.table_color || "white");
     setCurrentProjectId(project.id);
     setShowCanvas(true);
     if (project.render_3d_url) {
@@ -814,7 +843,12 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                   <Layout className="w-6 h-6 text-amber-400" />
                   Interactive Floor Plan
                 </h2>
-                <InteractiveRoomCanvas formData={formData} />
+                <RoomItemInputs onAddItems={handleAddItems} />
+                <InteractiveRoomCanvas 
+                  formData={formData} 
+                  items={roomItems}
+                  onItemsChange={setRoomItems}
+                />
                 
                 <div className="flex gap-3 flex-col">
                   <div className="flex gap-3">
