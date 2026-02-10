@@ -607,196 +607,19 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 </div>
               </div>
 
-              {/* Stage */}
-              <div>
-                <h3 className="text-sm font-semibold text-white mb-3">Stage (feet)</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Length</Label>
-                    <Input
-                      type="number"
-                      value={formData.stage_length}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, stage_length: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Width</Label>
-                    <Input
-                      type="number"
-                      value={formData.stage_width}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, stage_width: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
 
-              {/* Dance Floor */}
-              <div>
-                <h3 className="text-sm font-semibold text-white mb-3">Dance Floor (feet)</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Length</Label>
-                    <Input
-                      type="number"
-                      value={formData.dance_floor_length}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, dance_floor_length: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Width</Label>
-                    <Input
-                      type="number"
-                      value={formData.dance_floor_width}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, dance_floor_width: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
 
-              {/* Bar */}
-              <div>
-                <h3 className="text-sm font-semibold text-white mb-3">Bar (feet)</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Length</Label>
-                    <Input
-                      type="number"
-                      value={formData.bar_length}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, bar_length: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Width</Label>
-                    <Input
-                      type="number"
-                      value={formData.bar_width}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, bar_width: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
+              <Button
+                type="submit"
+                className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg"
+              >
+                <Layout className="w-5 h-5 mr-2" />
+                Generate 2D
+              </Button>
 
-              {/* Video Wall */}
-              <div>
-                <h3 className="text-sm font-semibold text-white mb-3">Video Wall (metres)</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Height</Label>
-                    <Input
-                      type="number"
-                      step="0.5"
-                      value={formData.video_wall_height}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, video_wall_height: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Width</Label>
-                    <Input
-                      type="number"
-                      step="0.5"
-                      value={formData.video_wall_width}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, video_wall_width: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Tables */}
-              <div>
-                <h3 className="text-sm font-semibold text-white mb-3">Tables</h3>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <div>
-                    <Label className="text-zinc-400 text-xs">8ft Banquet</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={formData.table_8ft}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, table_8ft: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">6ft Banquet</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={formData.table_6ft}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, table_6ft: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">5ft Round</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={formData.table_5ft_round}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, table_5ft_round: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">6ft Round</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={formData.table_6ft_round}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, table_6ft_round: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Cocktail Tables</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={formData.cocktail_tables}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, cocktail_tables: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-xs">Drape Color</Label>
-                    <Select
-                      value={formData.table_color}
-                      onValueChange={(value) => setFormData((prev) => ({ ...prev, table_color: value }))}
-                    >
-                      <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-zinc-700">
-                        <SelectItem value="white" className="text-white">White</SelectItem>
-                        <SelectItem value="black" className="text-white">Black</SelectItem>
-                        <SelectItem value="ivory" className="text-white">Ivory</SelectItem>
-                        <SelectItem value="champagne" className="text-white">Champagne</SelectItem>
-                        <SelectItem value="gold" className="text-white">Gold</SelectItem>
-                        <SelectItem value="silver" className="text-white">Silver</SelectItem>
-                        <SelectItem value="navy" className="text-white">Navy</SelectItem>
-                        <SelectItem value="burgundy" className="text-white">Burgundy</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </div>
+              {showCanvas && <RoomItemInputs onAddItems={handleAddItems} />}
 
               <div className="grid grid-cols-2 gap-3">
-                <Button
-                  type="submit"
-                  className="bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 rounded-lg"
-                >
-                  <Layout className="w-5 h-5 mr-2" />
-                  Generate 2D
-                </Button>
                 <Button
                   type="button"
                   variant="outline"
@@ -806,9 +629,8 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                   <FolderOpen className="w-5 h-5 mr-2" />
                   Load {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                 </Button>
-              </div>
               {showCanvas && (
-                <div className="grid grid-cols-2 gap-3">
+                <>
                   <Button
                     type="button"
                     onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
@@ -826,7 +648,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                     <FileDown className="w-5 h-5 mr-2" />
                     Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                   </Button>
-                </div>
+                </>
               )}
             </form>
           </motion.div>
@@ -843,7 +665,6 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                   <Layout className="w-6 h-6 text-amber-400" />
                   Interactive Floor Plan
                 </h2>
-                <RoomItemInputs onAddItems={handleAddItems} />
                 <InteractiveRoomCanvas 
                   formData={formData} 
                   items={roomItems}
