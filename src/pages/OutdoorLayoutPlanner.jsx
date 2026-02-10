@@ -568,6 +568,7 @@ export default function OutdoorLayoutPlanner() {
               selectedItem={selectedItem}
               onUpdateItem={handleUpdateItem}
               canvasRef={canvasRef}
+              showLegend={false}
             />
           </div>
         </div>
