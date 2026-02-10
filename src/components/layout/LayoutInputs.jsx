@@ -14,7 +14,6 @@ export default function LayoutInputs({ onAddItems }) {
     tent_20x30: 0,
     tent_30x30: 0,
     frame_tent: { count: 0, width: 20, length: 30 },
-    video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
     toilet: 0,
     handwash: 0,
     sink: 0,
@@ -30,12 +29,14 @@ export default function LayoutInputs({ onAddItems }) {
     tent_20x30: 0,
     tent_30x30: 0,
     frame_tent: { count: 0, width: 20, length: 30 },
-    video_wall: { count: 0, width: 10, height: 8, color: '#000000' },
     toilet: 0,
     handwash: 0,
     sink: 0,
     stage: { count: 0, width: 16, length: 20 },
   });
+
+  const [videoWalls, setVideoWalls] = useState([]);
+  const [customItems, setCustomItems] = useState([]);
 
   const handleTentChange = (tentType, value) => {
     setInputs(prev => ({
@@ -44,14 +45,38 @@ export default function LayoutInputs({ onAddItems }) {
     }));
   };
 
-  const handleVideoWallChange = (field, value) => {
-    setInputs(prev => ({
-      ...prev,
-      video_wall: {
-        ...prev.video_wall,
-        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : field === 'color' ? value : parseFloat(value) || 0
-      }
-    }));
+  const addVideoWall = () => {
+    setVideoWalls([...videoWalls, { length: 10, height: 8, color: '#000000' }]);
+  };
+
+  const updateVideoWall = (index, field, value) => {
+    const updated = [...videoWalls];
+    updated[index] = {
+      ...updated[index],
+      [field]: field === 'color' ? value : parseFloat(value) || 0
+    };
+    setVideoWalls(updated);
+  };
+
+  const removeVideoWall = (index) => {
+    setVideoWalls(videoWalls.filter((_, i) => i !== index));
+  };
+
+  const addCustomItem = () => {
+    setCustomItems([...customItems, { name: '', width: 10, length: 10, color: '#808080' }]);
+  };
+
+  const updateCustomItem = (index, field, value) => {
+    const updated = [...customItems];
+    updated[index] = {
+      ...updated[index],
+      [field]: field === 'name' || field === 'color' ? value : parseFloat(value) || 0
+    };
+    setCustomItems(updated);
+  };
+
+  const removeCustomItem = (index) => {
+    setCustomItems(customItems.filter((_, i) => i !== index));
   };
 
   const handleStageChange = (field, value) => {
@@ -102,18 +127,35 @@ export default function LayoutInputs({ onAddItems }) {
       });
     }
 
-    const videoWallToAdd = Math.max(0, inputs.video_wall.count - previousInputs.video_wall.count);
-    for (let i = 0; i < videoWallToAdd; i++) {
+    // Add all video walls
+    videoWalls.forEach(vw => {
       newItems.push({
         type: 'video_wall',
-        width: inputs.video_wall.width,
-        height: inputs.video_wall.height,
-        color: inputs.video_wall.color,
+        width: 2, // Fixed width of 2ft
+        length: vw.length,
+        height: vw.height,
+        color: vw.color,
         x: Math.random() * 300,
         y: Math.random() * 300,
         rotation: 0
       });
-    }
+    });
+
+    // Add all custom items
+    customItems.forEach(item => {
+      if (item.name.trim()) {
+        newItems.push({
+          type: 'custom',
+          name: item.name,
+          width: item.width,
+          length: item.length,
+          color: item.color,
+          x: Math.random() * 300,
+          y: Math.random() * 300,
+          rotation: 0
+        });
+      }
+    });
 
     ['toilet', 'handwash', 'sink'].forEach(item => {
       const toAdd = Math.max(0, inputs[item] - previousInputs[item]);
@@ -141,6 +183,10 @@ export default function LayoutInputs({ onAddItems }) {
 
     onAddItems(newItems);
     
+    // Clear video walls and custom items after adding
+    setVideoWalls([]);
+    setCustomItems([]);
+    
     // Update previous inputs to current values
     setPreviousInputs({
       tent_8x8: inputs.tent_8x8,
@@ -151,7 +197,6 @@ export default function LayoutInputs({ onAddItems }) {
       tent_20x30: inputs.tent_20x30,
       tent_30x30: inputs.tent_30x30,
       frame_tent: { ...inputs.frame_tent },
-      video_wall: { ...inputs.video_wall },
       toilet: inputs.toilet,
       handwash: inputs.handwash,
       sink: inputs.sink,
@@ -225,38 +270,77 @@ export default function LayoutInputs({ onAddItems }) {
 
       {/* Video Walls */}
       <div className="space-y-1.5">
-        <h4 className="text-xs font-semibold text-slate-600">Video Walls</h4>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label htmlFor="vw_count" className="text-xs">Qty</Label>
-            <Input type="number" id="vw_count" value={inputs.video_wall.count} onChange={(e) => handleVideoWallChange('count', e.target.value)} min="0" className="h-8 text-sm w-16" />
+        <h4 className="text-xs font-semibold text-slate-600">Video Walls (Width: 2ft)</h4>
+        <Button onClick={addVideoWall} variant="outline" className="w-full h-7 text-xs">
+          + Add Video Wall
+        </Button>
+        {videoWalls.map((vw, idx) => (
+          <div key={idx} className="border border-slate-200 rounded p-2 space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium">Video Wall {idx + 1}</span>
+              <button onClick={() => removeVideoWall(idx)} className="text-red-500 text-xs hover:text-red-700">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs">Length (ft)</Label>
+                <Input type="number" value={vw.length} onChange={(e) => updateVideoWall(idx, 'length', e.target.value)} min="1" step="0.5" className="h-7 text-xs" />
+              </div>
+              <div>
+                <Label className="text-xs">Height (ft)</Label>
+                <Input type="number" value={vw.height} onChange={(e) => updateVideoWall(idx, 'height', e.target.value)} min="1" step="0.5" className="h-7 text-xs" />
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">Color</Label>
+              <Select value={vw.color} onValueChange={(value) => updateVideoWall(idx, 'color', value)}>
+                <SelectTrigger className="text-xs h-7">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="#000000">Black</SelectItem>
+                  <SelectItem value="#1a1a1a">Gray</SelectItem>
+                  <SelectItem value="#FF0000">Red</SelectItem>
+                  <SelectItem value="#00FF00">Green</SelectItem>
+                  <SelectItem value="#0000FF">Blue</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <div>
-            <Label htmlFor="vw_color" className="text-xs">Color</Label>
-            <Select value={inputs.video_wall.color} onValueChange={(value) => handleVideoWallChange('color', value)}>
-              <SelectTrigger id="vw_color" className="text-xs h-8">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="#000000">Black</SelectItem>
-                <SelectItem value="#1a1a1a">Gray</SelectItem>
-                <SelectItem value="#FF0000">Red</SelectItem>
-                <SelectItem value="#00FF00">Green</SelectItem>
-                <SelectItem value="#0000FF">Blue</SelectItem>
-              </SelectContent>
-            </Select>
+        ))}
+      </div>
+
+      {/* Custom Items */}
+      <div className="space-y-1.5">
+        <h4 className="text-xs font-semibold text-slate-600">Custom Items</h4>
+        <Button onClick={addCustomItem} variant="outline" className="w-full h-7 text-xs">
+          + Add Custom Item
+        </Button>
+        {customItems.map((item, idx) => (
+          <div key={idx} className="border border-slate-200 rounded p-2 space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium">Custom Item {idx + 1}</span>
+              <button onClick={() => removeCustomItem(idx)} className="text-red-500 text-xs hover:text-red-700">Remove</button>
+            </div>
+            <div>
+              <Label className="text-xs">Name</Label>
+              <Input type="text" value={item.name} onChange={(e) => updateCustomItem(idx, 'name', e.target.value)} placeholder="Item name" className="h-7 text-xs" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs">Width (ft)</Label>
+                <Input type="number" value={item.width} onChange={(e) => updateCustomItem(idx, 'width', e.target.value)} min="1" step="0.5" className="h-7 text-xs" />
+              </div>
+              <div>
+                <Label className="text-xs">Length (ft)</Label>
+                <Input type="number" value={item.length} onChange={(e) => updateCustomItem(idx, 'length', e.target.value)} min="1" step="0.5" className="h-7 text-xs" />
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">Color</Label>
+              <input type="color" value={item.color} onChange={(e) => updateCustomItem(idx, 'color', e.target.value)} className="h-7 w-full rounded border" />
+            </div>
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label htmlFor="vw_width" className="text-xs">Width (ft)</Label>
-            <Input type="number" id="vw_width" value={inputs.video_wall.width} onChange={(e) => handleVideoWallChange('width', e.target.value)} min="1" step="0.5" className="h-8 text-sm w-16" />
-          </div>
-          <div>
-            <Label htmlFor="vw_height" className="text-xs">Height (ft)</Label>
-            <Input type="number" id="vw_height" value={inputs.video_wall.height} onChange={(e) => handleVideoWallChange('height', e.target.value)} min="1" step="0.5" className="h-8 text-sm w-16" />
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Facilities */}
