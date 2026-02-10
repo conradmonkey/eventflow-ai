@@ -9,11 +9,12 @@ const ITEM_SIZES = {
   tent_20x30: { width: 20, height: 30, color: '#3B82F6', label: '20x30 Tent' },
   tent_30x30: { width: 30, height: 30, color: '#3B82F6', label: '30x30 Tent' },
   frame_tent: { width: 20, height: 30, color: '#2563EB', label: 'Frame Tent' },
-  video_wall: { width: 10, height: 8, color: '#1E90FF', label: 'Video Wall' },
+  video_wall: { width: 2, height: 8, color: '#1E90FF', label: 'Video Wall' },
   toilet: { width: 5, height: 5, color: '#000000', label: 'Toilet' },
   handwash: { width: 3, height: 3, color: '#4169E1', label: 'Handwash' },
   sink: { width: 4, height: 4, color: '#20B2AA', label: 'Sink' },
   stage: { width: 16, height: 20, color: '#EF4444', label: 'Stage' },
+  custom: { width: 10, height: 10, color: '#808080', label: 'Custom' },
 };
 
 export default function Canvas2DRenderer({
@@ -54,7 +55,7 @@ export default function Canvas2DRenderer({
       ctx.translate(item.x * zoom, item.y * zoom);
       ctx.rotate((item.rotation * Math.PI) / 180);
 
-      ctx.fillStyle = selectedItem === idx ? '#00FF00' : (item.type === 'video_wall' && item.color ? item.color : size.color);
+      ctx.fillStyle = selectedItem === idx ? '#00FF00' : (item.color || size.color);
       ctx.fillRect(-width / 2, -height / 2, width, height);
 
       ctx.strokeStyle = selectedItem === idx ? '#00AA00' : '#000000';
@@ -65,7 +66,8 @@ export default function Canvas2DRenderer({
       ctx.font = 'bold 10px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(size.label, 0, 0);
+      const label = item.type === 'custom' ? item.name : size.label;
+      ctx.fillText(label, 0, 0);
 
       ctx.restore();
     });
@@ -112,13 +114,16 @@ export default function Canvas2DRenderer({
       let width = (size.width / scale) * INCH_TO_PIXELS * zoom;
       let height = (size.height / scale) * INCH_TO_PIXELS * zoom;
 
-      if (item.type === 'video_wall' && item.width && item.height) {
-        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
-        height = (item.height / scale) * INCH_TO_PIXELS * zoom;
+      if (item.type === 'video_wall') {
+        width = (item.width || 2) / scale * INCH_TO_PIXELS * zoom;
+        height = ((item.length || item.height || size.height) / scale) * INCH_TO_PIXELS * zoom;
       } else if (item.type === 'stage' && item.width && item.length) {
         width = (item.width / scale) * INCH_TO_PIXELS * zoom;
         height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       } else if (item.type === 'frame_tent' && item.width && item.length) {
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.length / scale) * INCH_TO_PIXELS * zoom;
+      } else if (item.type === 'custom' && item.width && item.length) {
         width = (item.width / scale) * INCH_TO_PIXELS * zoom;
         height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       }
