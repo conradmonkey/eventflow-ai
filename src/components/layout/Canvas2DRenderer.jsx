@@ -40,9 +40,9 @@ export default function Canvas2DRenderer({
       let width = (size.width / scale) * INCH_TO_PIXELS * zoom;
       let height = (size.height / scale) * INCH_TO_PIXELS * zoom;
 
-      if (item.type === 'video_wall' && item.width && item.height) {
-        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
-        height = (item.height / scale) * INCH_TO_PIXELS * zoom;
+      if (item.type === 'video_wall') {
+        width = (item.width || 2) / scale * INCH_TO_PIXELS * zoom;
+        height = ((item.length || item.height || size.height) / scale) * INCH_TO_PIXELS * zoom;
       } else if (item.type === 'stage' && item.width && item.length) {
         width = (item.width / scale) * INCH_TO_PIXELS * zoom;
         height = (item.length / scale) * INCH_TO_PIXELS * zoom;
