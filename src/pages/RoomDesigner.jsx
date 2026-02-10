@@ -165,8 +165,10 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   const gearList = showGearList ? calculateGearList() : null;
 
   const handleSaveProject = async () => {
-    // Remove subscription check - allow authenticated users
-
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
 
     if (!formData.project_name.trim()) {
       alert('Please enter a project name');
@@ -195,7 +197,10 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const handleLoadProject = (project) => {
-    // Remove subscription check - allow authenticated users
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
 
     setFormData({
       project_name: project.project_name,
@@ -269,7 +274,10 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
   };
 
   const handleExportPDF = () => {
-    // Remove subscription check - allow authenticated users
+    if (!isSubscribed) {
+      setShowSubscriptionModal(true);
+      return;
+    }
 
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
@@ -763,31 +771,31 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setShowLoadModal(true)}
-                  className="h-12 rounded-lg border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
+                  className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
                 >
                   <FolderOpen className="w-5 h-5 mr-2" />
-                  Load
+                  Load {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                 </Button>
               </div>
               {showCanvas && (
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     type="button"
-                    onClick={() => setShowSaveModal(true)}
-                    className="h-12 rounded-lg bg-green-600 hover:bg-green-700"
+                    onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
+                    className={`h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
                   >
                     <Save className="w-5 h-5 mr-2" />
-                    Save
+                    Save {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                   </Button>
                   <Button
                     type="button"
                     onClick={handleExportPDF}
                     variant="outline"
-                    className="h-12 rounded-lg border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                    className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
                   >
                     <FileDown className="w-5 h-5 mr-2" />
-                    Export PDF
+                    Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                   </Button>
                 </div>
               )}
