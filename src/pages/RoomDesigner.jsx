@@ -375,45 +375,45 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
 
       pdf.setFontSize(10);
       if (gearList.costs.tables_8ft.count > 0) {
-        pdf.text(`8ft Tables: $${gearList.costs.tables_8ft.total}`, margin, yPos);
+        pdf.text(`8ft Tables: ${gearList.costs.tables_8ft.total}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.tables_6ft.count > 0) {
-        pdf.text(`6ft Tables: $${gearList.costs.tables_6ft.total}`, margin, yPos);
+        pdf.text(`6ft Tables: ${gearList.costs.tables_6ft.total}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.tables_5ft_round.count > 0) {
-        pdf.text(`5ft Round Tables: $${gearList.costs.tables_5ft_round.total}`, margin, yPos);
+        pdf.text(`5ft Round Tables: ${gearList.costs.tables_5ft_round.total}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.tables_6ft_round.count > 0) {
-        pdf.text(`6ft Round Tables: $${gearList.costs.tables_6ft_round.total}`, margin, yPos);
+        pdf.text(`6ft Round Tables: ${gearList.costs.tables_6ft_round.total}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.cocktail_tables.count > 0) {
-        pdf.text(`Cocktail Tables: $${gearList.costs.cocktail_tables.total}`, margin, yPos);
+        pdf.text(`Cocktail Tables: ${gearList.costs.cocktail_tables.total}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.table_linen.count > 0) {
-        pdf.text(`Table Linens: $${gearList.costs.table_linen.total}`, margin, yPos);
+        pdf.text(`Table Linens: ${gearList.costs.table_linen.total}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.stage.area > 0) {
-        pdf.text(`Stage: $${gearList.costs.stage.total.toFixed(0)}`, margin, yPos);
+        pdf.text(`Stage: ${gearList.costs.stage.total.toFixed(0)}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.dance_floor.area > 0) {
-        pdf.text(`Dance Floor: $${gearList.costs.dance_floor.total.toFixed(0)}`, margin, yPos);
+        pdf.text(`Dance Floor: ${gearList.costs.dance_floor.total.toFixed(0)}`, margin, yPos);
         yPos += 6;
       }
       if (gearList.costs.video_wall.area > 0) {
-        pdf.text(`Video Wall: $${gearList.costs.video_wall.total.toFixed(0)}`, margin, yPos);
+        pdf.text(`Video Wall: ${gearList.costs.video_wall.total.toFixed(0)}`, margin, yPos);
         yPos += 6;
       }
 
       yPos += 5;
       pdf.setFontSize(12);
-      pdf.text(`Total: $${gearList.totalCost.toFixed(0)}`, margin, yPos);
+      pdf.text(`Total: ${gearList.totalCost.toFixed(0)}`, margin, yPos);
       yPos += 10;
     }
 
@@ -764,61 +764,61 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
               {gearList.costs.tables_8ft.count > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">8ft Banquet Tables ({gearList.costs.tables_8ft.count})</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.tables_8ft.total}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_8ft.total}</span>
                 </div>
               )}
               {gearList.costs.tables_6ft.count > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">6ft Banquet Tables ({gearList.costs.tables_6ft.count})</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.tables_6ft.total}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_6ft.total}</span>
                 </div>
               )}
               {gearList.costs.tables_5ft_round.count > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">5ft Round Tables ({gearList.costs.tables_5ft_round.count})</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.tables_5ft_round.total}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_5ft_round.total}</span>
                 </div>
               )}
               {gearList.costs.tables_6ft_round.count > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">6ft Round Tables ({gearList.costs.tables_6ft_round.count})</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.tables_6ft_round.total}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_6ft_round.total}</span>
                 </div>
               )}
               {gearList.costs.cocktail_tables.count > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">Cocktail Tables ({gearList.costs.cocktail_tables.count})</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.cocktail_tables.total}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.cocktail_tables.total}</span>
                 </div>
               )}
               {gearList.costs.table_linen.count > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">Table Linens ({gearList.costs.table_linen.count})</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.table_linen.total}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.table_linen.total}</span>
                 </div>
               )}
               {gearList.costs.stage.area > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">Stage ({gearList.costs.stage.area.toFixed(0)} sq ft)</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.stage.total.toFixed(0)}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.stage.total.toFixed(0)}</span>
                 </div>
               )}
               {gearList.costs.dance_floor.area > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">Dance Floor ({gearList.costs.dance_floor.area.toFixed(0)} sq ft)</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.dance_floor.total.toFixed(0)}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.dance_floor.total.toFixed(0)}</span>
                 </div>
               )}
               {gearList.costs.video_wall.area > 0 && (
                 <div className="flex justify-between items-center py-3 border-b border-zinc-800">
                   <span className="text-zinc-300">Video Wall ({gearList.costs.video_wall.area.toFixed(1)} m²)</span>
-                  <span className="text-amber-400 font-semibold">${gearList.costs.video_wall.total.toFixed(0)}</span>
+                  <span className="text-amber-400 font-semibold">{gearList.costs.video_wall.total.toFixed(0)}</span>
                 </div>
               )}
               
               <div className="flex justify-between items-center pt-6 mt-4 border-t-2 border-amber-500/30">
                 <span className="text-xl font-bold text-white">Total</span>
-                <span className="text-2xl font-bold text-amber-400">${gearList.totalCost.toFixed(0)}</span>
+                <span className="text-2xl font-bold text-amber-400">{gearList.totalCost.toFixed(0)}</span>
               </div>
               
               <p className="text-zinc-500 text-sm mt-4 italic">
