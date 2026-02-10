@@ -25,6 +25,7 @@ export default function Canvas2DRenderer({
   selectedItem,
   onUpdateItem,
   canvasRef,
+  showLegend = true,
 }) {
   const containerRef = useRef(null);
   const [draggingItem, setDraggingItem] = useState(null);
@@ -226,7 +227,8 @@ export default function Canvas2DRenderer({
       </div>
       
       {/* Color Legend */}
-      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-slate-200">
+      {showLegend && (
+        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-slate-200">
         <h4 className="font-semibold text-xs mb-2 text-slate-700">Legend</h4>
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
@@ -263,6 +265,7 @@ export default function Canvas2DRenderer({
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
