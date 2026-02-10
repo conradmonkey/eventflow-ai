@@ -629,8 +629,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                   <FolderOpen className="w-5 h-5 mr-2" />
                   Load {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                 </Button>
-              {showCanvas && (
-                <>
+                {showCanvas && (
                   <Button
                     type="button"
                     onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
@@ -639,16 +638,17 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                     <Save className="w-5 h-5 mr-2" />
                     Save {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                   </Button>
-                  <Button
-                    type="button"
-                    onClick={handleExportPDF}
-                    variant="outline"
-                    className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
-                  >
-                    <FileDown className="w-5 h-5 mr-2" />
-                    Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
-                  </Button>
-                </>
+                )}
+              </div>
+              {showCanvas && (
+                <Button
+                  type="button"
+                  onClick={handleExportPDF}
+                  className={`w-full h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-amber-500 hover:bg-amber-600 text-black'}`}
+                >
+                  <FileDown className="w-5 h-5 mr-2" />
+                  Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
+                </Button>
               )}
             </form>
           </motion.div>
