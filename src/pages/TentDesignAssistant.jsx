@@ -454,37 +454,259 @@ export default function TentDesignAssistant() {
   const handleGenerateRealistic = async () => {
     setGeneratingRealistic(true);
     try {
-      // Build prompt based on actual canvas items with average decor
+      // Count items
       const itemCounts = {};
       items.forEach(item => {
         itemCounts[item.type] = (itemCounts[item.type] || 0) + 1;
       });
 
-      let setupDescription = 'A functional event space with';
+      // Event type specific descriptions
+      const eventDescriptions = {
+        wedding: {
+          mood: 'romantic and elegant',
+          lighting: 'soft warm uplighting with fairy lights and chandeliers',
+          colors: 'blush pink, ivory, and gold accents',
+          decor: 'floral centerpieces, draped fabric ceiling, romantic ambiance'
+        },
+        conference: {
+          mood: 'professional and modern',
+          lighting: 'bright clean lighting with spotlights on presentation areas',
+          colors: 'corporate blues, whites, and chrome accents',
+          decor: 'branded signage, modern furniture, tech-forward setup'
+        },
+        presentation: {
+          mood: 'focused and professional',
+          lighting: 'bright even lighting with stage spotlights',
+          colors: 'neutral tones with accent colors for branding',
+          decor: 'clean lines, projection screens, organized seating'
+        },
+        celebration_of_life: {
+          mood: 'warm and dignified',
+          lighting: 'soft ambient lighting with gentle uplights',
+          colors: 'warm earth tones, creams, and soft blues',
+          decor: 'tasteful memorial displays, comfortable seating, photo arrangements'
+        },
+        workshop: {
+          mood: 'collaborative and energizing',
+          lighting: 'bright functional lighting with task lights',
+          colors: 'vibrant accent colors with white base',
+          decor: 'workstation setups, writable surfaces, creative displays'
+        },
+        film_screening: {
+          mood: 'theatrical and immersive',
+          lighting: 'dim ambient with accent lighting, focused on screen',
+          colors: 'deep reds, blacks, theatrical gold accents',
+          decor: 'cinema-style seating, large screen, sound system visible'
+        }
+      };
+
+      const eventSpec = eventDescriptions[eventType] || {
+        mood: 'elegant and professional',
+        lighting: 'warm ambient lighting with uplights',
+        colors: 'coordinated color palette',
+        decor: 'sophisticated event setup'
+      };
+
+      // Build equipment list
       let elements = [];
+      if (itemCounts.stage > 0) elements.push(`professional stage with ${eventSpec.lighting}`);
+      if (itemCounts.danceFloor > 0) elements.push('polished dance floor with ambient lighting');
+      if (itemCounts.bar > 0) elements.push('elegant bar with backlit displays');
+      if (itemCounts.table8ft > 0 || itemCounts.table6ft > 0 || itemCounts.table5ft > 0) {
+        elements.push(`tables with ${tentConfig.linenColor || 'white'} linens and ${eventSpec.decor.split(',')[0]}`);
+      }
+      if (itemCounts.videoWall > 0) elements.push('LED video walls displaying event graphics');
+      if (itemCounts.cocktailTable > 0) elements.push('cocktail tables with ambient lighting');
+      if (itemCounts.chair > 0) elements.push('organized seating arrangements');
+      if (itemCounts.customEquipment > 0) elements.push('custom event equipment');
 
-      if (itemCounts.stage > 0) elements.push(`${itemCounts.stage} stage(s)`);
-      if (itemCounts.danceFloor > 0) elements.push(`${itemCounts.danceFloor} dance floor(s)`);
-      if (itemCounts.bar > 0) elements.push(`${itemCounts.bar} bar(s)`);
-      if (itemCounts.table8ft > 0) elements.push(`${itemCounts.table8ft} 8ft tables`);
-      if (itemCounts.table6ft > 0) elements.push(`${itemCounts.table6ft} 6ft tables`);
-      if (itemCounts.table5ft > 0) elements.push(`${itemCounts.table5ft} round tables`);
-      if (itemCounts.cocktailTable > 0) elements.push(`${itemCounts.cocktailTable} cocktail tables`);
-      if (itemCounts.videoWall > 0) elements.push(`${itemCounts.videoWall} video wall(s)`);
-      if (itemCounts.chair > 0) elements.push(`${itemCounts.chair} chairs`);
+      const tentTypeDesc = tentStyle === 'marquee' ? 'elegant marquee tent with draped ceiling' : 'modern frame tent with high ceilings';
+      const elementsText = elements.length > 0 ? elements.join(', ') : 'elegant setup';
 
-      const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent' : 'frame tent';
-      const elementsText = elements.length > 0 ? elements.join(', ') : 'basic setup';
-
-      const prompt = `Realistic photograph of an event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc} with ${elementsText}. Standard event lighting, practical decor with ${tentConfig.linenColor || 'white'} linens, ${attendees} guests present. Natural daylight mixed with standard uplighting. Actual venue photography style, authentic event setup, professional quality, no stylization.`;
+      const prompt = `Professional event photography of a ${eventType ? eventType.replace('_', ' ') : 'elegant'} event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${eventSpec.mood.charAt(0).toUpperCase() + eventSpec.mood.slice(1)} atmosphere with ${elementsText}. Color scheme: ${eventSpec.colors}. Lighting: ${eventSpec.lighting}. ${attendees} guests enjoying the space. High-quality event photography, realistic styling, professional setup, authentic venue aesthetic.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
-      setRealisticImage(response.url);
+      
+      // Generate comprehensive suggestions
+      const suggestions = {
+        lighting: generateLightingSuggestions(itemCounts, tentConfig, eventType, attendees),
+        sound: generateSoundSuggestions(itemCounts, tentConfig, eventType, attendees),
+        colorTone: generateColorSuggestions(eventType, tentConfig),
+        layout: generateLayoutSuggestions(itemCounts, tentConfig, seatingArrangement, attendees)
+      };
+
+      setRealisticImage({ 
+        url: response.url,
+        suggestions 
+      });
     } catch (error) {
       console.error('Failed to generate realistic image:', error);
+      alert('Failed to generate design. Please try again.');
     } finally {
       setGeneratingRealistic(false);
     }
+  };
+
+  const generateLightingSuggestions = (itemCounts, config, eventType, attendees) => {
+    const perimeter = (config.width * 2 + config.length * 2);
+    const uplights = Math.ceil(perimeter / 10);
+    const area = config.width * config.length;
+    
+    let suggestions = [];
+    suggestions.push(`${uplights} LED uplights (spaced 10ft apart around perimeter)`);
+    
+    if (itemCounts.stage > 0) {
+      suggestions.push('Stage wash: 4-6 LED PAR lights with color mixing');
+      suggestions.push('2 spotlights for key presenters/performers');
+    }
+    
+    if (itemCounts.danceFloor > 0) {
+      suggestions.push('Dance floor: 4 moving head lights + LED strips');
+    }
+    
+    if (itemCounts.table8ft > 0 || itemCounts.table6ft > 0 || itemCounts.table5ft > 0) {
+      const tableCount = (itemCounts.table8ft || 0) + (itemCounts.table6ft || 0) + (itemCounts.table5ft || 0);
+      suggestions.push(`${tableCount} pin spots for table centerpieces`);
+    }
+    
+    if (area > 1200) {
+      suggestions.push('2-3 chandeliers or overhead statement fixtures');
+    }
+    
+    if (eventType === 'wedding') {
+      suggestions.push('Romantic: Fairy light canopy, warm white (2700K)');
+    } else if (eventType === 'conference') {
+      suggestions.push('Professional: Bright white (4000K), even coverage');
+    } else if (eventType === 'film_screening') {
+      suggestions.push('Theatrical: Dim ambient, focus on screen area');
+    }
+    
+    return suggestions.join('\n• ');
+  };
+
+  const generateSoundSuggestions = (itemCounts, config, eventType, attendees) => {
+    const area = config.width * config.length;
+    let suggestions = [];
+    
+    if (area < 800) {
+      suggestions.push('2x 12" powered speakers (1000W each)');
+    } else if (area < 1500) {
+      suggestions.push('2x 15" powered speakers (1500W each)');
+    } else {
+      suggestions.push('4x 15" powered speakers with subwoofers');
+    }
+    
+    if (itemCounts.stage > 0) {
+      suggestions.push('4-channel mixer for stage inputs');
+      suggestions.push('2 wireless handheld microphones');
+      suggestions.push('1 wireless lavalier microphone');
+    } else {
+      suggestions.push('2-channel mixer');
+      suggestions.push('1 wireless microphone for announcements');
+    }
+    
+    if (eventType === 'workshop' || eventType === 'presentation') {
+      suggestions.push('Powered monitor speakers for presenters');
+    }
+    
+    if (eventType === 'wedding' || itemCounts.danceFloor > 0) {
+      suggestions.push('DJ controller and music playback system');
+    }
+    
+    suggestions.push(`Coverage: ${Math.ceil(attendees / 100)} speaker zones`);
+    
+    return suggestions.join('\n• ');
+  };
+
+  const generateColorSuggestions = (eventType, config) => {
+    const colorSchemes = {
+      wedding: {
+        primary: 'Blush pink, ivory, champagne gold',
+        accents: 'Soft rose gold metallics, white florals',
+        linen: 'Ivory or blush table linens',
+        lighting: 'Warm white (2700K) with soft amber uplights'
+      },
+      conference: {
+        primary: 'Navy blue, crisp white, silver',
+        accents: 'Corporate brand colors, modern chrome',
+        linen: 'White or navy table linens',
+        lighting: 'Cool white (4000K) with blue accent lighting'
+      },
+      presentation: {
+        primary: 'Neutral grays, white, accent brand color',
+        accents: 'Minimalist modern tones',
+        linen: 'Clean white or light gray',
+        lighting: 'Neutral white (3500K) even coverage'
+      },
+      celebration_of_life: {
+        primary: 'Warm earth tones, cream, soft blue',
+        accents: 'Natural wood, gentle florals',
+        linen: 'Cream or soft beige',
+        lighting: 'Warm white (2700K) gentle and respectful'
+      },
+      workshop: {
+        primary: 'Vibrant accent colors, white base',
+        accents: 'Energizing oranges, greens, blues',
+        linen: 'White or bright solid colors',
+        lighting: 'Bright white (4000K) energizing'
+      },
+      film_screening: {
+        primary: 'Deep red, black, gold accents',
+        accents: 'Theatrical draping, velvet textures',
+        linen: 'Black or deep red',
+        lighting: 'Dim amber (2200K) with focused spots'
+      }
+    };
+    
+    const scheme = colorSchemes[eventType] || {
+      primary: 'Elegant neutrals with coordinated accents',
+      accents: 'Sophisticated metallics',
+      linen: config.linenColor || 'White',
+      lighting: 'Warm white (3000K) ambient'
+    };
+    
+    return `Primary Colors: ${scheme.primary}\nAccent Elements: ${scheme.accents}\nTable Linens: ${scheme.linen}\nLighting Temperature: ${scheme.lighting}`;
+  };
+
+  const generateLayoutSuggestions = (itemCounts, config, arrangement, attendees) => {
+    let suggestions = [];
+    
+    if (itemCounts.stage > 0) {
+      suggestions.push('Position stage at focal point (typically short end of tent)');
+      suggestions.push('Ensure 15-20ft clearance in front of stage for sightlines');
+    }
+    
+    if (itemCounts.danceFloor > 0) {
+      suggestions.push('Place dance floor in center or near stage for energy flow');
+    }
+    
+    if (itemCounts.bar > 0) {
+      suggestions.push('Position bar(s) at tent perimeter for easy access and flow');
+      suggestions.push('Maintain 4ft clearance around bar for service');
+    }
+    
+    if (arrangement === 'seated_5ft' || arrangement === 'seated_8ft' || arrangement === 'seated_6ft') {
+      suggestions.push('Space tables 5-6ft apart for comfortable guest circulation');
+      suggestions.push('Create clear aisles (min 4ft wide) to all exits and amenities');
+    }
+    
+    if (arrangement === 'presentation') {
+      suggestions.push('Arrange chairs in rows with center aisle (min 4ft)');
+      suggestions.push('First row 8-10ft from stage for optimal viewing');
+    }
+    
+    if (itemCounts.cocktailTable > 0) {
+      suggestions.push('Scatter cocktail tables near entrance and bar areas');
+    }
+    
+    suggestions.push(`Traffic flow: Ensure ${Math.ceil(attendees / 100)} main circulation paths`);
+    suggestions.push('Emergency exits: Keep 2+ clear paths to tent exits at all times');
+    
+    if (config.width * config.length > 1500) {
+      suggestions.push('Consider zoning: Create distinct areas for dining, socializing, and entertainment');
+    }
+    
+    return suggestions.join('\n• ');
   };
 
   const handleReset = () => {
@@ -974,17 +1196,47 @@ export default function TentDesignAssistant() {
         />
       )}
 
-      {generatedImage && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-8">
-          <div className="bg-white rounded-lg w-full h-full max-w-6xl max-h-[90vh] flex flex-col">
+      {realisticImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-7xl max-h-[95vh] flex flex-col">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-xl font-bold text-slate-900">Generated Event Visualization</h3>
-              <Button variant="ghost" size="icon" onClick={() => setGeneratedImage(null)}>
+              <h3 className="text-xl font-bold text-slate-900">A.I. Event Design</h3>
+              <Button variant="ghost" size="icon" onClick={() => setRealisticImage(null)}>
                 <X className="w-5 h-5" />
               </Button>
             </div>
-            <div className="flex-1 p-4 overflow-auto flex items-center justify-center">
-              <img src={generatedImage} alt="Generated event" className="max-w-full max-h-full rounded-lg shadow-lg" />
+            <div className="flex-1 overflow-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+                {/* Image */}
+                <div className="flex items-center justify-center bg-slate-100 rounded-lg">
+                  <img src={realisticImage.url || realisticImage} alt="A.I. generated design" className="max-w-full max-h-[70vh] rounded-lg shadow-lg" />
+                </div>
+                
+                {/* Suggestions */}
+                {realisticImage.suggestions && (
+                  <div className="space-y-4 overflow-y-auto max-h-[70vh]">
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                      <h4 className="font-bold text-amber-900 mb-2">💡 Lighting Suggestions</h4>
+                      <p className="text-sm text-amber-800 whitespace-pre-line">• {realisticImage.suggestions.lighting}</p>
+                    </div>
+                    
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <h4 className="font-bold text-blue-900 mb-2">🔊 Sound Suggestions</h4>
+                      <p className="text-sm text-blue-800 whitespace-pre-line">• {realisticImage.suggestions.sound}</p>
+                    </div>
+                    
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                      <h4 className="font-bold text-purple-900 mb-2">🎨 Color & Tone</h4>
+                      <p className="text-sm text-purple-800 whitespace-pre-line">{realisticImage.suggestions.colorTone}</p>
+                    </div>
+                    
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <h4 className="font-bold text-green-900 mb-2">📐 Layout Suggestions</h4>
+                      <p className="text-sm text-green-800 whitespace-pre-line">• {realisticImage.suggestions.layout}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
