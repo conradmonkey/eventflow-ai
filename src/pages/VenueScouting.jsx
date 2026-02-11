@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "./utils";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -218,6 +220,14 @@ Format the response in a clear, organized manner with venue names as headers. Us
           <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
             AI-powered venue discovery tailored to your event requirements
           </p>
+          <div className="mt-6">
+            <Link 
+              to={createPageUrl('Home')}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg text-white transition-colors"
+            >
+              Other AI Designers
+            </Link>
+          </div>
         </motion.div>
 
         {/* Form */}

@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from './utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -378,8 +380,19 @@ export default function OutdoorLayoutPlanner() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
       <GuidedTour />
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900">Outdoor Event Planner</h1>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Outdoor Event Planner</h1>
+          <div className="mt-4">
+            <Link 
+              to={createPageUrl('Home')}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-slate-700 transition-colors shadow-sm"
+            >
+              Other AI Designers
+            </Link>
+          </div>
+        </div>
+        <div className="flex justify-end items-center mb-8">
+          <div className="flex gap-2">
           <div className="flex gap-2">
             <Button
               onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
@@ -409,6 +422,7 @@ export default function OutdoorLayoutPlanner() {
               </>
             )}
           </div>
+        </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
