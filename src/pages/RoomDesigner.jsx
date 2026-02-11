@@ -811,18 +811,28 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   onItemsChange={setRoomItems}
                 />
                 
-                <Button
-                  onClick={handleGenerate3D}
-                  disabled={isLoading3D}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
-                >
-                  {isLoading3D ? (
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  ) : (
-                    <Box className="w-5 h-5 mr-2" />
-                  )}
-                  A.I. Design
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={handleGenerate3D}
+                    disabled={isLoading3D}
+                    className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
+                  >
+                    {isLoading3D ? (
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    ) : (
+                      <Box className="w-5 h-5 mr-2" />
+                    )}
+                    A.I. Design
+                  </Button>
+                  <Button
+                    onClick={() => setShowGearList(!showGearList)}
+                    variant="outline"
+                    className="flex-1 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                  >
+                    <Layout className="w-5 h-5 mr-2" />
+                    {showGearList ? 'Hide' : 'Show'} Gear List
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-zinc-500">
@@ -866,80 +876,70 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
         )}
 
         {/* Gear List */}
-        {gearList && (
+        {showGearList && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-8 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
           >
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              <DollarSign className="w-6 h-6 text-amber-400" />
-              Equipment List & Costs
+              <Layout className="w-6 h-6 text-amber-400" />
+              Equipment List
             </h2>
-            <div className="space-y-4">
-              {gearList.costs.tables_8ft.count > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">8ft Banquet Tables ({gearList.costs.tables_8ft.count})</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_8ft.total}</span>
+            <div className="space-y-3">
+              {roomItems.filter(i => i.type === 'stage').map((item, idx) => (
+                <div key={idx} className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">Stage - {item.width}' x {item.length}'</span>
+                </div>
+              ))}
+              {roomItems.filter(i => i.type === 'dancefloor').map((item, idx) => (
+                <div key={idx} className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">Dance Floor - {item.width}' x {item.length}'</span>
+                </div>
+              ))}
+              {roomItems.filter(i => i.type === 'bar').map((item, idx) => (
+                <div key={idx} className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">Bar - {item.width}' x {item.length}'</span>
+                </div>
+              ))}
+              {roomItems.filter(i => i.type === 'videowall').map((item, idx) => (
+                <div key={idx} className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">Video Wall - {item.width}m x {item.height}m</span>
+                </div>
+              ))}
+              {roomItems.filter(i => i.type === 'table_8ft').length > 0 && (
+                <div className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">8ft Banquet Tables ({roomItems.filter(i => i.type === 'table_8ft').length})</span>
                 </div>
               )}
-              {gearList.costs.tables_6ft.count > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">6ft Banquet Tables ({gearList.costs.tables_6ft.count})</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_6ft.total}</span>
+              {roomItems.filter(i => i.type === 'table_6ft').length > 0 && (
+                <div className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">6ft Banquet Tables ({roomItems.filter(i => i.type === 'table_6ft').length})</span>
                 </div>
               )}
-              {gearList.costs.tables_5ft_round.count > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">5ft Round Tables ({gearList.costs.tables_5ft_round.count})</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_5ft_round.total}</span>
+              {roomItems.filter(i => i.type === 'table_5ft_round').length > 0 && (
+                <div className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">5ft Round Tables ({roomItems.filter(i => i.type === 'table_5ft_round').length})</span>
                 </div>
               )}
-              {gearList.costs.tables_6ft_round.count > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">6ft Round Tables ({gearList.costs.tables_6ft_round.count})</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.tables_6ft_round.total}</span>
+              {roomItems.filter(i => i.type === 'table_6ft_round').length > 0 && (
+                <div className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">6ft Round Tables ({roomItems.filter(i => i.type === 'table_6ft_round').length})</span>
                 </div>
               )}
-              {gearList.costs.cocktail_tables.count > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">Cocktail Tables ({gearList.costs.cocktail_tables.count})</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.cocktail_tables.total}</span>
+              {roomItems.filter(i => i.type === 'cocktail').length > 0 && (
+                <div className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">Cocktail Tables ({roomItems.filter(i => i.type === 'cocktail').length})</span>
                 </div>
               )}
-              {gearList.costs.table_linen.count > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">Table Linens ({gearList.costs.table_linen.count})</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.table_linen.total}</span>
+              {roomItems.filter(i => i.type === 'custom').map((item, idx) => (
+                <div key={idx} className="py-2 border-b border-zinc-800">
+                  <span className="text-zinc-300">{item.name} - {item.width}' x {item.length}'</span>
                 </div>
+              ))}
+              {roomItems.length === 0 && (
+                <p className="text-zinc-400 text-center py-4">No equipment added yet</p>
               )}
-              {gearList.costs.stage.area > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">Stage ({gearList.costs.stage.area.toFixed(0)} sq ft)</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.stage.total.toFixed(0)}</span>
-                </div>
-              )}
-              {gearList.costs.dance_floor.area > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">Dance Floor ({gearList.costs.dance_floor.area.toFixed(0)} sq ft)</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.dance_floor.total.toFixed(0)}</span>
-                </div>
-              )}
-              {gearList.costs.video_wall.area > 0 && (
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-zinc-300">Video Wall ({gearList.costs.video_wall.area.toFixed(1)} m²)</span>
-                  <span className="text-amber-400 font-semibold">{gearList.costs.video_wall.total.toFixed(0)}</span>
-                </div>
-              )}
-              
-              <div className="flex justify-between items-center pt-6 mt-4 border-t-2 border-amber-500/30">
-                <span className="text-xl font-bold text-white">Total</span>
-                <span className="text-2xl font-bold text-amber-400">{gearList.totalCost.toFixed(0)}</span>
-              </div>
-              
-              <p className="text-zinc-500 text-sm mt-4 italic">
-                *Prices do not include labour or pickup and delivery
-              </p>
             </div>
           </motion.div>
         )}
