@@ -751,47 +751,34 @@ export default function TentDesignAssistant() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Panel - Inputs */}
           <div className="col-span-1 lg:col-span-1 space-y-6">
-            {/* Project Name, Event Type & Category */}
-            <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-              <div>
-                <Label className="text-sm font-semibold">Project Name</Label>
-                <Input
-                  type="text"
-                  placeholder="Enter project name"
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label className="text-sm font-semibold">Event Type</Label>
-                <Select value={eventType} onValueChange={setEventType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select event type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="wedding">Wedding</SelectItem>
-                    <SelectItem value="conference">Conference</SelectItem>
-                    <SelectItem value="presentation">Presentation</SelectItem>
-                    <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
-                    <SelectItem value="workshop">Workshop</SelectItem>
-                    <SelectItem value="film_screening">Film Screening</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label className="text-sm font-semibold">Category</Label>
-                <Input
-                  type="text"
-                  placeholder="Enter category (e.g., Wedding, Corporate)"
-                  value={projectCategory}
-                  onChange={(e) => setProjectCategory(e.target.value)}
-                  list="categories"
-                />
-                <datalist id="categories">
-                  {[...new Set(savedProjects.map(p => p.category).filter(Boolean))].map(cat => (
-                    <option key={cat} value={cat} />
-                  ))}
-                </datalist>
+            {/* Project Name & Event Type */}
+            <div className="bg-white rounded-lg shadow-md p-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-sm font-semibold">Project Name</Label>
+                  <Input
+                    type="text"
+                    placeholder="Enter project name"
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Event Type</Label>
+                  <Select value={eventType} onValueChange={setEventType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select event type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="wedding">Wedding</SelectItem>
+                      <SelectItem value="conference">Conference</SelectItem>
+                      <SelectItem value="presentation">Presentation</SelectItem>
+                      <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
+                      <SelectItem value="workshop">Workshop</SelectItem>
+                      <SelectItem value="film_screening">Film Screening</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
