@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { createPageUrl } from "./utils";
+import { createPageUrl } from "@/utils";
 import ChatInterface from "@/components/chat/ChatInterface";
 import { FileCheck } from "lucide-react";
 
