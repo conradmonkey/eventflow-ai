@@ -194,6 +194,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
 
     const itemIdx = getItemAtPoint(x, y);
     if (itemIdx !== null) {
+      e.preventDefault();
       const item = items[itemIdx];
       if (item.groupId) {
         setSelectedGroup(item.groupId);
@@ -281,7 +282,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     <div
       ref={containerRef}
       className="bg-white rounded-lg shadow-lg border-2 border-slate-200 relative"
-      style={{ height: '700px' }}
+      style={{ height: '700px', touchAction: 'none' }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
