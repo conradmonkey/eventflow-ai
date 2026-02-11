@@ -17,6 +17,7 @@ import AILayoutSuggestions from "@/components/AILayoutSuggestions";
 export default function RoomDesigner() {
   const [formData, setFormData] = useState({
     project_name: "",
+    event_type: "",
     country: "",
     province: "",
     city: "",
@@ -231,6 +232,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
 
     setFormData({
       project_name: project.project_name,
+      event_type: project.event_type || "",
       country: project.country,
       province: project.province,
       city: project.city,
@@ -529,15 +531,40 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
             className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
           >
             <form onSubmit={handleGenerate2D} className="space-y-6">
-              {/* Project Name */}
-              <div>
-                <Label className="text-zinc-400 text-sm">Project Name</Label>
-                <Input
-                  value={formData.project_name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
-                  className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
-                  placeholder="e.g., Summer Gala 2026"
-                />
+              {/* Project Name & Event Type */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-zinc-400 text-sm">Project Name</Label>
+                  <Input
+                    value={formData.project_name}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
+                    className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
+                    placeholder="e.g., Summer Gala 2026"
+                  />
+                </div>
+                <div>
+                  <Label className="text-zinc-400 text-sm">Event Type</Label>
+                  <Select 
+                    value={formData.event_type} 
+                    onValueChange={(value) => setFormData((prev) => ({ ...prev, event_type: value }))}
+                  >
+                    <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="wedding">Wedding</SelectItem>
+                      <SelectItem value="conference">Conference</SelectItem>
+                      <SelectItem value="music_concert">Music Concert</SelectItem>
+                      <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
+                      <SelectItem value="lecture">Lecture</SelectItem>
+                      <SelectItem value="film_screening">Film Screening</SelectItem>
+                      <SelectItem value="dinner_party">Dinner Party</SelectItem>
+                      <SelectItem value="family_get_together">Family Get Together</SelectItem>
+                      <SelectItem value="presentation">Presentation</SelectItem>
+                      <SelectItem value="workshop">Workshop</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               {/* Location */}
