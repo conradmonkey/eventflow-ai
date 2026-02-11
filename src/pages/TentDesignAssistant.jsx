@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from './utils';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -723,9 +725,17 @@ export default function TentDesignAssistant() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <Sparkles className="w-8 h-8 text-purple-600" />
-          <h1 className="text-4xl font-bold text-slate-900">AI Tent Design Visualizer</h1>
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Sparkles className="w-8 h-8 text-purple-600" />
+            <h1 className="text-4xl font-bold text-slate-900">AI Tent Design Visualizer</h1>
+          </div>
+          <Link 
+            to={createPageUrl('Home')}
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-slate-700 transition-colors shadow-sm"
+          >
+            Other AI Designers
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
