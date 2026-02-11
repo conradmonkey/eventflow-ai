@@ -533,8 +533,7 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
           table_6ft: { color: [168, 85, 247], name: '6ft Table' },
           table_5ft_round: { color: [251, 191, 36], name: '5ft Round Table' },
           table_6ft_round: { color: [34, 211, 238], name: '6ft Round Table' },
-          cocktail: { color: [248, 113, 113], name: 'Cocktail Table' },
-          custom: { color: [156, 163, 175], name: 'Custom Item' }
+          cocktail: { color: [248, 113, 113], name: 'Cocktail Table' }
         };
 
         Object.entries(itemTypes).forEach(([type, info]) => {
@@ -550,6 +549,28 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
             pdf.text(`${info.name} (${count})`, margin + 8, yPos);
             yPos += 6;
           }
+        });
+
+        // Add custom items individually with their names and colors
+        const customItems = roomItems.filter(i => i.type === 'custom');
+        customItems.forEach((item) => {
+          const hexToRgb = (hex) => {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? [
+              parseInt(result[1], 16),
+              parseInt(result[2], 16),
+              parseInt(result[3], 16)
+            ] : [156, 163, 175];
+          };
+          
+          const rgb = hexToRgb(item.color || '#9ca3af');
+          pdf.setFillColor(rgb[0], rgb[1], rgb[2]);
+          pdf.rect(margin, yPos - 3, 5, 5, 'F');
+          
+          pdf.setTextColor(0, 0, 0);
+          pdf.setFontSize(9);
+          pdf.text(`${item.name || 'Custom Item'}`, margin + 8, yPos);
+          yPos += 6;
         });
 
         yPos += 5;
