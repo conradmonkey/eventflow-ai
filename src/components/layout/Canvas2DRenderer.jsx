@@ -30,6 +30,7 @@ export default function Canvas2DRenderer({
   const containerRef = useRef(null);
   const [draggingItem, setDraggingItem] = useState(null);
   const [dragStart, setDragStart] = useState(null);
+  const [moveMode, setMoveMode] = useState(false);
 
   const drawItems = useCallback((ctx, canvas) => {
     items.forEach((item, idx) => {
@@ -144,10 +145,17 @@ export default function Canvas2DRenderer({
     return null;
   };
 
-  const handleMouseDown = (e) => {
+  const handleStart = (e) => {
+    if (!moveMode) return;
+    
+    if (e.touches) {
+      e.preventDefault();
+    }
+    
     const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const touch = e.touches?.[0] || e;
+    const x = (touch.clientX || e.clientX) - rect.left;
+    const y = (touch.clientY || e.clientY) - rect.top;
 
     const itemIdx = getItemAtPoint(x, y);
     if (itemIdx !== null) {
@@ -156,23 +164,29 @@ export default function Canvas2DRenderer({
     }
   };
 
-  const handleMouseMove = (e) => {
-    if (draggingItem !== null && dragStart) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const dx = (x - dragStart.x) / zoom;
-      const dy = (y - dragStart.y) / zoom;
-
-      onUpdateItem(draggingItem, {
-        x: dragStart.itemX + dx,
-        y: dragStart.itemY + dy,
-      });
+  const handleMove = (e) => {
+    if (!moveMode || draggingItem === null || !dragStart) return;
+    
+    if (e.cancelable) {
+      e.preventDefault();
     }
+    e.stopPropagation();
+    
+    const rect = canvasRef.current.getBoundingClientRect();
+    const touch = e.touches?.[0] || e;
+    const x = (touch.clientX || e.clientX) - rect.left;
+    const y = (touch.clientY || e.clientY) - rect.top;
+
+    const dx = (x - dragStart.x) / zoom;
+    const dy = (y - dragStart.y) / zoom;
+
+    onUpdateItem(draggingItem, {
+      x: dragStart.itemX + dx,
+      y: dragStart.itemY + dy,
+    });
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setDraggingItem(null);
     setDragStart(null);
   };
@@ -211,19 +225,34 @@ export default function Canvas2DRenderer({
     <div
       ref={containerRef}
       className="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-slate-200 relative"
-      style={{ height: '600px' }}
+      style={{ height: '600px', touchAction: moveMode ? 'none' : 'auto' }}
     >
       <canvas
         ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onMouseDown={handleStart}
+        onMouseMove={handleMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
+        onTouchStart={handleStart}
+        onTouchMove={handleMove}
+        onTouchEnd={handleEnd}
+        onTouchCancel={handleEnd}
         onContextMenu={handleContextMenu}
-        className="w-full h-full cursor-move block"
+        style={{ touchAction: moveMode ? 'none' : 'auto' }}
+        className={`w-full h-full ${moveMode ? 'cursor-move' : 'cursor-default'} block`}
       />
+      <button
+        onClick={() => setMoveMode(!moveMode)}
+        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
+          moveMode 
+            ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
+            : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+        }`}
+      >
+        {moveMode ? '✓ Move Mode' : 'Move Mode'}
+      </button>
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
-        Drag to move • Right-click to rotate • Delete key to remove
+        {moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items'} • Right-click to rotate • Delete key to remove
       </div>
       
       {/* Color Legend */}

@@ -6,6 +6,7 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
   const [draggedItem, setDraggedItem] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const [moveMode, setMoveMode] = useState(false);
 
   // Update items when external items change
   useEffect(() => {
@@ -52,21 +53,34 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
     });
   }, [formData.room_length, formData.room_width]);
 
-  const handleMouseDown = (e, item) => {
+  const handleStart = (e, item) => {
+    if (!moveMode) return;
+    
+    if (e.touches) {
+      e.preventDefault();
+    }
+    
     const rect = canvasRef.current.getBoundingClientRect();
+    const touch = e.touches?.[0] || e;
     setOffset({
-      x: e.clientX - rect.left - item.x,
-      y: e.clientY - rect.top - item.y
+      x: (touch.clientX || e.clientX) - rect.left - item.x,
+      y: (touch.clientY || e.clientY) - rect.top - item.y
     });
     setDraggedItem(item.id);
   };
 
-  const handleMouseMove = (e) => {
-    if (!draggedItem) return;
+  const handleMove = (e) => {
+    if (!moveMode || !draggedItem) return;
+    
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+    e.stopPropagation();
     
     const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - offset.x;
-    const y = e.clientY - rect.top - offset.y;
+    const touch = e.touches?.[0] || e;
+    const x = (touch.clientX || e.clientX) - rect.left - offset.x;
+    const y = (touch.clientY || e.clientY) - rect.top - offset.y;
     
     const updatedItems = items.map(item => 
       item.id === draggedItem 
@@ -77,7 +91,7 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
     if (onItemsChange) onItemsChange(updatedItems);
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setDraggedItem(null);
   };
 
@@ -104,9 +118,13 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
       <div
         ref={canvasRef}
         className="absolute inset-0"
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        style={{ touchAction: moveMode ? 'none' : 'auto' }}
+        onMouseMove={handleMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
+        onTouchMove={handleMove}
+        onTouchEnd={handleEnd}
+        onTouchCancel={handleEnd}
       >
         {/* Room outline */}
         {canvasSize.width > 0 && (
@@ -157,7 +175,8 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
                 transform: `rotate(${item.rotation || 0}deg)`,
                 transformOrigin: 'center'
               }}
-              onMouseDown={(e) => handleMouseDown(e, item)}
+              onMouseDown={(e) => handleStart(e, item)}
+              onTouchStart={(e) => handleStart(e, item)}
             >
               <div
                 className="w-full h-full border-2 border-amber-500/50 flex items-center justify-center text-xs text-white font-semibold overflow-hidden"
@@ -195,9 +214,21 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
         })}
       </div>
 
+      {/* Move Mode Toggle */}
+      <button
+        onClick={() => setMoveMode(!moveMode)}
+        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
+          moveMode 
+            ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
+            : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+        }`}
+      >
+        {moveMode ? '✓ Move Mode' : 'Move Mode'}
+      </button>
+      
       {/* Instructions */}
       <div className="absolute bottom-4 left-4 bg-zinc-900/90 rounded-lg px-4 py-2 text-zinc-400 text-xs">
-        <p>💡 Drag items to move • Click ↻ to rotate</p>
+        <p>💡 {moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items'} • Click ↻ to rotate</p>
       </div>
     </div>
   );
