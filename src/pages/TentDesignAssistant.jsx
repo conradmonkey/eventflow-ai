@@ -21,6 +21,7 @@ export default function TentDesignAssistant() {
   }, []);
 
   const [projectName, setProjectName] = useState('');
+  const [eventType, setEventType] = useState('');
   const [attendees, setAttendees] = useState(100);
   const [seatingArrangement, setSeatingArrangement] = useState('');
   const [suggestedTent, setSuggestedTent] = useState(null);
@@ -76,6 +77,7 @@ export default function TentDesignAssistant() {
 
     const projectData = {
       project_name: projectName,
+      event_type: eventType,
       category: projectCategory,
       attendees,
       seating_arrangement: seatingArrangement,
@@ -104,6 +106,7 @@ export default function TentDesignAssistant() {
       await base44.entities.TentProjectVersion.create({
         project_id: projectId,
         project_name: projectName,
+        event_type: eventType,
         version_number: currentVersion,
         attendees,
         seating_arrangement: seatingArrangement,
@@ -124,6 +127,7 @@ export default function TentDesignAssistant() {
 
   const handleLoadProject = (project) => {
     setProjectName(project.project_name);
+    setEventType(project.event_type || '');
     setAttendees(project.attendees);
     setSeatingArrangement(project.seating_arrangement);
     setTentStyle(project.tent_style);
@@ -135,6 +139,7 @@ export default function TentDesignAssistant() {
 
   const handleLoadVersion = (version) => {
     setProjectName(version.project_name);
+    setEventType(version.event_type || '');
     setAttendees(version.attendees);
     setSeatingArrangement(version.seating_arrangement);
     setTentStyle(version.tent_style);
@@ -485,6 +490,7 @@ export default function TentDesignAssistant() {
   const handleReset = () => {
     if (window.confirm('Are you sure you want to reset everything? This will clear all items and start fresh.')) {
       setProjectName('');
+      setEventType('');
       setAttendees(100);
       setSeatingArrangement('');
       setSuggestedTent(null);
@@ -745,7 +751,7 @@ export default function TentDesignAssistant() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Panel - Inputs */}
           <div className="col-span-1 lg:col-span-1 space-y-6">
-            {/* Project Name & Category */}
+            {/* Project Name, Event Type & Category */}
             <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
               <div>
                 <Label className="text-sm font-semibold">Project Name</Label>
@@ -755,6 +761,22 @@ export default function TentDesignAssistant() {
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                 />
+              </div>
+              <div>
+                <Label className="text-sm font-semibold">Event Type</Label>
+                <Select value={eventType} onValueChange={setEventType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select event type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="wedding">Wedding</SelectItem>
+                    <SelectItem value="conference">Conference</SelectItem>
+                    <SelectItem value="presentation">Presentation</SelectItem>
+                    <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
+                    <SelectItem value="workshop">Workshop</SelectItem>
+                    <SelectItem value="film_screening">Film Screening</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label className="text-sm font-semibold">Category</Label>
