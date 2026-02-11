@@ -598,7 +598,7 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   <MapPin className="w-5 h-5 text-amber-400" />
                   LOCATION
                 </h2>
-                <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-3">
                   <div>
                     <Label className="text-zinc-400 text-sm">Country</Label>
                     <Input
