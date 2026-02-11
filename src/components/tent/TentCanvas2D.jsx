@@ -207,7 +207,11 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
 
   const handleMove = (e) => {
     if (dragging !== null && dragStart) {
-      e.preventDefault();
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      e.stopPropagation();
+      
       const rect = canvasRef.current.getBoundingClientRect();
       const touch = e.touches?.[0] || e;
       const x = (touch.clientX || e.clientX) - rect.left;
@@ -295,8 +299,10 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
         onTouchStart={handleStart}
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
+        onTouchCancel={handleEnd}
         onContextMenu={handleContextMenu}
-        className="w-full h-full cursor-move touch-none"
+        style={{ touchAction: 'none' }}
+        className="w-full h-full cursor-move"
       />
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
         Drag to move • Long-press to rotate
