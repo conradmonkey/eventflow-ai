@@ -186,10 +186,11 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     return null;
   };
 
-  const handleMouseDown = (e) => {
+  const handleStart = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const touch = e.touches?.[0] || e;
+    const x = (touch.clientX || e.clientX) - rect.left;
+    const y = (touch.clientY || e.clientY) - rect.top;
 
     const itemIdx = getItemAtPoint(x, y);
     if (itemIdx !== null) {
@@ -203,11 +204,13 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     }
   };
 
-  const handleMouseMove = (e) => {
+  const handleMove = (e) => {
     if (dragging !== null && dragStart) {
+      e.preventDefault();
       const rect = canvasRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const touch = e.touches?.[0] || e;
+      const x = (touch.clientX || e.clientX) - rect.left;
+      const y = (touch.clientY || e.clientY) - rect.top;
 
       const scale = Math.min(
         (canvasRef.current.width - 100) / tentConfig.length,
@@ -233,7 +236,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setDragging(null);
     setDragStart(null);
   };
@@ -284,16 +287,19 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     >
       <canvas
         ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onMouseDown={handleStart}
+        onMouseMove={handleMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
+        onTouchStart={handleStart}
+        onTouchMove={handleMove}
+        onTouchEnd={handleEnd}
         onContextMenu={handleContextMenu}
-        className="w-full h-full cursor-move"
+        className="w-full h-full cursor-move touch-none"
       />
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
-        Drag to move • Right-click to rotate
-        {selectedItem !== null && <span className="ml-4">• Press Delete to remove</span>}
+        Drag to move • Long-press to rotate
+        {selectedItem !== null && <span className="ml-4 hidden sm:inline">• Press Delete to remove</span>}
       </div>
       {selectedItem !== null && (
         <button
