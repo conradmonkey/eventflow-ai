@@ -45,12 +45,6 @@ const services = [
     href: "VenueScouting",
   },
   {
-    icon: MonitorPlay,
-    title: "Video Wall Drawing Generator",
-    description: "Generate technical drawings, 3D renders, and equipment lists for LED video wall installations.",
-    href: "VideoWallDrawing",
-  },
-  {
     icon: Grid3x3,
     title: "Outdoor Event Planner",
     description: "Perfect for planning outdoor festivals—design 2D and 3D layouts with tents, stages, video walls, and more.",
