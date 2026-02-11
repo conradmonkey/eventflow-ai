@@ -121,8 +121,28 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
     }));
   };
 
+  const addCustomItem = () => {
+    setTentConfig(prev => ({
+      ...prev,
+      customEquipment: [...(prev.customEquipment || []), { name: 'Custom Item', width: 10, length: 10, color: '#9CA3AF' }]
+    }));
+  };
 
+  const removeCustomItem = (idx) => {
+    setTentConfig(prev => ({
+      ...prev,
+      customEquipment: prev.customEquipment.filter((_, i) => i !== idx)
+    }));
+  };
 
+  const updateCustomItem = (idx, field, value) => {
+    setTentConfig(prev => ({
+      ...prev,
+      customEquipment: prev.customEquipment.map((item, i) => 
+        i === idx ? { ...item, [field]: field === 'color' || field === 'name' ? value : parseFloat(value) || 0 } : item
+      )
+    }));
+  };
 
 
   return (
@@ -374,6 +394,52 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
             className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
           />
         </div>
+      </div>
+
+      {/* Custom Items */}
+      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
+        <div className="flex justify-between items-center">
+          <Label className="text-sm font-semibold">Custom Items</Label>
+          <Button size="sm" variant="outline" onClick={addCustomItem}>
+            <Plus className="w-4 h-4" />
+          </Button>
+        </div>
+        {(tentConfig.customEquipment || []).map((item, idx) => (
+          <div key={idx} className="border rounded p-2 space-y-2">
+            <div className="flex justify-between">
+              <span className="text-xs font-medium">Item {idx + 1}</span>
+              <button onClick={() => removeCustomItem(idx)} className="text-red-500">
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
+            <Input
+              type="text"
+              placeholder="Item name"
+              value={item.name}
+              onChange={(e) => updateCustomItem(idx, 'name', e.target.value)}
+            />
+            <div className="grid grid-cols-3 gap-2 items-end">
+              <Input 
+                type="number" 
+                placeholder="Width" 
+                value={item.width}
+                onChange={(e) => updateCustomItem(idx, 'width', e.target.value)}
+              />
+              <Input 
+                type="number" 
+                placeholder="Length" 
+                value={item.length}
+                onChange={(e) => updateCustomItem(idx, 'length', e.target.value)}
+              />
+              <input
+                type="color"
+                value={item.color || '#9CA3AF'}
+                onChange={(e) => updateCustomItem(idx, 'color', e.target.value)}
+                className="w-full h-9 rounded cursor-pointer border border-input"
+              />
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Linen Color */}
