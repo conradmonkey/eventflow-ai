@@ -344,13 +344,13 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       />
       <button
         onClick={() => setMoveMode(!moveMode)}
-        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
           moveMode 
             ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
             : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
         }`}
       >
-        {moveMode ? '✓ Move Mode ON' : 'Move Mode OFF'}
+        {moveMode ? '✓ Move Mode' : 'Move Mode'}
       </button>
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
         {moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items'} • Long-press to rotate
@@ -359,7 +359,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       {selectedItem !== null && (
         <button
           onClick={handleDeleteItem}
-          className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors"
+          className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors z-50"
         >
           Delete Item
         </button>
