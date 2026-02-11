@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { jsPDF } from 'jspdf';
 
 export default function TentDesignAssistant() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [projectName, setProjectName] = useState('');
   const [attendees, setAttendees] = useState(100);
   const [seatingArrangement, setSeatingArrangement] = useState('');
