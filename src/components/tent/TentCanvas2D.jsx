@@ -7,6 +7,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [originalPositions, setOriginalPositions] = useState([]);
+  const [isDraggingMode, setIsDraggingMode] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current) return;
@@ -194,22 +195,33 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     const y = (touch.clientY || e.clientY) - rect.top;
 
     const itemIdx = getItemAtPoint(x, y);
+    
     if (itemIdx !== null) {
-      e.preventDefault();
       const item = items[itemIdx];
-      if (item.groupId) {
-        setSelectedGroup(item.groupId);
+      
+      // If this item is already selected, start dragging
+      if (selectedItem === itemIdx) {
+        e.preventDefault();
+        setDragging(itemIdx);
+        setDragStart({ x, y });
+        setOriginalPositions(items.map(itm => ({ x: itm.x, y: itm.y })));
+        setIsDraggingMode(true);
+      } else {
+        // Otherwise, just select it
+        if (item.groupId) {
+          setSelectedGroup(item.groupId);
+        }
+        setSelectedItem(itemIdx);
       }
-      setSelectedItem(itemIdx);
-      setDragging(itemIdx);
-      setDragStart({ x, y });
-      // Store original positions of all items
-      setOriginalPositions(items.map(itm => ({ x: itm.x, y: itm.y })));
+    } else {
+      // Clicked empty space, deselect
+      setSelectedItem(null);
+      setSelectedGroup(null);
     }
   };
 
   const handleMove = (e) => {
-    if (dragging !== null && dragStart && originalPositions.length > 0) {
+    if (dragging !== null && dragStart && originalPositions.length > 0 && isDraggingMode) {
       if (e.cancelable) {
         e.preventDefault();
       }
@@ -247,6 +259,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     setDragging(null);
     setDragStart(null);
     setOriginalPositions([]);
+    setIsDraggingMode(false);
   };
 
   const handleDeleteItem = () => {
