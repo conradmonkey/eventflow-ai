@@ -218,6 +218,11 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
   };
 
   const handleStart = (e) => {
+    // Always prevent default on touch to stop scrolling
+    if (e.touches) {
+      e.preventDefault();
+    }
+    
     const rect = canvasRef.current.getBoundingClientRect();
     const touch = e.touches?.[0] || e;
     const x = (touch.clientX || e.clientX) - rect.left;
@@ -230,7 +235,6 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       
       // If this item is already selected, start dragging
       if (selectedItem === itemIdx) {
-        e.preventDefault();
         setDragging(itemIdx);
         setDragStart({ x, y });
         setOriginalPositions(items.map(itm => ({ x: itm.x, y: itm.y })));
