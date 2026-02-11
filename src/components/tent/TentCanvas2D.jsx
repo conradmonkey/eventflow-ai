@@ -36,6 +36,35 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       ctx.lineWidth = 3;
       ctx.strokeRect(offsetX, offsetY, tentWidth, tentHeight);
 
+      // Highlight selected items
+      items.forEach((item, idx) => {
+        if (selectedItem === idx || (item.groupId && selectedGroup === item.groupId)) {
+          ctx.save();
+          ctx.strokeStyle = '#3B82F6';
+          ctx.lineWidth = 4;
+          const itemX = offsetX + item.x * scale;
+          const itemY = offsetY + item.y * scale;
+          ctx.translate(itemX, itemY);
+          ctx.rotate((item.rotation || 0) * Math.PI / 180);
+          
+          if (item.type === 'table5ft' || item.type === 'cocktailTable') {
+            const radius = ((item.diameter || 5) / 2) * scale;
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.stroke();
+          } else if (item.type === 'chair') {
+            const w = 1.5 * scale;
+            const h = 1.5 * scale;
+            ctx.strokeRect(-w/2, -h/2, w, h);
+          } else {
+            const w = item.width * scale;
+            const h = (item.length || item.height || item.width) * scale;
+            ctx.strokeRect(-w/2, -h/2, w, h);
+          }
+          ctx.restore();
+        }
+      });
+
       // Draw items
       items.forEach((item, idx) => {
         ctx.save();
@@ -321,7 +350,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
         className="w-full h-full cursor-move"
       />
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
-        Drag to move • Long-press to rotate
+        Tap to select • Drag to move • Long-press to rotate
         {selectedItem !== null && <span className="ml-4 hidden sm:inline">• Press Delete to remove</span>}
       </div>
       {selectedItem !== null && (
