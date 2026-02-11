@@ -123,45 +123,70 @@ export default function RoomDesigner() {
     setRender3D(null);
 
     try {
-      const totalLinenFt = (parseInt(formData.table_8ft || 0) * 16 + 
-                           parseInt(formData.table_6ft || 0) * 12 + 
-                           parseInt(formData.table_5ft_round || 0) * 15.7 + 
-                           parseInt(formData.table_6ft_round || 0) * 18.8 +
-                           parseInt(formData.cocktail_tables || 0) * 9.4).toFixed(0);
+      // Get event type context
+      const eventTypeDescriptions = {
+        wedding: "romantic wedding reception with soft, elegant decor and intimate ambiance",
+        conference: "professional corporate conference with modern, clean design and tech-forward aesthetics",
+        music_concert: "energetic concert venue with dynamic stage lighting and vibrant atmosphere",
+        celebration_of_life: "warm, dignified memorial service with tasteful, comforting decor",
+        lecture: "academic lecture hall setting with focused, professional ambiance",
+        film_screening: "cinema-style viewing space with theatrical lighting and comfortable seating",
+        dinner_party: "intimate dinner party with cozy, sophisticated atmosphere",
+        family_get_together: "welcoming family gathering space with warm, casual elegance",
+        presentation: "professional presentation venue with clean, modern aesthetics",
+        workshop: "collaborative workshop space with functional, inspiring design"
+      };
 
-      const prompt = `Ultra realistic, cinematic 3D render of a luxurious event space interior.
+      const eventContext = formData.event_type ? eventTypeDescriptions[formData.event_type] || "elegant event space" : "elegant event space";
 
-Room: ${formData.room_length}ft x ${formData.room_width}ft elegant event venue
+      // Analyze placed items
+      const itemSummary = roomItems.map(item => {
+        const position = `positioned at ${Math.round(item.x)}, ${Math.round(item.y)}`;
+        if (item.type === 'stage') return `Stage (${item.width}' x ${item.length}') ${position}`;
+        if (item.type === 'dancefloor') return `Dance floor (${item.width}' x ${item.length}') ${position}`;
+        if (item.type === 'bar') return `Bar (${item.width}' x ${item.length}') ${position}`;
+        if (item.type === 'videowall') return `Video wall (${item.width}m x ${item.height}m) ${position}`;
+        if (item.type.includes('table')) return `${item.type.replace('_', ' ')} ${position}`;
+        return `${item.name || item.type} ${position}`;
+      }).join('\n- ');
 
-Setup includes:
-${formData.stage_length && formData.stage_width ? `- Professional stage (${formData.stage_length}ft x ${formData.stage_width}ft) with dramatic lighting` : ''}
-${formData.dance_floor_length && formData.dance_floor_width ? `- Polished dance floor (${formData.dance_floor_length}ft x ${formData.dance_floor_width}ft) with ambient uplighting` : ''}
-${formData.bar_length && formData.bar_width ? `- Elegant bar area (${formData.bar_length}ft x ${formData.bar_width}ft) with backlit shelving` : ''}
-${formData.video_wall_height && formData.video_wall_width ? `- Stunning LED video wall (${formData.video_wall_height}m x ${formData.video_wall_width}m) displaying elegant visuals` : ''}
-${formData.table_8ft !== "0" || formData.table_6ft !== "0" || formData.table_5ft_round !== "0" || formData.table_6ft_round !== "0" ? `- Tables draped in luxurious ${formData.table_color} linens with elegant folds` : ''}
-${formData.cocktail_tables !== "0" ? `- ${formData.cocktail_tables} cocktail tables with ${formData.table_color} draping` : ''}
+      const tableCount = roomItems.filter(i => i.type.includes('table')).length;
+      
+      const prompt = `Ultra realistic, cinematic 3D render of ${eventContext}.
 
-Lighting Design:
-- Warm amber uplighting along walls (approximately ${Math.ceil((parseFloat(formData.room_length || 0) * 2 + parseFloat(formData.room_width || 0) * 2) / 10)} uplights)
-- Pin spot lighting on each table centerpiece
-- Dramatic stage wash with amber and gold tones
-- Subtle LED strips under bar for glow effect
-- Elegant chandeliers or pendant lighting overhead
+Event Type: ${formData.event_type ? formData.event_type.replace('_', ' ').toUpperCase() : 'ELEGANT EVENT'}
+Room Dimensions: ${formData.room_length}ft x ${formData.room_width}ft
 
-Draping & Decor:
-- Approximately ${totalLinenFt}ft of ${formData.table_color} table draping
-- Flowing ceiling drape with warm lighting (optional enhancement)
-- Wall draping in complementary tones for softer ambiance
+Layout Configuration:
+${itemSummary ? `- ${itemSummary}` : 'Open floor plan with flexible seating'}
 
-Atmosphere:
-- Sophisticated, high-end event aesthetic
-- Warm, inviting amber and gold lighting
-- Luxurious textures and materials
-- Cinematic camera angle showcasing the full space
-- Professional event production quality
-- Glamorous and elegant presentation
+Design Elements:
+${roomItems.some(i => i.type === 'stage') ? '- Professional stage with theatrical lighting appropriate for the event type' : ''}
+${roomItems.some(i => i.type === 'dancefloor') ? '- Polished dance floor with ambient uplighting' : ''}
+${roomItems.some(i => i.type === 'bar') ? '- Elegant bar area with backlit shelving and premium finishes' : ''}
+${roomItems.some(i => i.type === 'videowall') ? '- High-resolution LED video wall displaying event-appropriate visuals' : ''}
+${tableCount > 0 ? `- ${tableCount} tables draped in luxurious ${tableColor} linens, arranged as shown in layout` : ''}
 
-Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end production value, ultra detailed.`;
+Lighting & Atmosphere:
+- Lighting design tailored specifically for ${formData.event_type ? formData.event_type.replace('_', ' ') : 'this event'}
+- Warm ambient lighting creating the perfect mood
+- Strategic accent lighting highlighting key areas
+- Color palette and intensity appropriate for event type
+${roomItems.some(i => i.type === 'stage') ? '- Dramatic stage wash with professional production lighting' : ''}
+
+Decor & Styling:
+- Event-specific decor matching ${formData.event_type ? formData.event_type.replace('_', ' ') : 'elegant occasion'}
+- Premium materials and luxurious finishes throughout
+- Spatial arrangement exactly as configured in the floor plan
+- Cohesive design language from entrance to main areas
+
+Camera & Presentation:
+- Cinematic wide-angle view showcasing the complete layout
+- Professional architectural visualization quality
+- Ultra-detailed textures and realistic materials
+- Photorealistic rendering with accurate spatial relationships
+
+Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.replace('_', ' ') : 'luxury event'}, contextually appropriate design, high-end production value, ultra detailed.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       const renderData = {
@@ -710,7 +735,7 @@ Style: Photorealistic 3D render, luxury event venue, dramatic lighting, high-end
                       ) : (
                         <Box className="w-5 h-5 mr-2" />
                       )}
-                      Generate 3D Render
+                      A.I. Design
                     </Button>
                     <Button
                       onClick={() => setShowGearList(!showGearList)}
