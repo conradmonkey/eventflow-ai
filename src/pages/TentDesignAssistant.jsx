@@ -1153,24 +1153,15 @@ export default function TentDesignAssistant() {
                 <Button 
                   className="w-full bg-indigo-600 hover:bg-indigo-700"
                   onClick={handleGenerateRealistic}
-                  disabled={!eventType || items.length === 0 || generatingRealistic}
+                  disabled={items.length === 0 || generatingRealistic}
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   {generatingRealistic ? 'Generating...' : 'A.I. Designer'}
                 </Button>
-                <Button 
-                  className="w-full bg-purple-600 hover:bg-purple-700" 
-                  onClick={handleRender2D}
-                  disabled={!eventType}
-                >
+                <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Items
                 </Button>
-                {!eventType && (
-                  <p className="text-xs text-center text-red-600">
-                    Please select an event type first
-                  </p>
-                )}
                 <Button
                   variant="outline"
                   onClick={handleExportPDF}
