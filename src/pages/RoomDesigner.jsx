@@ -190,7 +190,6 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       
-      const tableCount = roomItems.filter(i => i.type.includes('table')).length;
       const renderData = {
         url: response.url,
         suggestions: {
