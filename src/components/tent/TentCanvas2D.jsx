@@ -7,7 +7,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [originalPositions, setOriginalPositions] = useState([]);
-  const [isDraggingMode, setIsDraggingMode] = useState(false);
+  const [moveMode, setMoveMode] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current) return;
@@ -218,7 +218,8 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
   };
 
   const handleStart = (e) => {
-    // Always prevent default on touch to stop scrolling
+    if (!moveMode) return;
+    
     if (e.touches) {
       e.preventDefault();
     }
@@ -232,59 +233,48 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     
     if (itemIdx !== null) {
       const item = items[itemIdx];
-      
-      // If this item is already selected, start dragging
-      if (selectedItem === itemIdx) {
-        setDragging(itemIdx);
-        setDragStart({ x, y });
-        setOriginalPositions(items.map(itm => ({ x: itm.x, y: itm.y })));
-        setIsDraggingMode(true);
-      } else {
-        // Otherwise, just select it
-        if (item.groupId) {
-          setSelectedGroup(item.groupId);
-        }
-        setSelectedItem(itemIdx);
+      if (item.groupId) {
+        setSelectedGroup(item.groupId);
       }
-    } else {
-      // Clicked empty space, deselect
-      setSelectedItem(null);
-      setSelectedGroup(null);
+      setSelectedItem(itemIdx);
+      setDragging(itemIdx);
+      setDragStart({ x, y });
+      setOriginalPositions(items.map(itm => ({ x: itm.x, y: itm.y })));
     }
   };
 
   const handleMove = (e) => {
-    if (dragging !== null && dragStart && originalPositions.length > 0 && isDraggingMode) {
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-      e.stopPropagation();
-      
-      const rect = canvasRef.current.getBoundingClientRect();
-      const touch = e.touches?.[0] || e;
-      const x = (touch.clientX || e.clientX) - rect.left;
-      const y = (touch.clientY || e.clientY) - rect.top;
+    if (!moveMode || dragging === null || !dragStart || originalPositions.length === 0) return;
+    
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+    e.stopPropagation();
+    
+    const rect = canvasRef.current.getBoundingClientRect();
+    const touch = e.touches?.[0] || e;
+    const x = (touch.clientX || e.clientX) - rect.left;
+    const y = (touch.clientY || e.clientY) - rect.top;
 
-      const scale = Math.min(
-        (canvasRef.current.width - 100) / tentConfig.length,
-        (canvasRef.current.height - 100) / tentConfig.width
-      );
+    const scale = Math.min(
+      (canvasRef.current.width - 100) / tentConfig.length,
+      (canvasRef.current.height - 100) / tentConfig.width
+    );
 
-      const dx = (x - dragStart.x) / scale;
-      const dy = (y - dragStart.y) / scale;
+    const dx = (x - dragStart.x) / scale;
+    const dy = (y - dragStart.y) / scale;
 
-      const item = items[dragging];
-      if (item.groupId) {
-        setItems(prev => prev.map((itm, idx) =>
-          itm.groupId === item.groupId
-            ? { ...itm, x: originalPositions[idx].x + dx, y: originalPositions[idx].y + dy }
-            : itm
-        ));
-      } else {
-        setItems(prev => prev.map((itm, idx) =>
-          idx === dragging ? { ...itm, x: originalPositions[idx].x + dx, y: originalPositions[idx].y + dy } : itm
-        ));
-      }
+    const item = items[dragging];
+    if (item.groupId) {
+      setItems(prev => prev.map((itm, idx) =>
+        itm.groupId === item.groupId
+          ? { ...itm, x: originalPositions[idx].x + dx, y: originalPositions[idx].y + dy }
+          : itm
+      ));
+    } else {
+      setItems(prev => prev.map((itm, idx) =>
+        idx === dragging ? { ...itm, x: originalPositions[idx].x + dx, y: originalPositions[idx].y + dy } : itm
+      ));
     }
   };
 
@@ -292,7 +282,6 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     setDragging(null);
     setDragStart(null);
     setOriginalPositions([]);
-    setIsDraggingMode(false);
   };
 
   const handleDeleteItem = () => {
@@ -335,7 +324,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
     <div
       ref={containerRef}
       className="bg-white rounded-lg shadow-lg border-2 border-slate-200 relative"
-      style={{ height: '700px', touchAction: 'none' }}
+      style={{ height: '700px', touchAction: moveMode ? 'none' : 'auto' }}
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
@@ -350,11 +339,21 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
         onTouchEnd={handleEnd}
         onTouchCancel={handleEnd}
         onContextMenu={handleContextMenu}
-        style={{ touchAction: 'none' }}
-        className="w-full h-full cursor-move"
+        style={{ touchAction: moveMode ? 'none' : 'auto' }}
+        className={`w-full h-full ${moveMode ? 'cursor-move' : 'cursor-default'}`}
       />
+      <button
+        onClick={() => setMoveMode(!moveMode)}
+        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+          moveMode 
+            ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
+            : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+        }`}
+      >
+        {moveMode ? '✓ Move Mode ON' : 'Move Mode OFF'}
+      </button>
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
-        Tap to select • Drag to move • Long-press to rotate
+        {moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items'} • Long-press to rotate
         {selectedItem !== null && <span className="ml-4 hidden sm:inline">• Press Delete to remove</span>}
       </div>
       {selectedItem !== null && (
