@@ -395,6 +395,93 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
     });
     yPos += 5;
 
+    // Suggestions Section
+    pdf.setFontSize(14);
+    pdf.text('Design Suggestions', margin, yPos);
+    yPos += 8;
+
+    pdf.setFontSize(10);
+    
+    // Lighting
+    const tableCount = roomItems.filter(i => i.type.includes('table')).length;
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Lighting:', margin, yPos);
+    pdf.setFont(undefined, 'normal');
+    yPos += 5;
+    pdf.text(`• ${Math.ceil((parseFloat(formData.room_length || 0) * 2 + parseFloat(formData.room_width || 0) * 2) / 10)} LED uplights (warm tones)`, margin + 5, yPos);
+    yPos += 5;
+    if (tableCount > 0) {
+      pdf.text(`• ${tableCount} pin spots for table centerpieces`, margin + 5, yPos);
+      yPos += 5;
+    }
+    if (roomItems.some(i => i.type === 'stage')) {
+      pdf.text(`• Stage wash lights (appropriate for ${formData.event_type || 'event'})`, margin + 5, yPos);
+      yPos += 5;
+    }
+    pdf.text(`• Accent lighting for key architectural features`, margin + 5, yPos);
+    yPos += 7;
+
+    // Decor
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Decor:', margin, yPos);
+    pdf.setFont(undefined, 'normal');
+    yPos += 5;
+    if (tableCount > 0) {
+      pdf.text(`• ${tableCount} centerpieces matching ${formData.event_type || 'event'} theme`, margin + 5, yPos);
+      yPos += 5;
+    }
+    pdf.text(`• Entrance statement piece or welcome display`, margin + 5, yPos);
+    yPos += 5;
+    pdf.text(`• Wall draping or fabric accents to soften the space`, margin + 5, yPos);
+    yPos += 5;
+    if (roomItems.some(i => i.type === 'stage')) {
+      pdf.text(`• Stage backdrop coordinating with event theme`, margin + 5, yPos);
+      yPos += 5;
+    }
+    yPos += 2;
+
+    // Audio
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Audio:', margin, yPos);
+    pdf.setFont(undefined, 'normal');
+    yPos += 5;
+    const roomSize = parseFloat(formData.room_length || 0) * parseFloat(formData.room_width || 0);
+    if (roomSize > 0) {
+      const speakers = roomSize > 2000 ? '4-6' : roomSize > 1000 ? '2-4' : '2';
+      pdf.text(`• ${speakers} speaker system for ${roomSize.toFixed(0)} sq ft space`, margin + 5, yPos);
+      yPos += 5;
+    }
+    pdf.text(`• Wireless microphone(s) for announcements/speeches`, margin + 5, yPos);
+    yPos += 5;
+    if (formData.event_type === 'music_concert' || formData.event_type === 'wedding') {
+      pdf.text(`• DJ booth or live music setup area`, margin + 5, yPos);
+      yPos += 5;
+    }
+    yPos += 2;
+
+    // Color Scheme
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Color Scheme:', margin, yPos);
+    pdf.setFont(undefined, 'normal');
+    yPos += 5;
+    pdf.text(`• Table linens: ${tableColor || 'white'}`, margin + 5, yPos);
+    yPos += 5;
+    const eventColors = {
+      wedding: 'soft blush, ivory, and gold accents',
+      conference: 'navy, white, and chrome accents',
+      music_concert: 'bold colors with dramatic lighting',
+      celebration_of_life: 'warm earth tones with gentle accents',
+      lecture: 'neutral tones with professional finish',
+      film_screening: 'deep reds and blacks with theatrical feel',
+      dinner_party: 'rich jewel tones or elegant neutrals',
+      family_get_together: 'warm, inviting colors',
+      presentation: 'clean whites and corporate colors',
+      workshop: 'energizing colors promoting creativity'
+    };
+    const colorSuggestion = eventColors[formData.event_type] || 'elegant coordinated palette';
+    pdf.text(`• Recommended palette: ${colorSuggestion}`, margin + 5, yPos);
+    yPos += 10;
+
     // Gear List with Costs
     if (gearList) {
       pdf.setFontSize(14);
