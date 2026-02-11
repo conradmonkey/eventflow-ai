@@ -31,6 +31,14 @@ export default function Canvas2DRenderer({
   const [draggingItem, setDraggingItem] = useState(null);
   const [dragStart, setDragStart] = useState(null);
   const [moveMode, setMoveMode] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    checkMobile();
+  }, []);
 
   const drawItems = useCallback((ctx, canvas) => {
     items.forEach((item, idx) => {
@@ -146,9 +154,10 @@ export default function Canvas2DRenderer({
   };
 
   const handleStart = (e) => {
-    if (!moveMode) return;
+    const isTouch = e.touches !== undefined;
+    if (isTouch && !moveMode) return;
     
-    if (e.touches) {
+    if (isTouch) {
       e.preventDefault();
     }
     
@@ -165,7 +174,10 @@ export default function Canvas2DRenderer({
   };
 
   const handleMove = (e) => {
-    if (!moveMode || draggingItem === null || !dragStart) return;
+    if (draggingItem === null || !dragStart) return;
+    
+    const isTouch = e.touches !== undefined;
+    if (isTouch && !moveMode) return;
     
     if (e.cancelable) {
       e.preventDefault();
@@ -241,18 +253,20 @@ export default function Canvas2DRenderer({
         style={{ touchAction: moveMode ? 'none' : 'auto' }}
         className={`w-full h-full ${moveMode ? 'cursor-move' : 'cursor-default'} block`}
       />
-      <button
-        onClick={() => setMoveMode(!moveMode)}
-        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
-          moveMode 
-            ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
-            : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
-        }`}
-      >
-        {moveMode ? '✓ Move Mode' : 'Move Mode'}
-      </button>
+      {isMobile && (
+        <button
+          onClick={() => setMoveMode(!moveMode)}
+          className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
+            moveMode 
+              ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
+              : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+          }`}
+        >
+          {moveMode ? '✓ Move Mode' : 'Move Mode'}
+        </button>
+      )}
       <div className="absolute bottom-4 left-4 text-xs text-slate-600 bg-white px-2 py-1 rounded">
-        {moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items'} • Right-click to rotate • Delete key to remove
+        {isMobile ? (moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items') : 'Drag to move'} • Right-click to rotate • Delete key to remove
       </div>
       
       {/* Color Legend */}

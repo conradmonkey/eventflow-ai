@@ -7,6 +7,14 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
   const [moveMode, setMoveMode] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    checkMobile();
+  }, []);
 
   // Update items when external items change
   useEffect(() => {
@@ -54,9 +62,10 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
   }, [formData.room_length, formData.room_width]);
 
   const handleStart = (e, item) => {
-    if (!moveMode) return;
+    const isTouch = e.touches !== undefined;
+    if (isTouch && !moveMode) return;
     
-    if (e.touches) {
+    if (isTouch) {
       e.preventDefault();
     }
     
@@ -70,7 +79,10 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
   };
 
   const handleMove = (e) => {
-    if (!moveMode || !draggedItem) return;
+    if (!draggedItem) return;
+    
+    const isTouch = e.touches !== undefined;
+    if (isTouch && !moveMode) return;
     
     if (e.cancelable) {
       e.preventDefault();
@@ -214,21 +226,23 @@ export default function InteractiveRoomCanvas({ formData, items: externalItems, 
         })}
       </div>
 
-      {/* Move Mode Toggle */}
-      <button
-        onClick={() => setMoveMode(!moveMode)}
-        className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
-          moveMode 
-            ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
-            : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
-        }`}
-      >
-        {moveMode ? '✓ Move Mode' : 'Move Mode'}
-      </button>
+      {/* Move Mode Toggle - Mobile Only */}
+      {isMobile && (
+        <button
+          onClick={() => setMoveMode(!moveMode)}
+          className={`absolute top-4 left-4 px-4 py-2 rounded-lg text-sm font-semibold transition-all z-50 ${
+            moveMode 
+              ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg' 
+              : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+          }`}
+        >
+          {moveMode ? '✓ Move Mode' : 'Move Mode'}
+        </button>
+      )}
       
       {/* Instructions */}
       <div className="absolute bottom-4 left-4 bg-zinc-900/90 rounded-lg px-4 py-2 text-zinc-400 text-xs">
-        <p>💡 {moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items'} • Click ↻ to rotate</p>
+        <p>💡 {isMobile ? (moveMode ? 'Drag items to move them' : 'Enable Move Mode to drag items') : 'Drag to move'} • Click ↻ to rotate</p>
       </div>
     </div>
   );
