@@ -10,6 +10,7 @@ import InteractiveRoomCanvas from "@/components/room/InteractiveRoomCanvas";
 import RoomItemInputs from "@/components/room/RoomItemInputs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 import { useSubscriptionStatus } from "@/components/useSubscriptionStatus";
 import SubscriptionModal from "@/components/SubscriptionModal";
 import AILayoutSuggestions from "@/components/AILayoutSuggestions";
@@ -53,6 +54,7 @@ export default function RoomDesigner() {
   const [roomItems, setRoomItems] = useState([]);
   const [tableColor, setTableColor] = useState('white');
   const render3DRef = useRef(null);
+  const canvas2DRef = useRef(null);
 
   const { isSubscribed } = useSubscriptionStatus();
   const queryClient = useQueryClient();
@@ -330,7 +332,7 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
     }
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!isSubscribed) {
       setShowSubscriptionModal(true);
       return;
@@ -481,6 +483,38 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
     const colorSuggestion = eventColors[formData.event_type] || 'elegant coordinated palette';
     pdf.text(`• Recommended palette: ${colorSuggestion}`, margin + 5, yPos);
     yPos += 10;
+
+    // 2D Floor Plan
+    if (canvas2DRef.current && showCanvas) {
+      if (yPos > pageHeight - 100) {
+        pdf.addPage();
+        yPos = margin;
+      }
+
+      pdf.setFontSize(14);
+      pdf.text('2D Floor Plan', margin, yPos);
+      yPos += 10;
+
+      try {
+        const canvas2D = await html2canvas(canvas2DRef.current, {
+          backgroundColor: '#18181b',
+          scale: 2
+        });
+        
+        const imgData2D = canvas2D.toDataURL('image/png');
+        const imgWidth = pageWidth - 2 * margin;
+        const imgHeight = (canvas2D.height * imgWidth) / canvas2D.width;
+        const maxHeight = pageHeight - yPos - 30;
+        
+        const finalHeight = Math.min(imgHeight, maxHeight);
+        const finalWidth = (canvas2D.width * finalHeight) / canvas2D.height;
+
+        pdf.addImage(imgData2D, 'PNG', margin, yPos, finalWidth, finalHeight);
+        yPos += finalHeight + 10;
+      } catch (error) {
+        console.error('Error capturing 2D canvas:', error);
+      }
+    }
 
     // Gear List with Costs
     if (gearList) {
@@ -805,11 +839,13 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   <Layout className="w-6 h-6 text-amber-400" />
                   Interactive Floor Plan
                 </h2>
-                <InteractiveRoomCanvas 
-                  formData={formData} 
-                  items={roomItems}
-                  onItemsChange={setRoomItems}
-                />
+                <div ref={canvas2DRef}>
+                  <InteractiveRoomCanvas 
+                    formData={formData} 
+                    items={roomItems}
+                    onItemsChange={setRoomItems}
+                  />
+                </div>
                 
                 <div className="flex gap-3">
                   <Button
