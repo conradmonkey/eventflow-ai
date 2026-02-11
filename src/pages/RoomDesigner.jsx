@@ -189,15 +189,17 @@ Camera & Presentation:
 Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.replace('_', ' ') : 'luxury event'}, contextually appropriate design, high-end production value, ultra detailed.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
+      
+      const tableCount = roomItems.filter(i => i.type.includes('table')).length;
       const renderData = {
         url: response.url,
         suggestions: {
-          drape: `${formData.table_color} table draping - approximately ${totalLinenFt} feet total`,
-          lighting: `Suggested lighting package:
-- ${Math.ceil((parseFloat(formData.room_length || 0) * 2 + parseFloat(formData.room_width || 0) * 2) / 10)} LED uplights (amber/warm white)
-- ${parseInt(formData.table_8ft || 0) + parseInt(formData.table_6ft || 0) + parseInt(formData.table_5ft_round || 0) + parseInt(formData.table_6ft_round || 0)} pin spots for table centerpieces
-- 4-6 stage wash lights (warm tones)
-- LED strip lighting for bar and architectural accents`
+          drape: `${tableColor} table draping for ${tableCount} tables`,
+          lighting: `Suggested lighting package for ${formData.event_type ? formData.event_type.replace('_', ' ') : 'this event'}:
+- ${Math.ceil((parseFloat(formData.room_length || 0) * 2 + parseFloat(formData.room_width || 0) * 2) / 10)} LED uplights (contextual tones)
+- ${tableCount} pin spots for table centerpieces
+- Stage wash lights (appropriate for event type)
+- Accent lighting for key areas and architectural features`
         }
       };
       setRender3D(renderData);
