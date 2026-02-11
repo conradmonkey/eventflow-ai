@@ -511,6 +511,48 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
 
         pdf.addImage(imgData2D, 'PNG', margin, yPos, finalWidth, finalHeight);
         yPos += finalHeight + 10;
+
+        // Add legend after 2D floor plan
+        if (yPos > pageHeight - 80) {
+          pdf.addPage();
+          yPos = margin;
+        }
+
+        pdf.setFontSize(12);
+        pdf.setFont(undefined, 'bold');
+        pdf.text('Floor Plan Legend:', margin, yPos);
+        pdf.setFont(undefined, 'normal');
+        yPos += 7;
+
+        const itemTypes = {
+          stage: { color: [139, 92, 246], name: 'Stage' },
+          dancefloor: { color: [251, 146, 60], name: 'Dance Floor' },
+          bar: { color: [34, 197, 94], name: 'Bar' },
+          videowall: { color: [59, 130, 246], name: 'Video Wall' },
+          table_8ft: { color: [236, 72, 153], name: '8ft Table' },
+          table_6ft: { color: [168, 85, 247], name: '6ft Table' },
+          table_5ft_round: { color: [251, 191, 36], name: '5ft Round Table' },
+          table_6ft_round: { color: [34, 211, 238], name: '6ft Round Table' },
+          cocktail: { color: [248, 113, 113], name: 'Cocktail Table' },
+          custom: { color: [156, 163, 175], name: 'Custom Item' }
+        };
+
+        Object.entries(itemTypes).forEach(([type, info]) => {
+          const count = roomItems.filter(i => i.type === type).length;
+          if (count > 0) {
+            // Draw color box
+            pdf.setFillColor(info.color[0], info.color[1], info.color[2]);
+            pdf.rect(margin, yPos - 3, 5, 5, 'F');
+            
+            // Draw text
+            pdf.setTextColor(0, 0, 0);
+            pdf.setFontSize(9);
+            pdf.text(`${info.name} (${count})`, margin + 8, yPos);
+            yPos += 6;
+          }
+        });
+
+        yPos += 5;
       } catch (error) {
         console.error('Error capturing 2D canvas:', error);
       }
