@@ -6,6 +6,7 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
   const [dragStart, setDragStart] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [originalPositions, setOriginalPositions] = useState([]);
 
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current) return;
@@ -201,12 +202,14 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
       }
       setSelectedItem(itemIdx);
       setDragging(itemIdx);
-      setDragStart({ x, y, itemX: item.x, itemY: item.y });
+      setDragStart({ x, y });
+      // Store original positions of all items
+      setOriginalPositions(items.map(itm => ({ x: itm.x, y: itm.y })));
     }
   };
 
   const handleMove = (e) => {
-    if (dragging !== null && dragStart) {
+    if (dragging !== null && dragStart && originalPositions.length > 0) {
       if (e.cancelable) {
         e.preventDefault();
       }
@@ -227,23 +230,23 @@ export default function TentCanvas2D({ tentConfig, items, setItems, canvasRef })
 
       const item = items[dragging];
       if (item.groupId) {
-        setItems(prev => prev.map(itm =>
+        setItems(prev => prev.map((itm, idx) =>
           itm.groupId === item.groupId
-            ? { ...itm, x: itm.x + dx, y: itm.y + dy }
+            ? { ...itm, x: originalPositions[idx].x + dx, y: originalPositions[idx].y + dy }
             : itm
         ));
       } else {
         setItems(prev => prev.map((itm, idx) =>
-          idx === dragging ? { ...itm, x: dragStart.itemX + dx, y: dragStart.itemY + dy } : itm
+          idx === dragging ? { ...itm, x: originalPositions[idx].x + dx, y: originalPositions[idx].y + dy } : itm
         ));
       }
-      setDragStart({ x, y, itemX: dragStart.itemX + dx, itemY: dragStart.itemY + dy });
     }
   };
 
   const handleEnd = () => {
     setDragging(null);
     setDragStart(null);
+    setOriginalPositions([]);
   };
 
   const handleDeleteItem = () => {
