@@ -815,14 +815,29 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                 )}
               </div>
               {showCanvas && (
-                <Button
-                  type="button"
-                  onClick={handleExportPDF}
-                  className={`w-full h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-amber-500 hover:bg-amber-600 text-black'}`}
-                >
-                  <FileDown className="w-5 h-5 mr-2" />
-                  Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    onClick={handleGenerate3D}
+                    disabled={isLoading3D}
+                    className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
+                  >
+                    {isLoading3D ? (
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    ) : (
+                      <Box className="w-5 h-5 mr-2" />
+                    )}
+                    A.I. Design
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleExportPDF}
+                    className={`flex-1 h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-amber-500 hover:bg-amber-600 text-black'}`}
+                  >
+                    <FileDown className="w-5 h-5 mr-2" />
+                    Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
+                  </Button>
+                </div>
               )}
             </form>
           </motion.div>
@@ -847,28 +862,14 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   />
                 </div>
                 
-                <div className="flex gap-3">
-                  <Button
-                    onClick={handleGenerate3D}
-                    disabled={isLoading3D}
-                    className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold h-12 rounded-lg"
-                  >
-                    {isLoading3D ? (
-                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                    ) : (
-                      <Box className="w-5 h-5 mr-2" />
-                    )}
-                    A.I. Design
-                  </Button>
-                  <Button
-                    onClick={() => setShowGearList(!showGearList)}
-                    variant="outline"
-                    className="flex-1 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
-                  >
-                    <Layout className="w-5 h-5 mr-2" />
-                    {showGearList ? 'Hide' : 'Show'} Gear List
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => setShowGearList(!showGearList)}
+                  variant="outline"
+                  className="w-full border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
+                >
+                  <Layout className="w-5 h-5 mr-2" />
+                  {showGearList ? 'Hide' : 'Show'} Gear List
+                </Button>
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-zinc-500">
