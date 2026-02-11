@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "./utils";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -730,6 +732,14 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
           <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
             Create elegant room layouts with professional 2D floor plans and stunning 3D renders
           </p>
+          <div className="mt-6">
+            <Link 
+              to={createPageUrl('Home')}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg text-white transition-colors"
+            >
+              Other AI Designers
+            </Link>
+          </div>
         </motion.div>
 
         {/* Split Layout */}
