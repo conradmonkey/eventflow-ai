@@ -140,7 +140,8 @@ export default function RoomDesigner() {
         dinner_party: "intimate dinner party with cozy, sophisticated atmosphere",
         family_get_together: "welcoming family gathering space with warm, casual elegance",
         presentation: "professional presentation venue with clean, modern aesthetics",
-        workshop: "collaborative workshop space with functional, inspiring design"
+        workshop: "collaborative workshop space with functional, inspiring design",
+        party: "vibrant party venue with energetic atmosphere and festive decor"
       };
 
       const eventContext = formData.event_type ? eventTypeDescriptions[formData.event_type] || "elegant event space" : "elegant event space";
@@ -486,7 +487,8 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
       dinner_party: 'rich jewel tones or elegant neutrals',
       family_get_together: 'warm, inviting colors',
       presentation: 'clean whites and corporate colors',
-      workshop: 'energizing colors promoting creativity'
+      workshop: 'energizing colors promoting creativity',
+      party: 'vibrant, bold colors with festive accents'
     };
     const colorSuggestion = eventColors[formData.event_type] || 'elegant coordinated palette';
     pdf.text(`• Recommended palette: ${colorSuggestion}`, margin + 5, yPos);
@@ -788,6 +790,7 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                       <SelectItem value="family_get_together">Family Get Together</SelectItem>
                       <SelectItem value="presentation">Presentation</SelectItem>
                       <SelectItem value="workshop">Workshop</SelectItem>
+                      <SelectItem value="party">Party</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
