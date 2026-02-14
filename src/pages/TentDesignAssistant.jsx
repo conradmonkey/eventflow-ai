@@ -506,6 +506,12 @@ export default function TentDesignAssistant() {
           lighting: 'dim ambient with accent lighting, focused on screen',
           colors: 'deep reds, blacks, theatrical gold accents',
           decor: 'cinema-style seating, large screen, sound system visible'
+        },
+        party: {
+          mood: 'vibrant and energetic',
+          lighting: 'dynamic colorful lighting with LED effects and dance floor lights',
+          colors: 'bold vibrant colors with metallic accents',
+          decor: 'festive decorations, balloon installations, energetic atmosphere'
         }
       };
 
@@ -683,6 +689,12 @@ High-quality event photography, realistic styling, professional setup, authentic
         accents: 'Theatrical draping, velvet textures',
         linen: 'Black or deep red',
         lighting: 'Dim amber (2200K) with focused spots'
+      },
+      party: {
+        primary: 'Vibrant bold colors, metallics, neon accents',
+        accents: 'Colorful balloons, festive banners, LED features',
+        linen: 'Bright solid colors or metallic',
+        lighting: 'Dynamic RGB (color-changing) with dance effects'
       }
     };
     
@@ -1026,6 +1038,7 @@ High-quality event photography, realistic styling, professional setup, authentic
                       <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
                       <SelectItem value="workshop">Workshop</SelectItem>
                       <SelectItem value="film_screening">Film Screening</SelectItem>
+                      <SelectItem value="party">Party</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
