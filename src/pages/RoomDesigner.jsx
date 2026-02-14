@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Ruler, Layout, Box, DollarSign, Loader2, Save, FolderOpen, X, FileDown, Lock, Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
@@ -26,6 +27,7 @@ export default function RoomDesigner() {
     city: "",
     room_length: "",
     room_width: "",
+    theme_colors: "",
     stage_length: "",
     stage_width: "",
     dance_floor_length: "",
@@ -143,9 +145,9 @@ export default function RoomDesigner() {
 
       const eventContext = formData.event_type ? eventTypeDescriptions[formData.event_type] || "elegant event space" : "elegant event space";
 
-      // Analyze placed items
+      // Analyze placed items with their exact positions
       const itemSummary = roomItems.map(item => {
-        const position = `positioned at ${Math.round(item.x)}, ${Math.round(item.y)}`;
+        const position = `at coordinates (${Math.round(item.x)}, ${Math.round(item.y)}) with ${item.rotation || 0}° rotation`;
         if (item.type === 'stage') return `Stage (${item.width}' x ${item.length}') ${position}`;
         if (item.type === 'dancefloor') return `Dance floor (${item.width}' x ${item.length}') ${position}`;
         if (item.type === 'bar') return `Bar (${item.width}' x ${item.length}') ${position}`;
@@ -160,9 +162,12 @@ export default function RoomDesigner() {
 
 Event Type: ${formData.event_type ? formData.event_type.replace('_', ' ').toUpperCase() : 'ELEGANT EVENT'}
 Room Dimensions: ${formData.room_length}ft x ${formData.room_width}ft
+${formData.theme_colors ? `\nTheme & Colors: ${formData.theme_colors}` : ''}
 
-Layout Configuration:
+Layout Configuration (CRITICAL - Match exact positions and spatial relationships):
 ${itemSummary ? `- ${itemSummary}` : 'Open floor plan with flexible seating'}
+
+IMPORTANT: Render the room with items positioned EXACTLY as specified in the coordinates above. The spatial arrangement and item locations are critical to the design.
 
 Design Elements:
 ${roomItems.some(i => i.type === 'stage') ? '- Professional stage with theatrical lighting appropriate for the event type' : ''}
@@ -173,15 +178,15 @@ ${tableCount > 0 ? `- ${tableCount} tables draped in luxurious ${tableColor} lin
 
 Lighting & Atmosphere:
 - Lighting design tailored specifically for ${formData.event_type ? formData.event_type.replace('_', ' ') : 'this event'}
-- Warm ambient lighting creating the perfect mood
+${formData.theme_colors ? `- Color scheme and lighting matching the theme: ${formData.theme_colors}` : '- Warm ambient lighting creating the perfect mood'}
 - Strategic accent lighting highlighting key areas
 - Color palette and intensity appropriate for event type
 ${roomItems.some(i => i.type === 'stage') ? '- Dramatic stage wash with professional production lighting' : ''}
 
 Decor & Styling:
 - Event-specific decor matching ${formData.event_type ? formData.event_type.replace('_', ' ') : 'elegant occasion'}
-- Premium materials and luxurious finishes throughout
-- Spatial arrangement exactly as configured in the floor plan
+${formData.theme_colors ? `- Design elements and color palette: ${formData.theme_colors}` : '- Premium materials and luxurious finishes throughout'}
+- Spatial arrangement EXACTLY as configured in the floor plan with proper item positioning
 - Cohesive design language from entrance to main areas
 
 Camera & Presentation:
@@ -281,7 +286,8 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
       table_5ft_round: project.table_5ft_round || "0",
       table_6ft_round: project.table_6ft_round || "0",
       cocktail_tables: project.cocktail_tables || "0",
-      table_color: project.table_color || "white"
+      table_color: project.table_color || "white",
+      theme_colors: project.theme_colors || ""
     });
     setRoomItems(project.room_items || []);
     setTableColor(project.table_color || "white");
@@ -851,6 +857,16 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                       className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
                     />
                   </div>
+                </div>
+                <div>
+                  <Label className="text-zinc-400 text-sm">Theme and Colors</Label>
+                  <Textarea
+                    value={formData.theme_colors}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, theme_colors: e.target.value }))}
+                    className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 rounded-lg mt-1 resize-none"
+                    placeholder="e.g., Elegant gold and ivory with soft romantic lighting"
+                    rows={2}
+                  />
                 </div>
               </div>
 
