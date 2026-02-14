@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TentInputPanel from '@/components/tent/TentInputPanel';
@@ -22,6 +23,7 @@ export default function TentDesignAssistant() {
 
   const [projectName, setProjectName] = useState('');
   const [eventType, setEventType] = useState('');
+  const [themeColors, setThemeColors] = useState('');
   const [attendees, setAttendees] = useState(100);
   const [seatingArrangement, setSeatingArrangement] = useState('');
   const [suggestedTent, setSuggestedTent] = useState(null);
@@ -78,6 +80,7 @@ export default function TentDesignAssistant() {
     const projectData = {
       project_name: projectName,
       event_type: eventType,
+      theme_colors: themeColors,
       category: projectCategory,
       attendees,
       seating_arrangement: seatingArrangement,
@@ -107,6 +110,7 @@ export default function TentDesignAssistant() {
         project_id: projectId,
         project_name: projectName,
         event_type: eventType,
+        theme_colors: themeColors,
         version_number: currentVersion,
         attendees,
         seating_arrangement: seatingArrangement,
@@ -128,6 +132,7 @@ export default function TentDesignAssistant() {
   const handleLoadProject = (project) => {
     setProjectName(project.project_name);
     setEventType(project.event_type || '');
+    setThemeColors(project.theme_colors || '');
     setAttendees(project.attendees);
     setSeatingArrangement(project.seating_arrangement);
     setTentStyle(project.tent_style);
@@ -140,6 +145,7 @@ export default function TentDesignAssistant() {
   const handleLoadVersion = (version) => {
     setProjectName(version.project_name);
     setEventType(version.event_type || '');
+    setThemeColors(version.theme_colors || '');
     setAttendees(version.attendees);
     setSeatingArrangement(version.seating_arrangement);
     setTentStyle(version.tent_style);
@@ -454,10 +460,13 @@ export default function TentDesignAssistant() {
   const handleGenerateRealistic = async () => {
     setGeneratingRealistic(true);
     try {
-      // Count items
+      // Count items with their positions
       const itemCounts = {};
+      const itemPositions = [];
       items.forEach(item => {
         itemCounts[item.type] = (itemCounts[item.type] || 0) + 1;
+        const position = `${item.type} at (${Math.round(item.x)}, ${Math.round(item.y)}) with ${item.rotation || 0}° rotation`;
+        itemPositions.push(position);
       });
 
       // Event type specific descriptions
@@ -523,7 +532,26 @@ export default function TentDesignAssistant() {
       const tentTypeDesc = tentStyle === 'marquee' ? 'elegant marquee tent with draped ceiling' : 'modern frame tent with high ceilings';
       const elementsText = elements.length > 0 ? elements.join(', ') : 'elegant setup';
 
-      const prompt = `Professional event photography of a ${eventType ? eventType.replace('_', ' ') : 'elegant'} event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${eventSpec.mood.charAt(0).toUpperCase() + eventSpec.mood.slice(1)} atmosphere with ${elementsText}. Color scheme: ${eventSpec.colors}. Lighting: ${eventSpec.lighting}. ${attendees} guests enjoying the space. High-quality event photography, realistic styling, professional setup, authentic venue aesthetic.`;
+      const prompt = `Professional event photography of a ${eventType ? eventType.replace('_', ' ') : 'elegant'} event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}.
+
+Event Details:
+- Type: ${eventType ? eventType.replace('_', ' ') : 'elegant event'}
+- Tent: ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}
+${themeColors ? `- Theme & Colors: ${themeColors}` : ''}
+- Attendees: ${attendees}
+
+CRITICAL - Exact Item Positions (match these precisely):
+${itemPositions.join('\n')}
+
+IMPORTANT: Render the tent with items positioned EXACTLY as specified in the coordinates above. The spatial arrangement and item locations are critical to the design.
+
+Atmosphere & Design:
+- ${eventSpec.mood.charAt(0).toUpperCase() + eventSpec.mood.slice(1)} atmosphere with ${elementsText}
+${themeColors ? `- Color scheme matching theme: ${themeColors}` : `- Color scheme: ${eventSpec.colors}`}
+- Lighting: ${eventSpec.lighting}
+- Decor: ${eventSpec.decor}
+
+High-quality event photography, realistic styling, professional setup, authentic venue aesthetic with exact spatial relationships matching the layout.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
       
@@ -1000,6 +1028,16 @@ export default function TentDesignAssistant() {
                       <SelectItem value="film_screening">Film Screening</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Theme and Colors</Label>
+                  <Textarea
+                    value={themeColors}
+                    onChange={(e) => setThemeColors(e.target.value)}
+                    placeholder="e.g., Romantic blush pink and gold with fairy lights"
+                    className="resize-none mt-1"
+                    rows={2}
+                  />
                 </div>
               </div>
             </div>
