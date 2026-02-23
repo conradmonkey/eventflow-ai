@@ -502,32 +502,45 @@ export default function OutdoorLayoutPlanner() {
                 </div>
 
                 {scaleUnit === 'imperial' ? (
-                  <>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs text-slate-500">1 inch =</span>
-                      <Input
-                        id="scale"
-                        type="number"
-                        value={scale}
-                        onChange={(e) => handleImperialScaleChange(e.target.value)}
-                        min="0.1"
-                        step="0.5"
-                        className="w-16 h-7 text-xs"
-                      />
-                      <span className="text-xs text-slate-500">feet</span>
-                    </div>
-                  </>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <Input
+                      type="number"
+                      value={imperialInches}
+                      onChange={(e) => handleImperialChange(parseFloat(e.target.value) || 1, imperialFeet)}
+                      min="0.01"
+                      step="0.5"
+                      className="w-14 h-7 text-xs"
+                    />
+                    <span className="text-xs text-slate-500">inch =</span>
+                    <Input
+                      type="number"
+                      value={imperialFeet}
+                      onChange={(e) => handleImperialChange(imperialInches, parseFloat(e.target.value) || 1)}
+                      min="0.1"
+                      step="1"
+                      className="w-14 h-7 text-xs"
+                    />
+                    <span className="text-xs text-slate-500">feet</span>
+                  </div>
                 ) : (
                   <>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs text-slate-500">1 cm =</span>
+                    <div className="flex items-center gap-1 flex-wrap">
                       <Input
                         type="number"
-                        value={metricScale}
-                        onChange={(e) => handleMetricScaleChange(e.target.value)}
+                        value={metricCm}
+                        onChange={(e) => handleMetricChange(parseFloat(e.target.value) || 1, metricMetres)}
                         min="0.01"
                         step="0.5"
-                        className="w-16 h-7 text-xs"
+                        className="w-14 h-7 text-xs"
+                      />
+                      <span className="text-xs text-slate-500">cm =</span>
+                      <Input
+                        type="number"
+                        value={metricMetres}
+                        onChange={(e) => handleMetricChange(metricCm, parseFloat(e.target.value) || 1)}
+                        min="0.01"
+                        step="1"
+                        className="w-14 h-7 text-xs"
                       />
                       <span className="text-xs text-slate-500">metres</span>
                     </div>
