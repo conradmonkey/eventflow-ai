@@ -59,6 +59,9 @@ export default function Canvas2DRenderer({
       } else if (item.type === 'frame_tent' && item.width && item.length) {
         width = (item.width / scale) * INCH_TO_PIXELS * zoom;
         height = (item.length / scale) * INCH_TO_PIXELS * zoom;
+      } else if (item.type === 'custom' && item.width && item.length) {
+        width = (item.width / scale) * INCH_TO_PIXELS * zoom;
+        height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       }
 
       ctx.save();
