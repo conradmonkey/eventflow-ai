@@ -23,6 +23,7 @@ export default function Canvas2DRenderer({
   scale,
   zoom,
   selectedItem,
+  onSelectItem,
   onUpdateItem,
   canvasRef,
   showLegend = true,
