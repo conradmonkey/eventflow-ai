@@ -23,24 +23,27 @@ export default function OutdoorLayoutPlanner() {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [scale, setScale] = useState(10); // feet per inch (always imperial internally)
   const [scaleUnit, setScaleUnit] = useState('imperial'); // 'imperial' or 'metric'
-  const [metricScale, setMetricScale] = useState(3); // metres per cm
+  const [imperialInches, setImperialInches] = useState(1);
+  const [imperialFeet, setImperialFeet] = useState(10);
+  const [metricCm, setMetricCm] = useState(1);
+  const [metricMetres, setMetricMetres] = useState(3);
 
-  // Convert metric (metres per cm) to imperial (feet per inch)
-  const metricToImperial = (metresPerCm) => {
-    // 1 cm = 0.393701 inches, 1 metre = 3.28084 feet
-    // feet per inch = (metresPerCm * 3.28084) / 0.393701
-    return metresPerCm * 3.28084 / 0.393701;
+  // Convert metric ratio to feet per inch
+  const metricToImperial = (cm, metres) => {
+    // (metres * 3.28084) feet per (cm / 2.54) inches = (metres * 3.28084 * 2.54) / cm
+    return (metres * 3.28084 * 2.54) / cm;
   };
 
-  const handleMetricScaleChange = (val) => {
-    const metres = parseFloat(val) || 1;
-    setMetricScale(metres);
-    setScale(metricToImperial(metres));
+  const handleMetricChange = (cm, metres) => {
+    setMetricCm(cm);
+    setMetricMetres(metres);
+    setScale(metricToImperial(cm, metres));
   };
 
-  const handleImperialScaleChange = (val) => {
-    const feet = parseFloat(val) || 10;
-    setScale(feet);
+  const handleImperialChange = (inches, feet) => {
+    setImperialInches(inches);
+    setImperialFeet(feet);
+    setScale(feet / inches);
   };
 
   useEffect(() => {
