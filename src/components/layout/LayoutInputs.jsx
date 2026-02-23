@@ -147,12 +147,13 @@ export default function LayoutInputs({ onAddItems }) {
         newItems.push({
           type: 'custom',
           name: item.name,
-          width: item.width,
-          length: item.length,
+          width: item.width || 10,
+          length: item.length || 10,
           color: item.color,
-          x: Math.random() * 300,
-          y: Math.random() * 300,
-          rotation: 0
+          x: 200 + Math.random() * 100,
+          y: 200 + Math.random() * 100,
+          rotation: 0,
+          quantity: 1
         });
       }
     });
