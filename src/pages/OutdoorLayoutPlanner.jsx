@@ -655,6 +655,7 @@ export default function OutdoorLayoutPlanner() {
               scale={scale}
               zoom={zoom}
               selectedItem={selectedItem}
+              onSelectItem={setSelectedItem}
               onUpdateItem={handleUpdateItem}
               canvasRef={canvasRef}
               showLegend={false}
