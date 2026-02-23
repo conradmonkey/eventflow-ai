@@ -21,7 +21,27 @@ import GuidedTour from '@/components/layout/GuidedTour';
 export default function OutdoorLayoutPlanner() {
   const [projectName, setProjectName] = useState('');
   const [backgroundImage, setBackgroundImage] = useState(null);
-  const [scale, setScale] = useState(10); // feet per inch
+  const [scale, setScale] = useState(10); // feet per inch (always imperial internally)
+  const [scaleUnit, setScaleUnit] = useState('imperial'); // 'imperial' or 'metric'
+  const [metricScale, setMetricScale] = useState(3); // metres per cm
+
+  // Convert metric (metres per cm) to imperial (feet per inch)
+  const metricToImperial = (metresPerCm) => {
+    // 1 cm = 0.393701 inches, 1 metre = 3.28084 feet
+    // feet per inch = (metresPerCm * 3.28084) / 0.393701
+    return metresPerCm * 3.28084 / 0.393701;
+  };
+
+  const handleMetricScaleChange = (val) => {
+    const metres = parseFloat(val) || 1;
+    setMetricScale(metres);
+    setScale(metricToImperial(metres));
+  };
+
+  const handleImperialScaleChange = (val) => {
+    const feet = parseFloat(val) || 10;
+    setScale(feet);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -461,19 +481,58 @@ export default function OutdoorLayoutPlanner() {
                 )}
               </div>
               <div id="scale-input">
-                <Label htmlFor="scale" className="text-xs font-semibold">
-                  Scale (feet per inch)
-                </Label>
-                <Input
-                  id="scale"
-                  type="number"
-                  value={scale}
-                  onChange={(e) => setScale(parseFloat(e.target.value) || 10)}
-                  min="0.1"
-                  step="0.5"
-                  className="w-16 h-8 text-sm mt-1"
-                />
-                <p className="text-xs text-slate-500 mt-1">1 inch = {scale} feet</p>
+                <Label className="text-xs font-semibold">Scale</Label>
+                {/* Unit toggle */}
+                <div className="flex gap-1 mt-1 mb-2">
+                  <button
+                    onClick={() => setScaleUnit('imperial')}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${scaleUnit === 'imperial' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                  >
+                    Imperial
+                  </button>
+                  <button
+                    onClick={() => setScaleUnit('metric')}
+                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${scaleUnit === 'metric' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                  >
+                    Metric
+                  </button>
+                </div>
+
+                {scaleUnit === 'imperial' ? (
+                  <>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-slate-500">1 inch =</span>
+                      <Input
+                        id="scale"
+                        type="number"
+                        value={scale}
+                        onChange={(e) => handleImperialScaleChange(e.target.value)}
+                        min="0.1"
+                        step="0.5"
+                        className="w-16 h-7 text-xs"
+                      />
+                      <span className="text-xs text-slate-500">feet</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs text-slate-500">1 cm =</span>
+                      <Input
+                        type="number"
+                        value={metricScale}
+                        onChange={(e) => handleMetricScaleChange(e.target.value)}
+                        min="0.01"
+                        step="0.5"
+                        className="w-16 h-7 text-xs"
+                      />
+                      <span className="text-xs text-slate-500">metres</span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">
+                      = 1 inch : <span className="font-medium text-slate-600">{scale.toFixed(2)} feet</span>
+                    </p>
+                  </>
+                )}
               </div>
             </div>
 
