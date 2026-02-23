@@ -119,6 +119,7 @@ export default function Canvas2DRenderer({
   }, [backgroundImage, items, scale, zoom, selectedItem, drawItems]);
 
   const getItemAtPoint = (x, y) => {
+    const MIN_HIT = 20; // minimum hit area in pixels for small items
     for (let i = items.length - 1; i >= 0; i--) {
       const item = items[i];
       const size = ITEM_SIZES[item.type];
@@ -142,14 +143,18 @@ export default function Canvas2DRenderer({
         height = (item.length / scale) * INCH_TO_PIXELS * zoom;
       }
 
+      // Ensure a minimum hit area so thin/small items are still clickable
+      const hitW = Math.max(width, MIN_HIT);
+      const hitH = Math.max(height, MIN_HIT);
+
       const itemX = item.x * zoom;
       const itemY = item.y * zoom;
 
       if (
-        x >= itemX - width / 2 &&
-        x <= itemX + width / 2 &&
-        y >= itemY - height / 2 &&
-        y <= itemY + height / 2
+        x >= itemX - hitW / 2 &&
+        x <= itemX + hitW / 2 &&
+        y >= itemY - hitH / 2 &&
+        y <= itemY + hitH / 2
       ) {
         return i;
       }
