@@ -182,13 +182,13 @@ export default function OutdoorLayoutPlanner() {
     }
 
     try {
-      const canvasImage = canvasRef.current?.toDataURL('image/png') || '';
+      // background_image can be a large base64 string; omit it to avoid network payload limits
       const projectData = {
         project_name: projectName,
         scale,
         items,
-        background_image: backgroundImage || '',
-        canvas_drawing: canvasImage
+        background_image: '',
+        canvas_drawing: ''
       };
 
       if (currentProjectId) {
