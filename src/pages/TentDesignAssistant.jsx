@@ -304,65 +304,41 @@ export default function TentDesignAssistant() {
       }
     }
 
-    // Add Option 1 (realistic) if available
-    if (realisticImageToUse) {
+    const subLabel = `${eventLabel.charAt(0).toUpperCase() + eventLabel.slice(1)} • ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}${themeColors ? ` • ${themeColors}` : ''}`;
+
+    const addImagePage = async (url, title) => {
+      if (!url) return;
       pdf.addPage();
       yPos = 20;
-
-      pdf.setFontSize(16);
-      pdf.text('Option 1', 20, yPos);
-      yPos += 6;
+      pdf.setFontSize(18);
+      pdf.setTextColor(88, 28, 135);
+      pdf.text(title, 20, yPos);
+      yPos += 7;
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(`${eventLabel.charAt(0).toUpperCase() + eventLabel.slice(1)} • ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}${themeColors ? ` • ${themeColors}` : ''}`, 20, yPos);
+      // Wrap long subtitle
+      const lines = pdf.splitTextToSize(subLabel, pageWidth - 40);
+      pdf.text(lines, 20, yPos);
       pdf.setTextColor(0, 0, 0);
-      yPos += 8;
-
+      yPos += lines.length * 5 + 5;
       try {
         const img = new Image();
         img.crossOrigin = 'anonymous';
-        img.src = realisticImageToUse;
+        img.src = url;
         await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
         const imgWidth = pageWidth - 40;
         const imgHeight = (img.height * imgWidth) / img.width;
-        const finalHeight = Math.min(imgHeight, pageHeight - 40);
+        const finalHeight = Math.min(imgHeight, pageHeight - yPos - 10);
         const finalWidth = (img.width * finalHeight) / img.height;
-        pdf.addImage(realisticImageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
+        pdf.addImage(url, 'JPEG', 20, yPos, finalWidth, finalHeight);
       } catch (error) {
-        console.error('Error adding Option 1 image to PDF:', error);
-        pdf.text('(Option 1 image could not be loaded)', 20, yPos);
+        console.error(`Error adding ${title} to PDF:`, error);
+        pdf.text(`(${title} image could not be loaded)`, 20, yPos);
       }
-    }
+    };
 
-    // Add Option 2 (AI Dreamer) if available
-    if (imageToUse) {
-      pdf.addPage();
-      yPos = 20;
-
-      pdf.setFontSize(16);
-      pdf.text('Option 2', 20, yPos);
-      yPos += 6;
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`${eventLabel.charAt(0).toUpperCase() + eventLabel.slice(1)} • ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}${themeColors ? ` • ${themeColors}` : ''}`, 20, yPos);
-      pdf.setTextColor(0, 0, 0);
-      yPos += 8;
-
-      try {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = imageToUse;
-        await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
-        const imgWidth = pageWidth - 40;
-        const imgHeight = (img.height * imgWidth) / img.width;
-        const finalHeight = Math.min(imgHeight, pageHeight - 40);
-        const finalWidth = (img.width * finalHeight) / img.height;
-        pdf.addImage(imageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
-      } catch (error) {
-        console.error('Error adding Option 2 image to PDF:', error);
-        pdf.text('(Option 2 image could not be loaded)', 20, yPos);
-      }
-    }
+    await addImagePage(option1Url, 'Option 1');
+    await addImagePage(option2Url, 'Option 2');
 
     // Footer
     const totalPages = pdf.internal.pages.length - 1;
