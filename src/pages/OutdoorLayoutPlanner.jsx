@@ -182,12 +182,24 @@ export default function OutdoorLayoutPlanner() {
     }
 
     try {
-      // background_image can be a large base64 string; omit it to avoid network payload limits
+      let bgImageUrl = '';
+
+      // Upload background image to file storage if it's a local base64 blob
+      if (backgroundImage && backgroundImage.startsWith('data:')) {
+        const res = await fetch(backgroundImage);
+        const blob = await res.blob();
+        const file = new File([blob], 'background.png', { type: blob.type });
+        const uploaded = await base44.integrations.Core.UploadFile({ file });
+        bgImageUrl = uploaded.file_url;
+      } else if (backgroundImage) {
+        bgImageUrl = backgroundImage; // already a URL from a previous save
+      }
+
       const projectData = {
         project_name: projectName,
         scale,
         items,
-        background_image: '',
+        background_image: bgImageUrl,
         canvas_drawing: ''
       };
 
