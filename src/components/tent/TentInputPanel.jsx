@@ -145,311 +145,150 @@ export default function TentInputPanel({ tentConfig, setTentConfig, seatingArran
   };
 
 
+  const compactInput = "h-7 text-xs px-2";
+  const compactColor = "w-8 h-7 rounded cursor-pointer border border-input";
+
   return (
-    <div className="space-y-4 max-h-[calc(100vh-500px)] overflow-y-auto">
-      <h3 className="text-lg font-bold text-slate-900">Add Decor Items</h3>
-      
-      {/* Stages */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Stages</Label>
-          <Button size="sm" variant="outline" onClick={addStage}>
-            <Plus className="w-4 h-4" />
-          </Button>
-        </div>
-        {tentConfig.stages.map((stage, idx) => (
-          <div key={idx} className="border rounded p-2 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-xs font-medium">Stage {idx + 1}</span>
-              <button onClick={() => removeStage(idx)} className="text-red-500">
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <Input
-                type="number"
-                placeholder="Width"
-                value={stage.width}
-                onChange={(e) => updateStage(idx, 'width', e.target.value)}
-              />
-              <Input
-                type="number"
-                placeholder="Length"
-                value={stage.length}
-                onChange={(e) => updateStage(idx, 'length', e.target.value)}
-              />
-              <Input
-                type="number"
-                placeholder="Height"
-                value={stage.height}
-                onChange={(e) => updateStage(idx, 'height', e.target.value)}
-              />
-            </div>
-            <Input
-              type="color"
-              value={stage.color}
-              onChange={(e) => updateStage(idx, 'color', e.target.value)}
-            />
-          </div>
-        ))}
+    <div className="bg-white rounded-lg shadow-md flex flex-col" style={{ maxHeight: 'calc(100vh - 420px)', minHeight: '200px' }}>
+      {/* Sticky header */}
+      <div className="px-3 py-2 border-b bg-white rounded-t-lg flex-shrink-0">
+        <h3 className="text-sm font-bold text-slate-900">Add Decor Items</h3>
       </div>
 
-      {/* Video Walls */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Video Walls</Label>
-          <Button size="sm" variant="outline" onClick={addVideoWall}>
-            <Plus className="w-4 h-4" />
-          </Button>
-        </div>
-        {tentConfig.videoWalls.map((wall, idx) => (
-          <div key={idx} className="border rounded p-2 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-xs font-medium">Wall {idx + 1}</span>
-              <button onClick={() => removeVideoWall(idx)} className="text-red-500">
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="grid grid-cols-3 gap-2 items-end">
-              <Input 
-                type="number" 
-                placeholder="Length" 
-                value={wall.length}
-                onChange={(e) => updateVideoWall(idx, 'length', e.target.value)}
-              />
-              <Input 
-                type="number" 
-                placeholder="Height" 
-                value={wall.height}
-                onChange={(e) => updateVideoWall(idx, 'height', e.target.value)}
-              />
-              <input
-                type="color"
-                value={wall.color || '#1E90FF'}
-                onChange={(e) => updateVideoWall(idx, 'color', e.target.value)}
-                className="w-full h-9 rounded cursor-pointer border border-input"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* Scrollable content */}
+      <div className="overflow-y-auto flex-1 px-3 py-2 space-y-2">
 
-      {/* Dance Floors */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Dance Floors</Label>
-          <Button size="sm" variant="outline" onClick={addDanceFloor}>
-            <Plus className="w-4 h-4" />
-          </Button>
+        {/* Tables - all 3 in one compact card */}
+        <div className="border rounded p-2 space-y-1">
+          <Label className="text-xs font-semibold text-slate-600">Tables</Label>
+          {[
+            { label: '8ft', type: 'tables8ft' },
+            { label: '6ft', type: 'tables6ft' },
+            { label: '5ft Round', type: 'tables5ft' },
+          ].map(({ label, type }) => (
+            <div key={type} className="flex items-center gap-1">
+              <span className="text-xs w-14 text-slate-500">{label}</span>
+              <Input type="number" min="0" value={tentConfig[type].length}
+                onChange={(e) => updateTableCount(type, e.target.value)}
+                className={`flex-1 ${compactInput}`} />
+              <input type="color" value={tentConfig[type][0]?.color || '#8B4513'}
+                onChange={(e) => updateTableColor(type, e.target.value)}
+                className={compactColor} />
+            </div>
+          ))}
         </div>
-        {tentConfig.danceFloors.map((floor, idx) => (
-          <div key={idx} className="border rounded p-2 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-xs font-medium">Floor {idx + 1}</span>
-              <button onClick={() => removeDanceFloor(idx)} className="text-red-500">
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Input 
-                type="number" 
-                placeholder="Width" 
-                value={floor.width}
-                onChange={(e) => updateDanceFloor(idx, 'width', e.target.value)}
-              />
-              <Input 
-                type="number" 
-                placeholder="Length" 
-                value={floor.length}
-                onChange={(e) => updateDanceFloor(idx, 'length', e.target.value)}
-              />
-            </div>
-            <Input 
-              type="color" 
-              value={floor.color}
-              onChange={(e) => updateDanceFloor(idx, 'color', e.target.value)}
-            />
-          </div>
-        ))}
-      </div>
 
-      {/* Tables */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <Label className="text-sm font-semibold">Tables</Label>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <div className="flex-1">
-              <Label className="text-xs">8ft</Label>
-              <Input
-                type="number"
-                min="0"
-                value={tentConfig.tables8ft.length}
-                onChange={(e) => updateTableCount('tables8ft', e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <input
-              type="color"
-              value={tentConfig.tables8ft[0]?.color || '#8B4513'}
-              onChange={(e) => updateTableColor('tables8ft', e.target.value)}
-              className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex-1">
-              <Label className="text-xs">6ft</Label>
-              <Input
-                type="number"
-                min="0"
-                value={tentConfig.tables6ft.length}
-                onChange={(e) => updateTableCount('tables6ft', e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <input
-              type="color"
-              value={tentConfig.tables6ft[0]?.color || '#8B4513'}
-              onChange={(e) => updateTableColor('tables6ft', e.target.value)}
-              className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex-1">
-              <Label className="text-xs">5ft Round</Label>
-              <Input
-                type="number"
-                min="0"
-                value={tentConfig.tables5ft.length}
-                onChange={(e) => updateTableCount('tables5ft', e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <input
-              type="color"
-              value={tentConfig.tables5ft[0]?.color || '#8B4513'}
-              onChange={(e) => updateTableColor('tables5ft', e.target.value)}
-              className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Bars */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Bars</Label>
-          <Button size="sm" variant="outline" onClick={addBar}>
-            <Plus className="w-4 h-4" />
-          </Button>
-        </div>
-        {tentConfig.bars.map((bar, idx) => (
-          <div key={idx} className="border rounded p-2 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-xs font-medium">Bar {idx + 1}</span>
-              <button onClick={() => removeBar(idx)} className="text-red-500">
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="grid grid-cols-3 gap-2 items-end">
-              <Input 
-                type="number" 
-                placeholder="Width" 
-                value={bar.width}
-                onChange={(e) => updateBar(idx, 'width', e.target.value)}
-              />
-              <Input 
-                type="number" 
-                placeholder="Length" 
-                value={bar.length}
-                onChange={(e) => updateBar(idx, 'length', e.target.value)}
-              />
-              <input
-                type="color"
-                value={bar.color || '#654321'}
-                onChange={(e) => updateBar(idx, 'color', e.target.value)}
-                className="w-full h-9 rounded cursor-pointer border border-input"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Cocktail Tables */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <Label className="text-sm font-semibold">Cocktail</Label>
-            <Input
-              type="number"
-              min="0"
-              value={tentConfig.cocktailTables.length}
+        {/* Cocktail Tables */}
+        <div className="border rounded p-2">
+          <div className="flex items-center gap-1">
+            <span className="text-xs w-14 text-slate-500">Cocktail</span>
+            <Input type="number" min="0" value={tentConfig.cocktailTables.length}
               onChange={(e) => updateTableCount('cocktailTables', e.target.value)}
-              className="w-full"
-            />
+              className={`flex-1 ${compactInput}`} />
+            <input type="color" value={tentConfig.cocktailTables[0]?.color || '#8B4513'}
+              onChange={(e) => updateTableColor('cocktailTables', e.target.value)}
+              className={compactColor} />
           </div>
-          <input
-            type="color"
-            value={tentConfig.cocktailTables[0]?.color || '#8B4513'}
-            onChange={(e) => updateTableColor('cocktailTables', e.target.value)}
-            className="w-12 h-9 rounded cursor-pointer border border-input mt-5"
-          />
         </div>
-      </div>
 
-      {/* Custom Items */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-semibold">Custom Items</Label>
-          <Button size="sm" variant="outline" onClick={addCustomItem}>
-            <Plus className="w-4 h-4" />
-          </Button>
+        {/* Linen Color */}
+        <div className="border rounded p-2 flex items-center gap-2">
+          <Label className="text-xs font-semibold text-slate-600 flex-1">Linen Color</Label>
+          <input type="color" value={tentConfig.linenColor}
+            onChange={(e) => setTentConfig(prev => ({ ...prev, linenColor: e.target.value }))}
+            className={compactColor} />
         </div>
-        {(tentConfig.customEquipment || []).map((item, idx) => (
-          <div key={idx} className="border rounded p-2 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-xs font-medium">Item {idx + 1}</span>
-              <button onClick={() => removeCustomItem(idx)} className="text-red-500">
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-            <Input
-              type="text"
-              placeholder="Item name"
-              value={item.name}
-              onChange={(e) => updateCustomItem(idx, 'name', e.target.value)}
-            />
-            <div className="grid grid-cols-3 gap-2 items-end">
-              <Input 
-                type="number" 
-                placeholder="Width" 
-                value={item.width}
-                onChange={(e) => updateCustomItem(idx, 'width', e.target.value)}
-              />
-              <Input 
-                type="number" 
-                placeholder="Length" 
-                value={item.length}
-                onChange={(e) => updateCustomItem(idx, 'length', e.target.value)}
-              />
-              <input
-                type="color"
-                value={item.color || '#9CA3AF'}
-                onChange={(e) => updateCustomItem(idx, 'color', e.target.value)}
-                className="w-full h-9 rounded cursor-pointer border border-input"
-              />
-            </div>
+
+        {/* Stages */}
+        <div className="border rounded p-2 space-y-1">
+          <div className="flex justify-between items-center">
+            <Label className="text-xs font-semibold text-slate-600">Stages</Label>
+            <Button size="sm" variant="outline" className="h-6 px-2 text-xs" onClick={addStage}><Plus className="w-3 h-3" /></Button>
           </div>
-        ))}
-      </div>
+          {tentConfig.stages.map((stage, idx) => (
+            <div key={idx} className="flex items-center gap-1">
+              <span className="text-xs text-slate-400 w-10">#{idx+1}</span>
+              <Input type="number" placeholder="W" value={stage.width} onChange={(e) => updateStage(idx, 'width', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <Input type="number" placeholder="L" value={stage.length} onChange={(e) => updateStage(idx, 'length', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <Input type="number" placeholder="H" value={stage.height} onChange={(e) => updateStage(idx, 'height', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <input type="color" value={stage.color} onChange={(e) => updateStage(idx, 'color', e.target.value)} className={compactColor} />
+              <button onClick={() => removeStage(idx)} className="text-red-400"><Trash2 className="w-3 h-3" /></button>
+            </div>
+          ))}
+        </div>
 
-      {/* Linen Color */}
-      <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-        <Label className="text-sm font-semibold">Linen Color</Label>
-        <Input
-          type="color"
-          value={tentConfig.linenColor}
-          onChange={(e) => setTentConfig(prev => ({ ...prev, linenColor: e.target.value }))}
-        />
+        {/* Video Walls */}
+        <div className="border rounded p-2 space-y-1">
+          <div className="flex justify-between items-center">
+            <Label className="text-xs font-semibold text-slate-600">Video Walls</Label>
+            <Button size="sm" variant="outline" className="h-6 px-2 text-xs" onClick={addVideoWall}><Plus className="w-3 h-3" /></Button>
+          </div>
+          {tentConfig.videoWalls.map((wall, idx) => (
+            <div key={idx} className="flex items-center gap-1">
+              <span className="text-xs text-slate-400 w-10">#{idx+1}</span>
+              <Input type="number" placeholder="L" value={wall.length} onChange={(e) => updateVideoWall(idx, 'length', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <Input type="number" placeholder="H" value={wall.height} onChange={(e) => updateVideoWall(idx, 'height', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <input type="color" value={wall.color || '#1E90FF'} onChange={(e) => updateVideoWall(idx, 'color', e.target.value)} className={compactColor} />
+              <button onClick={() => removeVideoWall(idx)} className="text-red-400"><Trash2 className="w-3 h-3" /></button>
+            </div>
+          ))}
+        </div>
+
+        {/* Dance Floors */}
+        <div className="border rounded p-2 space-y-1">
+          <div className="flex justify-between items-center">
+            <Label className="text-xs font-semibold text-slate-600">Dance Floors</Label>
+            <Button size="sm" variant="outline" className="h-6 px-2 text-xs" onClick={addDanceFloor}><Plus className="w-3 h-3" /></Button>
+          </div>
+          {tentConfig.danceFloors.map((floor, idx) => (
+            <div key={idx} className="flex items-center gap-1">
+              <span className="text-xs text-slate-400 w-10">#{idx+1}</span>
+              <Input type="number" placeholder="W" value={floor.width} onChange={(e) => updateDanceFloor(idx, 'width', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <Input type="number" placeholder="L" value={floor.length} onChange={(e) => updateDanceFloor(idx, 'length', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <input type="color" value={floor.color} onChange={(e) => updateDanceFloor(idx, 'color', e.target.value)} className={compactColor} />
+              <button onClick={() => removeDanceFloor(idx)} className="text-red-400"><Trash2 className="w-3 h-3" /></button>
+            </div>
+          ))}
+        </div>
+
+        {/* Bars */}
+        <div className="border rounded p-2 space-y-1">
+          <div className="flex justify-between items-center">
+            <Label className="text-xs font-semibold text-slate-600">Bars</Label>
+            <Button size="sm" variant="outline" className="h-6 px-2 text-xs" onClick={addBar}><Plus className="w-3 h-3" /></Button>
+          </div>
+          {tentConfig.bars.map((bar, idx) => (
+            <div key={idx} className="flex items-center gap-1">
+              <span className="text-xs text-slate-400 w-10">#{idx+1}</span>
+              <Input type="number" placeholder="W" value={bar.width} onChange={(e) => updateBar(idx, 'width', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <Input type="number" placeholder="L" value={bar.length} onChange={(e) => updateBar(idx, 'length', e.target.value)} className={`flex-1 ${compactInput}`} />
+              <input type="color" value={bar.color || '#654321'} onChange={(e) => updateBar(idx, 'color', e.target.value)} className={compactColor} />
+              <button onClick={() => removeBar(idx)} className="text-red-400"><Trash2 className="w-3 h-3" /></button>
+            </div>
+          ))}
+        </div>
+
+        {/* Custom Items */}
+        <div className="border rounded p-2 space-y-1">
+          <div className="flex justify-between items-center">
+            <Label className="text-xs font-semibold text-slate-600">Custom Items</Label>
+            <Button size="sm" variant="outline" className="h-6 px-2 text-xs" onClick={addCustomItem}><Plus className="w-3 h-3" /></Button>
+          </div>
+          {(tentConfig.customEquipment || []).map((item, idx) => (
+            <div key={idx} className="space-y-1">
+              <div className="flex items-center gap-1">
+                <Input type="text" placeholder="Name" value={item.name} onChange={(e) => updateCustomItem(idx, 'name', e.target.value)} className={`flex-1 ${compactInput}`} />
+                <button onClick={() => removeCustomItem(idx)} className="text-red-400"><Trash2 className="w-3 h-3" /></button>
+              </div>
+              <div className="flex items-center gap-1 pl-1">
+                <Input type="number" placeholder="W" value={item.width} onChange={(e) => updateCustomItem(idx, 'width', e.target.value)} className={`flex-1 ${compactInput}`} />
+                <Input type="number" placeholder="L" value={item.length} onChange={(e) => updateCustomItem(idx, 'length', e.target.value)} className={`flex-1 ${compactInput}`} />
+                <input type="color" value={item.color || '#9CA3AF'} onChange={(e) => updateCustomItem(idx, 'color', e.target.value)} className={compactColor} />
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   );
