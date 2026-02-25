@@ -210,6 +210,11 @@ export default function TentDesignAssistant() {
       }
     }
 
+    // Extract the URL from realisticImage whether it's a string or object
+    const realisticImageUrl = realisticImageToUse?.url || (typeof realisticImageToUse === 'string' ? realisticImageToUse : null);
+    const option1Url = realisticImageUrl;
+    const option2Url = imageToUse?.url || (typeof imageToUse === 'string' ? imageToUse : null);
+
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -230,7 +235,7 @@ export default function TentDesignAssistant() {
     // Project Details
     pdf.setFontSize(11);
     pdf.setTextColor(80, 80, 80);
-    const detailsText = `${seatingArrangement?.replace('_', ' ') || 'N/A'} • ${attendees} Attendees • ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`;
+    const detailsText = `${eventLabel.charAt(0).toUpperCase() + eventLabel.slice(1)} • ${seatingArrangement?.replace(/_/g, ' ') || 'N/A'} • ${attendees} Attendees • ${tentConfig.width}' x ${tentConfig.length}' ${tentStyle}`;
     pdf.text(detailsText, pageWidth / 2, yPos, { align: 'center' });
     yPos += 12;
 
