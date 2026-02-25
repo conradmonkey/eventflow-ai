@@ -347,56 +347,15 @@ export default function TentDesignAssistant() {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.src = imageToUse;
-        
-        await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-
+        await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
         const imgWidth = pageWidth - 40;
         const imgHeight = (img.height * imgWidth) / img.width;
-        const maxHeight = pageHeight - 40;
-        
-        const finalHeight = Math.min(imgHeight, maxHeight);
+        const finalHeight = Math.min(imgHeight, pageHeight - 40);
         const finalWidth = (img.width * finalHeight) / img.height;
-
         pdf.addImage(imageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
       } catch (error) {
-        console.error('Error adding dreamer image to PDF:', error);
-        pdf.text('(Dreamer image could not be loaded)', 20, yPos);
-      }
-    }
-
-    // Add Realistic Image if available
-    if (realisticImageToUse) {
-      pdf.addPage();
-      yPos = 20;
-
-      pdf.setFontSize(16);
-      pdf.text('Realistic Rendering', 20, yPos);
-      yPos += 10;
-
-      try {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = realisticImageToUse;
-        
-        await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-
-        const imgWidth = pageWidth - 40;
-        const imgHeight = (img.height * imgWidth) / img.width;
-        const maxHeight = pageHeight - 40;
-        
-        const finalHeight = Math.min(imgHeight, maxHeight);
-        const finalWidth = (img.width * finalHeight) / img.height;
-
-        pdf.addImage(realisticImageToUse, 'JPEG', 20, yPos, finalWidth, finalHeight);
-      } catch (error) {
-        console.error('Error adding realistic image to PDF:', error);
-        pdf.text('(Realistic image could not be loaded)', 20, yPos);
+        console.error('Error adding Option 2 image to PDF:', error);
+        pdf.text('(Option 2 image could not be loaded)', 20, yPos);
       }
     }
 
