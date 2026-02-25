@@ -162,76 +162,51 @@ export default function TentDesignAssistant() {
   }, {});
 
   const handleExportPDF = async () => {
-    // Generate AI image if not already generated
-    let imageToUse = generatedImage;
-    if (!imageToUse) {
-      try {
-        let equipmentDetails = [];
-        
-        if (tentConfig.stages?.length > 0) {
-          equipmentDetails.push('a glamorous professional stage with dramatic lighting and LED panels');
-        }
-        if (tentConfig.danceFloors?.length > 0) {
-          equipmentDetails.push('an elegant dance floor with geometric LED patterns and dramatic uplighting');
-        }
-        if (tentConfig.bars?.length > 0) {
-          equipmentDetails.push('a luxurious modern bar with backlit shelves and premium finishes');
-        }
-        if (tentConfig.tables8ft?.length > 0 || tentConfig.tables6ft?.length > 0 || tentConfig.tables5ft?.length > 0) {
-          equipmentDetails.push(`elegant round tables with ${tentConfig.linenColor || 'white'} linens, centerpieces with flowers and candles`);
-        }
-        if (tentConfig.videoWalls?.length > 0) {
-          equipmentDetails.push('large LED video walls displaying elegant graphics');
-        }
-        if (tentConfig.cocktailTables?.length > 0) {
-          equipmentDetails.push('cocktail tables with ambient lighting');
-        }
+    // Build shared layout description from items on canvas
+    const buildLayoutDescription = () => {
+      const itemCounts = {};
+      items.forEach(item => { itemCounts[item.type] = (itemCounts[item.type] || 0) + 1; });
+      const parts = [];
+      if (itemCounts.stage > 0) parts.push(`${itemCounts.stage} stage${itemCounts.stage > 1 ? 's' : ''} positioned at the front/focal end`);
+      if (itemCounts.danceFloor > 0) parts.push(`${itemCounts.danceFloor} dance floor${itemCounts.danceFloor > 1 ? 's' : ''} in the center`);
+      if (itemCounts.bar > 0) parts.push(`${itemCounts.bar} bar${itemCounts.bar > 1 ? 's' : ''} along the perimeter`);
+      if (itemCounts.table8ft > 0) parts.push(`${itemCounts.table8ft} rectangular 8ft banquet tables`);
+      if (itemCounts.table6ft > 0) parts.push(`${itemCounts.table6ft} rectangular 6ft tables`);
+      if (itemCounts.table5ft > 0) parts.push(`${itemCounts.table5ft} round 5ft tables`);
+      if (itemCounts.cocktailTable > 0) parts.push(`${itemCounts.cocktailTable} cocktail tables scattered near entrances`);
+      if (itemCounts.videoWall > 0) parts.push(`${itemCounts.videoWall} large LED video wall${itemCounts.videoWall > 1 ? 's' : ''} behind/near the stage`);
+      if (itemCounts.chair > 0) parts.push(`${itemCounts.chair} chairs arranged in rows`);
+      return parts.length > 0 ? parts.join(', ') : 'open floor plan';
+    };
 
-        const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent with peaked ceiling and draped fabric' : 'modern frame tent with high ceilings';
-        const equipmentText = equipmentDetails.length > 0 ? equipmentDetails.join(', ') : 'elegant setup';
+    const layoutDesc = buildLayoutDescription();
+    const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent with peaked ceiling and draped fabric' : 'modern frame tent with high ceilings';
+    const eventLabel = eventType ? eventType.replace(/_/g, ' ') : 'elegant event';
+    const themeDesc = themeColors ? `Theme and color palette: ${themeColors}.` : '';
 
-        const prompt = `Ultra-realistic professional photograph of a luxury event inside a ${suggestedTent?.type || '40x60'} ft ${tentTypeDesc}. The event space features ${equipmentText}. Warm ambient lighting with chandeliers, sophisticated atmosphere, ${attendees} guests enjoying the space. Professional event photography, high-end venue styling, cinematic lighting, 8k quality, photorealistic.`;
-
-        const response = await base44.integrations.Core.GenerateImage({ prompt });
-        imageToUse = response.url;
-        setGeneratedImage(imageToUse);
-      } catch (error) {
-        console.error('Failed to generate image for PDF:', error);
-      }
-    }
-
-    // Generate realistic image if not already generated
+    // Generate Option 1 (realistic) if not already generated
     let realisticImageToUse = realisticImage;
     if (!realisticImageToUse) {
       try {
-        const itemCounts = {};
-        items.forEach(item => {
-          itemCounts[item.type] = (itemCounts[item.type] || 0) + 1;
-        });
-
-        let setupDescription = 'A functional event space with';
-        let elements = [];
-
-        if (itemCounts.stage > 0) elements.push(`${itemCounts.stage} stage(s)`);
-        if (itemCounts.danceFloor > 0) elements.push(`${itemCounts.danceFloor} dance floor(s)`);
-        if (itemCounts.bar > 0) elements.push(`${itemCounts.bar} bar(s)`);
-        if (itemCounts.table8ft > 0) elements.push(`${itemCounts.table8ft} 8ft tables`);
-        if (itemCounts.table6ft > 0) elements.push(`${itemCounts.table6ft} 6ft tables`);
-        if (itemCounts.table5ft > 0) elements.push(`${itemCounts.table5ft} round tables`);
-        if (itemCounts.cocktailTable > 0) elements.push(`${itemCounts.cocktailTable} cocktail tables`);
-        if (itemCounts.videoWall > 0) elements.push(`${itemCounts.videoWall} video wall(s)`);
-        if (itemCounts.chair > 0) elements.push(`${itemCounts.chair} chairs`);
-
-        const tentTypeDesc = tentStyle === 'marquee' ? 'marquee tent' : 'frame tent';
-        const elementsText = elements.length > 0 ? elements.join(', ') : 'basic setup';
-
-        const prompt = `Realistic photograph of an event inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc} with ${elementsText}. Standard event lighting, practical decor with ${tentConfig.linenColor || 'white'} linens, ${attendees} guests present. Natural daylight mixed with standard uplighting. Actual venue photography style, authentic event setup, professional quality, no stylization.`;
-
+        const prompt = `Ultra-realistic professional event photograph. ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc} hosting a ${eventLabel}. ${themeDesc} Layout contains exactly: ${layoutDesc}. All items are placed in the positions matching a floor plan — stage at the front, tables arranged in the middle, bar on the side. Table linens are ${tentConfig.linenColor || 'white'}. ${attendees} guests present. Realistic venue photography, no CGI stylization, authentic lighting that matches the event theme and colors described.`;
         const response = await base44.integrations.Core.GenerateImage({ prompt });
         realisticImageToUse = response.url;
         setRealisticImage(realisticImageToUse);
       } catch (error) {
-        console.error('Failed to generate realistic image for PDF:', error);
+        console.error('Failed to generate Option 1 image for PDF:', error);
+      }
+    }
+
+    // Generate Option 2 (AI dreamer) if not already generated
+    let imageToUse = generatedImage;
+    if (!imageToUse) {
+      try {
+        const prompt = `Stunning cinematic AI-rendered vision of a luxury ${eventLabel} inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${themeDesc} The space is laid out with exactly: ${layoutDesc}. Stage is at the front focal point, tables fill the main floor area, bar lines the perimeter. Table linens are ${tentConfig.linenColor || 'white'}. Dramatic uplighting and atmospheric effects perfectly matching the theme colors. ${attendees} guests in elegant attire. Hyper-detailed 8K render, cinematic volumetric lighting, breathtaking event design, artistic and dreamlike yet true to the layout.`;
+        const response = await base44.integrations.Core.GenerateImage({ prompt });
+        imageToUse = response.url;
+        setGeneratedImage(imageToUse);
+      } catch (error) {
+        console.error('Failed to generate Option 2 image for PDF:', error);
       }
     }
 
