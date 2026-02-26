@@ -212,93 +212,196 @@ export default function RoomItemInputs({ onAddItems }) {
     });
   };
 
-  const ci = "h-7 text-xs bg-zinc-900 border-zinc-700 text-white"; // compact input
-
-  const CompactDynamic = ({ label, items, onAdd, onRemove, onUpdate, fields }) => (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center">
-        <span className="text-xs font-semibold text-amber-400">{label}</span>
-        <button onClick={onAdd} className="text-xs text-amber-400 hover:text-amber-300 px-1">+ Add</button>
-      </div>
-      {items.map((item, idx) => (
-        <div key={idx} className="flex items-center gap-1 bg-zinc-800/50 rounded px-2 py-1">
-          {fields.map(f => (
-            f.type === 'text'
-              ? <Input key={f.key} type="text" value={item[f.key]} placeholder={f.placeholder} onChange={(e) => onUpdate(idx, f.key, e.target.value)} className={`flex-1 ${ci}`} />
-              : f.type === 'color'
-              ? <input key={f.key} type="color" value={item[f.key]} onChange={(e) => onUpdate(idx, f.key, e.target.value)} className="w-7 h-7 rounded border border-zinc-700 cursor-pointer" />
-              : <Input key={f.key} type="number" value={item[f.key]} placeholder={f.label} min={f.min || 1} step={f.step || 1} onChange={(e) => onUpdate(idx, f.key, e.target.value)} className={`w-14 ${ci}`} />
-          ))}
-          <button onClick={() => onRemove(idx)} className="text-red-400 text-xs ml-1">✕</button>
-        </div>
-      ))}
-    </div>
-  );
-
   return (
-    <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl flex flex-col" style={{ maxHeight: '70vh' }}>
-      {/* Sticky header */}
-      <div className="px-4 pt-3 pb-2 border-b border-zinc-800 flex-shrink-0">
-        <h3 className="font-semibold text-sm text-white">Add Items</h3>
-      </div>
+    <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-4 space-y-3 max-h-[600px] overflow-y-auto">
+      <h3 className="font-semibold text-sm text-white mb-2">Add Items</h3>
 
-      {/* Scrollable content */}
-      <div className="overflow-y-auto flex-1 px-3 py-2 space-y-3">
-
-        {/* Tables */}
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-amber-400">Tables</span>
-          <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-            {[
-              { key: 'table_8ft', label: '8ft Banquet' },
-              { key: 'table_6ft', label: '6ft Banquet' },
-              { key: 'table_5ft_round', label: '5ft Round' },
-              { key: 'table_6ft_round', label: '6ft Round' },
-              { key: 'cocktail_tables', label: 'Cocktail' },
-            ].map(({ key, label }) => (
-              <div key={key} className="flex items-center gap-1">
-                <span className="text-xs text-zinc-400 w-20 shrink-0">{label}</span>
-                <Input type="number" min="0" value={tables[key]} onChange={(e) => handleTableChange(key, e.target.value)} className={`w-14 ${ci}`} />
+      {/* Stages */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-amber-400">Stages (feet)</h4>
+        <Button onClick={addStage} variant="outline" className="w-full h-8 text-xs border-zinc-700 text-zinc-300">
+          + Add Stage
+        </Button>
+        {stages.map((stage, idx) => (
+          <div key={idx} className="border border-zinc-700 rounded p-2 space-y-2 bg-zinc-800/50">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium text-white">Stage {idx + 1}</span>
+              <button onClick={() => removeStage(idx)} className="text-red-400 text-xs hover:text-red-500">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs text-zinc-400">Length (ft)</Label>
+                <Input type="number" value={stage.length} onChange={(e) => updateStage(idx, 'length', e.target.value)} min="1" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
               </div>
-            ))}
-            <div className="flex items-center gap-1 col-span-2">
-              <span className="text-xs text-zinc-400 w-20 shrink-0">Drape</span>
-              <Select value={tableColor} onValueChange={setTableColor}>
-                <SelectTrigger className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white flex-1">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700">
-                  {['white','black','ivory','champagne','gold','silver','navy','burgundy'].map(c => (
-                    <SelectItem key={c} value={c} className="text-white capitalize">{c.charAt(0).toUpperCase()+c.slice(1)}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div>
+                <Label className="text-xs text-zinc-400">Width (ft)</Label>
+                <Input type="number" value={stage.width} onChange={(e) => updateStage(idx, 'width', e.target.value)} min="1" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
             </div>
           </div>
-        </div>
-
-        <CompactDynamic label="Stages (ft)" items={stages} onAdd={addStage} onRemove={removeStage} onUpdate={updateStage}
-          fields={[{ key: 'length', label: 'L' }, { key: 'width', label: 'W' }]} />
-
-        <CompactDynamic label="Dance Floors (ft)" items={danceFloors} onAdd={addDanceFloor} onRemove={removeDanceFloor} onUpdate={updateDanceFloor}
-          fields={[{ key: 'length', label: 'L' }, { key: 'width', label: 'W' }]} />
-
-        <CompactDynamic label="Bars (ft)" items={bars} onAdd={addBar} onRemove={removeBar} onUpdate={updateBar}
-          fields={[{ key: 'length', label: 'L' }, { key: 'width', label: 'W' }]} />
-
-        <CompactDynamic label="Video Walls (m)" items={videoWalls} onAdd={addVideoWall} onRemove={removeVideoWall} onUpdate={updateVideoWall}
-          fields={[{ key: 'height', label: 'H', min: 0.5, step: 0.5 }, { key: 'width', label: 'W', min: 0.5, step: 0.5 }]} />
-
-        <CompactDynamic label="Custom Items (ft)" items={customItems} onAdd={addCustomItem} onRemove={removeCustomItem} onUpdate={updateCustomItem}
-          fields={[{ key: 'name', label: 'Name', type: 'text', placeholder: 'Name' }, { key: 'length', label: 'L' }, { key: 'width', label: 'W' }, { key: 'color', type: 'color' }]} />
-
+        ))}
       </div>
 
-      <div className="px-3 py-2 border-t border-zinc-800 flex-shrink-0">
-        <Button onClick={handleAddItems} className="w-full h-8 text-xs bg-amber-500 hover:bg-amber-600 text-black font-semibold">
-          Add Items to Layout
+      {/* Dance Floors */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-amber-400">Dance Floors (feet)</h4>
+        <Button onClick={addDanceFloor} variant="outline" className="w-full h-8 text-xs border-zinc-700 text-zinc-300">
+          + Add Dance Floor
         </Button>
+        {danceFloors.map((df, idx) => (
+          <div key={idx} className="border border-zinc-700 rounded p-2 space-y-2 bg-zinc-800/50">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium text-white">Dance Floor {idx + 1}</span>
+              <button onClick={() => removeDanceFloor(idx)} className="text-red-400 text-xs hover:text-red-500">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs text-zinc-400">Length (ft)</Label>
+                <Input type="number" value={df.length} onChange={(e) => updateDanceFloor(idx, 'length', e.target.value)} min="1" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+              <div>
+                <Label className="text-xs text-zinc-400">Width (ft)</Label>
+                <Input type="number" value={df.width} onChange={(e) => updateDanceFloor(idx, 'width', e.target.value)} min="1" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
+
+      {/* Bars */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-amber-400">Bars (feet)</h4>
+        <Button onClick={addBar} variant="outline" className="w-full h-8 text-xs border-zinc-700 text-zinc-300">
+          + Add Bar
+        </Button>
+        {bars.map((bar, idx) => (
+          <div key={idx} className="border border-zinc-700 rounded p-2 space-y-2 bg-zinc-800/50">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium text-white">Bar {idx + 1}</span>
+              <button onClick={() => removeBar(idx)} className="text-red-400 text-xs hover:text-red-500">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs text-zinc-400">Length (ft)</Label>
+                <Input type="number" value={bar.length} onChange={(e) => updateBar(idx, 'length', e.target.value)} min="1" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+              <div>
+                <Label className="text-xs text-zinc-400">Width (ft)</Label>
+                <Input type="number" value={bar.width} onChange={(e) => updateBar(idx, 'width', e.target.value)} min="1" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Video Walls */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-amber-400">Video Walls (metres)</h4>
+        <Button onClick={addVideoWall} variant="outline" className="w-full h-8 text-xs border-zinc-700 text-zinc-300">
+          + Add Video Wall
+        </Button>
+        {videoWalls.map((vw, idx) => (
+          <div key={idx} className="border border-zinc-700 rounded p-2 space-y-2 bg-zinc-800/50">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium text-white">Video Wall {idx + 1}</span>
+              <button onClick={() => removeVideoWall(idx)} className="text-red-400 text-xs hover:text-red-500">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs text-zinc-400">Height (m)</Label>
+                <Input type="number" value={vw.height} onChange={(e) => updateVideoWall(idx, 'height', e.target.value)} min="0.5" step="0.5" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+              <div>
+                <Label className="text-xs text-zinc-400">Width (m)</Label>
+                <Input type="number" value={vw.width} onChange={(e) => updateVideoWall(idx, 'width', e.target.value)} min="0.5" step="0.5" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Custom Items */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-amber-400">Custom Items (feet)</h4>
+        <Button onClick={addCustomItem} variant="outline" className="w-full h-8 text-xs border-zinc-700 text-zinc-300">
+          + Add Custom Item
+        </Button>
+        {customItems.map((item, idx) => (
+          <div key={idx} className="border border-zinc-700 rounded p-2 space-y-2 bg-zinc-800/50">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium text-white">Custom Item {idx + 1}</span>
+              <button onClick={() => removeCustomItem(idx)} className="text-red-400 text-xs hover:text-red-500">Remove</button>
+            </div>
+            <div>
+              <Label className="text-xs text-zinc-400">Name</Label>
+              <Input type="text" value={item.name} onChange={(e) => updateCustomItem(idx, 'name', e.target.value)} placeholder="e.g., Statue" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs text-zinc-400">Length (ft)</Label>
+                <Input type="number" value={item.length} onChange={(e) => updateCustomItem(idx, 'length', e.target.value)} min="1" step="0.5" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+              <div>
+                <Label className="text-xs text-zinc-400">Width (ft)</Label>
+                <Input type="number" value={item.width} onChange={(e) => updateCustomItem(idx, 'width', e.target.value)} min="1" step="0.5" className="h-7 text-xs bg-zinc-900 border-zinc-700 text-white" />
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs text-zinc-400">Color</Label>
+              <input type="color" value={item.color} onChange={(e) => updateCustomItem(idx, 'color', e.target.value)} className="h-7 w-full rounded border border-zinc-700 bg-zinc-900" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tables */}
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-amber-400">Tables</h4>
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <Label className="text-xs text-zinc-400">8ft Banquet</Label>
+            <Input type="number" min="0" value={tables.table_8ft} onChange={(e) => handleTableChange('table_8ft', e.target.value)} className="h-8 text-xs bg-zinc-900 border-zinc-700 text-white" />
+          </div>
+          <div>
+            <Label className="text-xs text-zinc-400">6ft Banquet</Label>
+            <Input type="number" min="0" value={tables.table_6ft} onChange={(e) => handleTableChange('table_6ft', e.target.value)} className="h-8 text-xs bg-zinc-900 border-zinc-700 text-white" />
+          </div>
+          <div>
+            <Label className="text-xs text-zinc-400">5ft Round</Label>
+            <Input type="number" min="0" value={tables.table_5ft_round} onChange={(e) => handleTableChange('table_5ft_round', e.target.value)} className="h-8 text-xs bg-zinc-900 border-zinc-700 text-white" />
+          </div>
+          <div>
+            <Label className="text-xs text-zinc-400">6ft Round</Label>
+            <Input type="number" min="0" value={tables.table_6ft_round} onChange={(e) => handleTableChange('table_6ft_round', e.target.value)} className="h-8 text-xs bg-zinc-900 border-zinc-700 text-white" />
+          </div>
+          <div>
+            <Label className="text-xs text-zinc-400">Cocktail</Label>
+            <Input type="number" min="0" value={tables.cocktail_tables} onChange={(e) => handleTableChange('cocktail_tables', e.target.value)} className="h-8 text-xs bg-zinc-900 border-zinc-700 text-white" />
+          </div>
+          <div>
+            <Label className="text-xs text-zinc-400">Drape Color</Label>
+            <Select value={tableColor} onValueChange={setTableColor}>
+              <SelectTrigger className="h-8 text-xs bg-zinc-900 border-zinc-700 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-zinc-700">
+                <SelectItem value="white" className="text-white">White</SelectItem>
+                <SelectItem value="black" className="text-white">Black</SelectItem>
+                <SelectItem value="ivory" className="text-white">Ivory</SelectItem>
+                <SelectItem value="champagne" className="text-white">Champagne</SelectItem>
+                <SelectItem value="gold" className="text-white">Gold</SelectItem>
+                <SelectItem value="silver" className="text-white">Silver</SelectItem>
+                <SelectItem value="navy" className="text-white">Navy</SelectItem>
+                <SelectItem value="burgundy" className="text-white">Burgundy</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      <Button onClick={handleAddItems} className="w-full h-10 text-sm bg-amber-500 hover:bg-amber-600 text-black font-semibold">
+        Add Items to Layout
+      </Button>
     </div>
   );
 }
