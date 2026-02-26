@@ -72,6 +72,14 @@ export default function TentDesignAssistant() {
   });
 
   const handleSaveProject = async () => {
+    const isAuthenticated = await base44.auth.isAuthenticated();
+    if (!isAuthenticated) {
+      if (window.confirm('You need an account to save your work. Would you like to sign in or create an account?')) {
+        base44.auth.redirectToLogin(window.location.href);
+      }
+      return;
+    }
+
     if (!projectName.trim()) {
       alert('Please enter a project name');
       return;
