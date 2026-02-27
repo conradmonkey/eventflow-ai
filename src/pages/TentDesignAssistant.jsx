@@ -1038,7 +1038,7 @@ High-quality event photography, realistic styling, professional setup, authentic
                 <Button
                   variant="outline"
                   onClick={handleExportPDF}
-                  disabled={items.length === 0 || generatingRealistic}
+                  disabled={items.length === 0 || generatingRealistic || !realisticImage}
                   className="w-full bg-slate-50"
                 >
                   <FileDown className="w-4 h-4 mr-2" />
