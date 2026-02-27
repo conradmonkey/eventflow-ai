@@ -79,7 +79,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            <div className="flex flex-col items-center gap-3 mb-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20">
                 <Sparkles className="w-4 h-4 text-amber-400" />
                 <span className="text-sm text-amber-200">AI-Powered Event Planning</span>
