@@ -837,27 +837,16 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
 
               {showCanvas && <RoomItemInputs onAddItems={handleAddItems} />}
 
-              <div className="grid grid-cols-2 gap-3">
+              {showCanvas && (
                 <Button
                   type="button"
-                  variant="outline"
-                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
-                  className={`h-12 rounded-lg ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
+                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
+                  className={`w-full h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
                 >
-                  <FolderOpen className="w-5 h-5 mr-2" />
-                  Load {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
+                  <Save className="w-5 h-5 mr-2" />
+                  Save {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
                 </Button>
-                {showCanvas && (
-                  <Button
-                    type="button"
-                    onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
-                    className={`h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
-                  >
-                    <Save className="w-5 h-5 mr-2" />
-                    Save {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
-                  </Button>
-                )}
-              </div>
+              )}
               {showCanvas && (
                 <div className="flex gap-3">
                   <Button
