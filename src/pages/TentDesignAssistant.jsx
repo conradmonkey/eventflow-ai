@@ -695,6 +695,8 @@ High-quality event photography, realistic styling, professional setup, authentic
     setSeatingArrangement(arrangement);
     const suggestion = getSuggestedTent(attendees, arrangement);
     setSuggestedTent(suggestion);
+    const sqft = suggestion.width * suggestion.length;
+    if (sqft > 900) setTentStyle('frame');
     setTentConfig(prev => ({
       ...prev,
       length: suggestion.length,
