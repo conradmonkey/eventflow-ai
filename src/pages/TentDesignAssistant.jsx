@@ -861,13 +861,13 @@ High-quality event photography, realistic styling, professional setup, authentic
                       <SelectValue placeholder="Select event type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="wedding">Wedding</SelectItem>
-                      <SelectItem value="conference">Conference</SelectItem>
-                      <SelectItem value="presentation">Presentation</SelectItem>
-                      <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
-                      <SelectItem value="workshop">Workshop</SelectItem>
-                      <SelectItem value="film_screening">Film Screening</SelectItem>
-                      <SelectItem value="party">Party</SelectItem>
+                      <SelectItem value="wedding">💍 Wedding</SelectItem>
+                      <SelectItem value="conference">🎤 Conference</SelectItem>
+                      <SelectItem value="presentation">📊 Presentation</SelectItem>
+                      <SelectItem value="celebration_of_life">🕊️ Celebration of Life</SelectItem>
+                      <SelectItem value="workshop">🛠️ Workshop</SelectItem>
+                      <SelectItem value="film_screening">🎬 Film Screening</SelectItem>
+                      <SelectItem value="party">🎉 Party</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
