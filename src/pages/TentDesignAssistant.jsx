@@ -1027,14 +1027,6 @@ High-quality event photography, realistic styling, professional setup, authentic
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Reset Everything
                 </Button>
-                <Button 
-                  className="w-full bg-indigo-600 hover:bg-indigo-700"
-                  onClick={handleGenerateRealistic}
-                  disabled={items.length === 0 || generatingRealistic}
-                >
-                  <Camera className="w-4 h-4 mr-2" />
-                  {generatingRealistic ? 'Generating...' : 'A.I. Designer'}
-                </Button>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Items
