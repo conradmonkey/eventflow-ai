@@ -84,8 +84,8 @@ export default function Home() {
                 <Sparkles className="w-4 h-4 text-amber-400" />
                 <span className="text-sm text-amber-200">AI-Powered Event Planning</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
-                <span className="text-sm text-green-300 font-semibold">✓ Free to Use</span>
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green-500/20 border border-green-400/40">
+                <span className="text-base text-green-300 font-bold tracking-wide">✓ Free Event Planning Software</span>
               </div>
             </div>
 
