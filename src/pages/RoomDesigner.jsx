@@ -896,10 +896,17 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   A.I. Design
                 </Button>
 
+                {!render3D && (
+                  <p className="text-amber-400 text-sm text-center">
+                    Run A.I. Design first to enable PDF export
+                  </p>
+                )}
+
                 <Button
                   type="button"
                   onClick={handleExportPDF}
-                  className={`w-full h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-amber-500 hover:bg-amber-600 text-black'}`}
+                  disabled={!render3D}
+                  className={`w-full h-12 rounded-lg ${!isSubscribed ? 'bg-red-600 hover:bg-red-700 disabled:opacity-40' : 'bg-amber-500 hover:bg-amber-600 text-black disabled:opacity-40'}`}
                 >
                   <FileDown className="w-5 h-5 mr-2" />
                   Export PDF {!isSubscribed && <Lock className="w-4 h-4 ml-1" />}
