@@ -51,6 +51,7 @@ export default function TentDesignAssistant() {
   const [generatingRealistic, setGeneratingRealistic] = useState(false);
   const [aiDesignerRan, setAiDesignerRan] = useState(false);
   const canvasRef = useRef(null);
+  const canvasSectionRef = useRef(null);
 
   const handleExportPDF = async () => {
     // Build shared layout description from items on canvas
