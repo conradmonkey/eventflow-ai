@@ -1009,15 +1009,6 @@ High-quality event photography, realistic styling, professional setup, authentic
             {/* Render Buttons */}
             {seatingArrangement && (
               <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-
-                <Button
-                  variant="outline"
-                  onClick={handleReset}
-                  className="w-full text-red-600 border-red-200 hover:bg-red-50"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Reset Everything
-                </Button>
                 <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={handleRender2D}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add Items
