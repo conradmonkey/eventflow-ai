@@ -761,28 +761,36 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
             <form onSubmit={handleGenerate2D} className="space-y-6">
               {/* Event Type */}
               <div>
-                <Label className="text-zinc-400 text-sm">Event Type</Label>
-                <Select 
-                  value={formData.event_type} 
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, event_type: value }))}
-                >
-                  <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1">
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="wedding">Wedding</SelectItem>
-                    <SelectItem value="conference">Conference</SelectItem>
-                    <SelectItem value="music_concert">Music Concert</SelectItem>
-                    <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
-                    <SelectItem value="lecture">Lecture</SelectItem>
-                    <SelectItem value="film_screening">Film Screening</SelectItem>
-                    <SelectItem value="dinner_party">Dinner Party</SelectItem>
-                    <SelectItem value="family_get_together">Family Get Together</SelectItem>
-                    <SelectItem value="presentation">Presentation</SelectItem>
-                    <SelectItem value="workshop">Workshop</SelectItem>
-                    <SelectItem value="party">Party</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label className="text-zinc-400 text-sm mb-2 block">Event Type</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { value: "wedding", label: "Wedding", icon: "💍" },
+                    { value: "conference", label: "Conference", icon: "🎤" },
+                    { value: "music_concert", label: "Concert", icon: "🎵" },
+                    { value: "celebration_of_life", label: "Celebration", icon: "🕊️" },
+                    { value: "lecture", label: "Lecture", icon: "📚" },
+                    { value: "film_screening", label: "Film", icon: "🎬" },
+                    { value: "dinner_party", label: "Dinner", icon: "🍽️" },
+                    { value: "family_get_together", label: "Family", icon: "👨‍👩‍👧" },
+                    { value: "presentation", label: "Presentation", icon: "📊" },
+                    { value: "workshop", label: "Workshop", icon: "🔧" },
+                    { value: "party", label: "Party", icon: "🎉" },
+                  ].map((evt) => (
+                    <button
+                      key={evt.value}
+                      type="button"
+                      onClick={() => setFormData((prev) => ({ ...prev, event_type: evt.value }))}
+                      className={`flex flex-col items-center gap-1 p-2 rounded-xl border transition-all text-center ${
+                        formData.event_type === evt.value
+                          ? 'border-amber-500 bg-amber-500/15 text-white'
+                          : 'border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200'
+                      }`}
+                    >
+                      <span className="text-xl">{evt.icon}</span>
+                      <span className="text-xs font-medium leading-tight">{evt.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Room Dimensions */}
