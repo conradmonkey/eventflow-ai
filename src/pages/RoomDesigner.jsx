@@ -906,14 +906,7 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   />
                 </div>
                 
-                <Button
-                  onClick={() => setShowGearList(!showGearList)}
-                  variant="outline"
-                  className="w-full border-amber-500/30 text-amber-400 hover:bg-amber-500/10 h-12 rounded-lg"
-                >
-                  <Layout className="w-5 h-5 mr-2" />
-                  {showGearList ? 'Hide' : 'Show'} Gear List
-                </Button>
+
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-zinc-500">
