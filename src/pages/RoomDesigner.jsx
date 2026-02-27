@@ -759,78 +759,30 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
             className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8"
           >
             <form onSubmit={handleGenerate2D} className="space-y-6">
-              {/* Project Name & Event Type */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="text-zinc-400 text-sm">Project Name</Label>
-                  <Input
-                    value={formData.project_name}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, project_name: e.target.value }))}
-                    className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
-                    placeholder="e.g., Summer Gala 2026"
-                  />
-                </div>
-                <div>
-                  <Label className="text-zinc-400 text-sm">Event Type</Label>
-                  <Select 
-                    value={formData.event_type} 
-                    onValueChange={(value) => setFormData((prev) => ({ ...prev, event_type: value }))}
-                  >
-                    <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1">
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="wedding">Wedding</SelectItem>
-                      <SelectItem value="conference">Conference</SelectItem>
-                      <SelectItem value="music_concert">Music Concert</SelectItem>
-                      <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
-                      <SelectItem value="lecture">Lecture</SelectItem>
-                      <SelectItem value="film_screening">Film Screening</SelectItem>
-                      <SelectItem value="dinner_party">Dinner Party</SelectItem>
-                      <SelectItem value="family_get_together">Family Get Together</SelectItem>
-                      <SelectItem value="presentation">Presentation</SelectItem>
-                      <SelectItem value="workshop">Workshop</SelectItem>
-                      <SelectItem value="party">Party</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Location */}
+              {/* Event Type */}
               <div>
-                <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-amber-400" />
-                  LOCATION
-                </h2>
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <Label className="text-zinc-400 text-sm">Country</Label>
-                    <Input
-                      required
-                      value={formData.country}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, country: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-sm">Province / State</Label>
-                    <Input
-                      required
-                      value={formData.province}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, province: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-zinc-400 text-sm">City</Label>
-                    <Input
-                      required
-                      value={formData.city}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
-                      className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 h-10 rounded-lg mt-1"
-                    />
-                  </div>
-                </div>
+                <Label className="text-zinc-400 text-sm">Event Type</Label>
+                <Select 
+                  value={formData.event_type} 
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, event_type: value }))}
+                >
+                  <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="wedding">Wedding</SelectItem>
+                    <SelectItem value="conference">Conference</SelectItem>
+                    <SelectItem value="music_concert">Music Concert</SelectItem>
+                    <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
+                    <SelectItem value="lecture">Lecture</SelectItem>
+                    <SelectItem value="film_screening">Film Screening</SelectItem>
+                    <SelectItem value="dinner_party">Dinner Party</SelectItem>
+                    <SelectItem value="family_get_together">Family Get Together</SelectItem>
+                    <SelectItem value="presentation">Presentation</SelectItem>
+                    <SelectItem value="workshop">Workshop</SelectItem>
+                    <SelectItem value="party">Party</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Room Dimensions */}
