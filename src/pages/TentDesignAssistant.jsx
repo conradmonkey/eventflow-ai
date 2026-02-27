@@ -986,7 +986,11 @@ High-quality event photography, realistic styling, professional setup, authentic
                       type="number"
                       className="h-8 text-xs"
                       value={tentConfig.length}
-                      onChange={(e) => setTentConfig(prev => ({ ...prev, length: parseFloat(e.target.value) || 0 }))}
+                      onChange={(e) => {
+                        const newLength = parseFloat(e.target.value) || 0;
+                        if (newLength * tentConfig.width > 900) setTentStyle('frame');
+                        setTentConfig(prev => ({ ...prev, length: newLength }));
+                      }}
                     />
                   </div>
                   <div>
