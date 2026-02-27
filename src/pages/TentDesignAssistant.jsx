@@ -1054,6 +1054,9 @@ High-quality event photography, realistic styling, professional setup, authentic
                   <Camera className="w-4 h-4 mr-2" />
                   {generatingRealistic ? 'Generating...' : 'A.I. Designer'}
                 </Button>
+                {!realisticImage && items.length > 0 && (
+                  <p className="text-xs text-amber-600 text-center">⚠️ Run A.I. Designer before Export PDF</p>
+                )}
                 <Button
                   variant="outline"
                   onClick={handleExportPDF}
