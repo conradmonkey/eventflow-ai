@@ -851,19 +851,10 @@ High-quality event photography, realistic styling, professional setup, authentic
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Panel - Inputs */}
           <div className="col-span-1 lg:col-span-1 space-y-6">
-            {/* Project Name & Event Type */}
+            {/* Event Type */}
             <div className="bg-white rounded-lg shadow-md p-4">
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="text-sm font-semibold">Project Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="Enter project name"
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                  />
-                </div>
-                <div>
+                <div className="col-span-2">
                   <Label className="text-sm font-semibold">Event Type</Label>
                   <Select value={eventType} onValueChange={setEventType}>
                     <SelectTrigger>
