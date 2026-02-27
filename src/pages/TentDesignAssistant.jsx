@@ -1043,6 +1043,15 @@ High-quality event photography, realistic styling, professional setup, authentic
                 <Camera className="w-4 h-4 mr-2" />
                 {generatingRealistic ? 'Generating...' : 'A.I. Designer'}
               </Button>
+              <Button
+                variant="outline"
+                onClick={handleExportPDF}
+                disabled={items.length === 0 || generatingRealistic}
+                className="w-full bg-slate-50"
+              >
+                <FileDown className="w-4 h-4 mr-2" />
+                {generatingRealistic ? 'Generating...' : 'Export PDF'}
+              </Button>
             )}
           </div>
         </div>
