@@ -1100,12 +1100,15 @@ High-quality event photography, realistic styling, professional setup, authentic
                 <Button
                   variant="outline"
                   onClick={handleExportPDF}
-                  disabled={items.length === 0 || generatingRealistic || !aiDesignerRan}
+                  disabled={items.length === 0 || generatingRealistic || !aiDesignerRan || generatingPDF}
                   className="w-full bg-slate-50"
                 >
                   <FileDown className="w-4 h-4 mr-2" />
-                  {generatingRealistic ? 'Generating...' : 'Export PDF'}
+                  {generatingPDF ? 'Generating PDF...' : 'Export PDF'}
                 </Button>
+                {generatingPDF && (
+                  <p className="text-xs text-indigo-600 text-center animate-pulse">Generating images and building your PDF, please wait...</p>
+                )}
                 <Button
                   variant="outline"
                   onClick={handleReset}
