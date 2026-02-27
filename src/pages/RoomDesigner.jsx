@@ -224,6 +224,20 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
     }
   };
 
+  const eventTypeOptions = [
+    { value: "wedding", label: "Wedding", icon: "💍" },
+    { value: "conference", label: "Conference", icon: "🏢" },
+    { value: "music_concert", label: "Music Concert", icon: "🎵" },
+    { value: "celebration_of_life", label: "Celebration of Life", icon: "🕊️" },
+    { value: "lecture", label: "Lecture", icon: "🎓" },
+    { value: "film_screening", label: "Film Screening", icon: "🎬" },
+    { value: "dinner_party", label: "Dinner Party", icon: "🍽️" },
+    { value: "family_get_together", label: "Family Get Together", icon: "👨‍👩‍👧‍👦" },
+    { value: "presentation", label: "Presentation", icon: "📊" },
+    { value: "workshop", label: "Workshop", icon: "🔧" },
+    { value: "party", label: "Party", icon: "🎉" },
+  ];
+
   const gearList = showGearList ? calculateGearList() : null;
 
   const handleSaveProject = async () => {
