@@ -1130,22 +1130,7 @@ High-quality event photography, realistic styling, professional setup, authentic
             {/* Render Buttons */}
             {seatingArrangement && (
               <div className="bg-white rounded-lg shadow-md p-4 space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    className="bg-green-600 hover:bg-green-700"
-                    onClick={handleSaveProject}
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Project
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowLoadModal(true)}
-                  >
-                    <FolderOpen className="w-4 h-4 mr-2" />
-                    Load Project
-                  </Button>
-                </div>
+
                 <Button
                   variant="outline"
                   onClick={handleReset}
