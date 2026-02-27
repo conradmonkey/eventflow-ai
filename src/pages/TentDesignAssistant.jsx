@@ -946,6 +946,7 @@ High-quality event photography, realistic styling, professional setup, authentic
                   <div>
                     <p className="text-xs font-semibold text-purple-900">Suggested Tent</p>
                     <p className="text-base font-bold text-purple-700">{suggestedTent.type} ft</p>
+                    <p className="text-xs text-purple-500">Peak height: {getPeakHeight(suggestedTent.width, tentStyle)}</p>
                   </div>
                   <div>
                     <Label className="text-xs font-semibold">Tent Style</Label>
