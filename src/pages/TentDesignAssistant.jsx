@@ -1044,6 +1044,14 @@ High-quality event photography, realistic styling, professional setup, authentic
                   <FileDown className="w-4 h-4 mr-2" />
                   {generatingRealistic ? 'Generating...' : 'Export PDF'}
                 </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleReset}
+                  className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Reset Everything
+                </Button>
               </>
             )}
           </div>
