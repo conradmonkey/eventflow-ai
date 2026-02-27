@@ -767,20 +767,24 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, event_type: value }))}
                 >
                   <SelectTrigger className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1">
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder="Select type">
+                      {formData.event_type && (
+                        <span className="flex items-center gap-2">
+                          <span>{eventTypeOptions.find(o => o.value === formData.event_type)?.icon}</span>
+                          <span>{eventTypeOptions.find(o => o.value === formData.event_type)?.label}</span>
+                        </span>
+                      )}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="wedding">Wedding</SelectItem>
-                    <SelectItem value="conference">Conference</SelectItem>
-                    <SelectItem value="music_concert">Music Concert</SelectItem>
-                    <SelectItem value="celebration_of_life">Celebration of Life</SelectItem>
-                    <SelectItem value="lecture">Lecture</SelectItem>
-                    <SelectItem value="film_screening">Film Screening</SelectItem>
-                    <SelectItem value="dinner_party">Dinner Party</SelectItem>
-                    <SelectItem value="family_get_together">Family Get Together</SelectItem>
-                    <SelectItem value="presentation">Presentation</SelectItem>
-                    <SelectItem value="workshop">Workshop</SelectItem>
-                    <SelectItem value="party">Party</SelectItem>
+                    {eventTypeOptions.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        <span className="flex items-center gap-2">
+                          <span>{opt.icon}</span>
+                          <span>{opt.label}</span>
+                        </span>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
