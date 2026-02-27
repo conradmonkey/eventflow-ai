@@ -615,8 +615,6 @@ High-quality event photography, realistic styling, professional setup, authentic
       setItems([]);
       setGeneratedImage(null);
       setRealisticImage(null);
-      setCurrentProjectId(null);
-      setProjectCategory('Uncategorized');
     }
   };
 
