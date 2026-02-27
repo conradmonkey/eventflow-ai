@@ -1022,15 +1022,6 @@ High-quality event photography, realistic styling, professional setup, authentic
                   <Plus className="w-4 h-4 mr-2" />
                   Add Items
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleExportPDF}
-                  disabled={items.length === 0 || generatingRealistic}
-                  className="w-full bg-slate-50"
-                >
-                  <FileDown className="w-4 h-4 mr-2" />
-                  {generatingRealistic ? 'Generating...' : 'Export PDF'}
-                </Button>
               </div>
             )}
           </div>
