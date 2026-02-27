@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function RoomItemInputs({ onAddItems }) {
+export default function RoomItemInputs({ onAddItems, onAfterAdd }) {
   const [stages, setStages] = useState([]);
   const [danceFloors, setDanceFloors] = useState([]);
   const [bars, setBars] = useState([]);
@@ -196,6 +196,7 @@ export default function RoomItemInputs({ onAddItems }) {
     }
 
     onAddItems(newItems, tableColor);
+    if (onAfterAdd) onAfterAdd();
 
     // Clear all inputs
     setStages([]);
