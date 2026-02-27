@@ -102,7 +102,19 @@ export default function TentDesignAssistant() {
           ? `exactly ${(itemCounts2.table8ft || 0) + (itemCounts2.table6ft || 0) + (itemCounts2.table5ft || 0)} plain folding tables with basic white plastic covers arranged in the same positions as the floor plan — ${itemCounts2.table8ft ? `${itemCounts2.table8ft} rectangular 8ft tables, ` : ''}${itemCounts2.table6ft ? `${itemCounts2.table6ft} rectangular 6ft tables, ` : ''}${itemCounts2.table5ft ? `${itemCounts2.table5ft} round 5ft tables` : ''} — no floral centerpieces, no candles, minimal decoration`
           : 'no tables';
 
-        const prompt = `Professional photograph of a budget-friendly ${eventLabel} inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${themeDesc} This is the affordable version of the same event layout. Layout contains: ${layoutDesc.replace(/elegant|luxury|premium/gi, 'basic')}. Tables: ${budgetTableDesc}. The spatial arrangement of all items matches the floor plan exactly — same positions, same zones. Basic string lights or fluorescent overhead lighting. Simple folding chairs. No draping or uplighting. Practical no-frills event setup. ${attendees} guests. Realistic venue photography.`;
+        // Build custom equipment descriptions with relative positions
+        const customItems = items.filter(item => item.type === 'customEquipment');
+        const customEquipmentDesc = customItems.length > 0
+          ? customItems.map(item => {
+              const relX = tentConfig.length > 0 ? Math.round((item.x / tentConfig.length) * 100) : 50;
+              const relY = tentConfig.width > 0 ? Math.round((item.y / tentConfig.width) * 100) : 50;
+              const zoneName = relY < 33 ? 'front' : relY < 66 ? 'middle' : 'back';
+              const sideZone = relX < 33 ? 'left side' : relX > 66 ? 'right side' : 'center';
+              return `a "${item.name}" (${item.width}ft wide x ${item.length}ft deep) placed at the ${zoneName} ${sideZone} of the tent`;
+            }).join('; ')
+          : null;
+
+        const prompt = `Professional photograph of a budget-friendly ${eventLabel} inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${themeDesc} This is the affordable version of the same event layout. Layout contains: ${layoutDesc.replace(/elegant|luxury|premium/gi, 'basic')}. Tables: ${budgetTableDesc}.${customEquipmentDesc ? ` Custom equipment visible in the scene: ${customEquipmentDesc} — rendered realistically based on the item name and scaled proportionally to the tent dimensions.` : ''} The spatial arrangement of all items matches the floor plan exactly — same positions, same zones. Basic string lights or fluorescent overhead lighting. Simple folding chairs. No draping or uplighting. Practical no-frills event setup. ${attendees} guests. Realistic venue photography.`;
         const response = await base44.integrations.Core.GenerateImage({ prompt });
         imageToUse = response.url;
         setGeneratedImage(imageToUse);
