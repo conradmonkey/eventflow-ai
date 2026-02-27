@@ -803,6 +803,18 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                 </Select>
               </div>
 
+              {/* Theme and Colors */}
+              <div>
+                <Label className="text-zinc-400 text-sm">Theme and Colors</Label>
+                <Textarea
+                  value={formData.theme_colors}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, theme_colors: e.target.value }))}
+                  className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 rounded-lg mt-1 resize-none"
+                  placeholder="e.g., Elegant gold and ivory with soft romantic lighting"
+                  rows={2}
+                />
+              </div>
+
               {/* Room Dimensions */}
               <div>
                 <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -830,16 +842,6 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                       className="bg-zinc-900 border-zinc-700 text-white h-10 rounded-lg mt-1"
                     />
                   </div>
-                </div>
-                <div>
-                  <Label className="text-zinc-400 text-sm">Theme and Colors</Label>
-                  <Textarea
-                    value={formData.theme_colors}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, theme_colors: e.target.value }))}
-                    className="bg-zinc-900 border-zinc-700 text-white focus-visible:ring-amber-500/50 rounded-lg mt-1 resize-none"
-                    placeholder="e.g., Elegant gold and ivory with soft romantic lighting"
-                    rows={2}
-                  />
                 </div>
               </div>
 
