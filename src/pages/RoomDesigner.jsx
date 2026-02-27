@@ -855,7 +855,7 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
                 Generate 2D
               </Button>
 
-              {showCanvas && <RoomItemInputs onAddItems={handleAddItems} />}
+              {showCanvas && <RoomItemInputs onAddItems={handleAddItems} onAfterAdd={() => canvas2DRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />}
 
 
 
