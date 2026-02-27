@@ -49,6 +49,7 @@ export default function TentDesignAssistant() {
   const [realisticImage, setRealisticImage] = useState(null);
   const [generatingImage, setGeneratingImage] = useState(false);
   const [generatingRealistic, setGeneratingRealistic] = useState(false);
+  const [aiDesignerRan, setAiDesignerRan] = useState(false);
   const canvasRef = useRef(null);
 
   const handleExportPDF = async () => {
