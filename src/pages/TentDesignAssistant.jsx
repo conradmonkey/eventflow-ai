@@ -871,7 +871,7 @@ High-quality event photography, realistic styling, professional setup, authentic
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
+                <div className="col-span-2">
                   <Label className="text-sm font-semibold">Theme and Colors</Label>
                   <Textarea
                     value={themeColors}
