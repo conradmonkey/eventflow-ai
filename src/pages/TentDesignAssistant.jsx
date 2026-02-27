@@ -1043,7 +1043,7 @@ High-quality event photography, realistic styling, professional setup, authentic
           </div>
 
           {/* Right Panel - Canvas */}
-          <div className="col-span-1 lg:col-span-2 space-y-3">
+          <div ref={canvasSectionRef} className="col-span-1 lg:col-span-2 space-y-3">
             <TentCanvas2D
               tentConfig={tentConfig}
               items={items}
