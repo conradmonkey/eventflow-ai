@@ -1045,13 +1045,23 @@ High-quality event photography, realistic styling, professional setup, authentic
           </div>
 
           {/* Right Panel - Canvas */}
-          <div className="col-span-1 lg:col-span-2">
+          <div className="col-span-1 lg:col-span-2 space-y-3">
             <TentCanvas2D
               tentConfig={tentConfig}
               items={items}
               setItems={setItems}
               canvasRef={canvasRef}
             />
+            {seatingArrangement && (
+              <Button 
+                className="w-full bg-indigo-600 hover:bg-indigo-700"
+                onClick={handleGenerateRealistic}
+                disabled={items.length === 0 || generatingRealistic}
+              >
+                <Camera className="w-4 h-4 mr-2" />
+                {generatingRealistic ? 'Generating...' : 'A.I. Designer'}
+              </Button>
+            )}
           </div>
         </div>
       </div>
