@@ -1070,7 +1070,7 @@ High-quality event photography, realistic styling, professional setup, authentic
                   {generatingRealistic ? 'Generating...' : 'A.I. Designer'}
                 </Button>
                 {!aiDesignerRan && items.length > 0 && (
-                  <p className="text-xs text-amber-600 text-center">⚠️ Run A.I. Designer before Export PDF</p>
+                  <p className="text-xs text-amber-600 text-center">Run A.I. Designer before Export PDF</p>
                 )}
                 <Button
                   variant="outline"
