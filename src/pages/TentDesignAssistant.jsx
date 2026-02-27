@@ -414,6 +414,7 @@ High-quality event photography, realistic styling, professional setup, authentic
         url: response.url,
         suggestions 
       });
+      setAiDesignerRan(true);
     } catch (error) {
       console.error('Failed to generate realistic image:', error);
       alert('Failed to generate design. Please try again.');
