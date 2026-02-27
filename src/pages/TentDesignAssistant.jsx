@@ -661,6 +661,24 @@ High-quality event photography, realistic styling, professional setup, authentic
     return bestTent;
   };
 
+  const getPeakHeight = (width, style) => {
+    if (style === 'marquee') {
+      // Marquee peak height is roughly width/4 + eave height (~8ft)
+      if (width <= 20) return '14 ft';
+      if (width <= 30) return '16 ft';
+      if (width <= 40) return '18 ft';
+      if (width <= 60) return '20 ft';
+      return '22 ft';
+    } else {
+      // Frame tents have a flatter profile, ~10-14ft
+      if (width <= 20) return '10 ft';
+      if (width <= 30) return '11 ft';
+      if (width <= 40) return '12 ft';
+      if (width <= 60) return '14 ft';
+      return '14 ft';
+    }
+  };
+
   const handleSeatingChange = (arrangement) => {
     setSeatingArrangement(arrangement);
     const suggestion = getSuggestedTent(attendees, arrangement);
