@@ -89,11 +89,20 @@ export default function TentDesignAssistant() {
       }
     }
 
-    // Generate Option 2 (AI dreamer) if not already generated
+    // Generate Option 2 (budget version) if not already generated
     let imageToUse = generatedImage;
     if (!imageToUse) {
       try {
-        const prompt = `Stunning cinematic AI-rendered vision of a luxury ${eventLabel} inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${themeDesc} The space is laid out with exactly: ${layoutDesc}. Stage is at the front focal point, tables fill the main floor area, bar lines the perimeter. Table linens are ${tentConfig.linenColor || 'white'}. Dramatic uplighting and atmospheric effects perfectly matching the theme colors. ${attendees} guests in elegant attire. Hyper-detailed 8K render, cinematic volumetric lighting, breathtaking event design, artistic and dreamlike yet true to the layout.`;
+        // Build a table-count-aware layout description identical in quantity and position to option 1
+        const itemCounts2 = {};
+        items.forEach(item => { itemCounts2[item.type] = (itemCounts2[item.type] || 0) + 1; });
+        const hasTables = (itemCounts2.table8ft || 0) + (itemCounts2.table6ft || 0) + (itemCounts2.table5ft || 0) + (itemCounts2.cocktailTable || 0) > 0;
+
+        const budgetTableDesc = hasTables
+          ? `exactly ${(itemCounts2.table8ft || 0) + (itemCounts2.table6ft || 0) + (itemCounts2.table5ft || 0)} plain folding tables with basic white plastic covers arranged in the same positions as the floor plan — ${itemCounts2.table8ft ? `${itemCounts2.table8ft} rectangular 8ft tables, ` : ''}${itemCounts2.table6ft ? `${itemCounts2.table6ft} rectangular 6ft tables, ` : ''}${itemCounts2.table5ft ? `${itemCounts2.table5ft} round 5ft tables` : ''} — no floral centerpieces, no candles, minimal decoration`
+          : 'no tables';
+
+        const prompt = `Professional photograph of a budget-friendly ${eventLabel} inside a ${tentConfig.width}' x ${tentConfig.length}' ${tentTypeDesc}. ${themeDesc} This is the affordable version of the same event layout. Layout contains: ${layoutDesc.replace(/elegant|luxury|premium/gi, 'basic')}. Tables: ${budgetTableDesc}. The spatial arrangement of all items matches the floor plan exactly — same positions, same zones. Basic string lights or fluorescent overhead lighting. Simple folding chairs. No draping or uplighting. Practical no-frills event setup. ${attendees} guests. Realistic venue photography.`;
         const response = await base44.integrations.Core.GenerateImage({ prompt });
         imageToUse = response.url;
         setGeneratedImage(imageToUse);
