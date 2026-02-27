@@ -272,6 +272,7 @@ export default function TentDesignAssistant() {
     // Save PDF
     const fileName = `${projectName || 'tent-design'}-${Date.now()}.pdf`;
     pdf.save(fileName);
+    setGeneratingPDF(false);
   };
 
   const handleGenerateImage = async () => {
