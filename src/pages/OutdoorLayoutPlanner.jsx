@@ -261,6 +261,14 @@ export default function OutdoorLayoutPlanner() {
       }
       if (imageResult.status === 'fulfilled') {
         setAiGeneratedImageUrl(imageResult.value.url);
+        // Generate budget version based on Option 1
+        const budgetResult = await base44.integrations.Core.GenerateImage({
+          prompt: `A budget-friendly version of this outdoor event layout. Keep the EXACT same layout and items as shown in the reference image: ${itemSummary || 'tents and stages'}. Use simpler, more affordable equipment — basic pop-up canopy tents instead of marquee tents, simple folding tables if present, no premium decor. Same top-down blueprint style. Do NOT add any items that are not in the reference image.`,
+          existing_image_urls: [imageResult.value.url]
+        }).catch(() => null);
+        if (budgetResult?.url) {
+          setAiBudgetImageUrl(budgetResult.url);
+        }
       }
       setShowAISuggestions(true);
     } catch (error) {
