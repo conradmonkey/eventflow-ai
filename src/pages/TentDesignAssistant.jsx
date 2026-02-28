@@ -879,7 +879,7 @@ High-quality event photography, realistic styling, professional setup, authentic
 
     setItems(newItems);
     setTimeout(() => {
-      canvasSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      exportButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }, 100);
   };
 
