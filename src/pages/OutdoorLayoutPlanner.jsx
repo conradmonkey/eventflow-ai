@@ -88,6 +88,9 @@ export default function OutdoorLayoutPlanner() {
       const reader = new FileReader();
       reader.onload = (event) => {
         setBackgroundImage(event.target.result);
+        setTimeout(() => {
+          exportBtnRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 100);
       };
       reader.readAsDataURL(file);
     }
