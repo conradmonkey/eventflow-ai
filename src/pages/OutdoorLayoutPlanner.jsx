@@ -236,17 +236,31 @@ export default function OutdoorLayoutPlanner() {
     setAILoading(true);
     try {
       const itemTypes = items.map(item => `${item.quantity} x ${item.type}`).join(', ');
-      const response = await base44.functions.invoke('getAILayoutSuggestions', {
-        designType: 'outdoor',
-        parameters: {
-          eventType: projectName,
-          attendeeCount: 'Not specified',
-          scale,
-          itemCount: items.length,
-          itemTypes: itemTypes || 'No items'
-        }
-      });
-      setAISuggestions(response.data.suggestions);
+      const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height || item.width}` : ''}`).join(', ');
+
+      // Generate AI image and suggestions in parallel
+      const [suggestionsResponse, imageResult] = await Promise.allSettled([
+        base44.functions.invoke('getAILayoutSuggestions', {
+          designType: 'outdoor',
+          parameters: {
+            eventType: projectName,
+            attendeeCount: 'Not specified',
+            scale,
+            itemCount: items.length,
+            itemTypes: itemTypes || 'No items'
+          }
+        }),
+        base44.integrations.Core.GenerateImage({
+          prompt: `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`
+        })
+      ]);
+
+      if (suggestionsResponse.status === 'fulfilled') {
+        setAISuggestions(suggestionsResponse.value.data.suggestions);
+      }
+      if (imageResult.status === 'fulfilled') {
+        setAiGeneratedImageUrl(imageResult.value.url);
+      }
       setShowAISuggestions(true);
     } catch (error) {
       alert('Error generating suggestions: ' + error.message);
