@@ -43,10 +43,28 @@ export default function LayoutInputs({ onAddItems }) {
   const [seatingArrangement, setSeatingArrangement] = useState('seated_dinner');
   const [suggestedTent, setSuggestedTent] = useState(null);
 
+  useEffect(() => {
+    if (attendees && seatingArrangement) {
+      const suggestion = suggestTentCombination(parseInt(attendees), seatingArrangement);
+      setSuggestedTent(suggestion);
+    } else {
+      setSuggestedTent(null);
+    }
+  }, [attendees, seatingArrangement]);
+
   const handleTentChange = (tentType, value) => {
     setInputs(prev => ({
       ...prev,
       [tentType]: Math.max(0, parseInt(value) || 0)
+    }));
+  };
+
+  const applySuggestedTent = () => {
+    if (!suggestedTent) return;
+    const tentType = suggestedTent.recommended.type;
+    setInputs(prev => ({
+      ...prev,
+      [tentType]: (prev[tentType] || 0) + 1
     }));
   };
 
