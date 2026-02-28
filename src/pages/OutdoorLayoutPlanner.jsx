@@ -573,23 +573,21 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
       pdf.addImage(canvasImage, 'PNG', margin, yPos, imgWidth, imgHeight);
     }
 
-    // AI Generated Layout Image
-    if (aiImageUrl) {
+    // Helper to add an image to PDF
+    const addImageToPDF = async (imageUrl, title) => {
       pdf.addPage();
       yPos = margin;
-
       pdf.setFontSize(14);
       pdf.setTextColor(0, 0, 0);
-      pdf.text('AI Layout Visualization', margin, yPos);
+      pdf.text(title, margin, yPos);
       yPos += 10;
 
-      // Load image and add to PDF
       const img = new Image();
       img.crossOrigin = 'anonymous';
       await new Promise((resolve) => {
         img.onload = resolve;
         img.onerror = resolve;
-        img.src = aiImageUrl;
+        img.src = imageUrl;
       });
 
       if (img.complete && img.naturalWidth > 0) {
@@ -603,6 +601,14 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
         const aiImgHeight = (img.naturalHeight * aiImgWidth) / img.naturalWidth;
         pdf.addImage(imgData, 'PNG', margin, yPos, aiImgWidth, Math.min(aiImgHeight, pageHeight - yPos - margin));
       }
+    };
+
+    // AI Generated Layout Images
+    if (aiImageUrl) {
+      await addImageToPDF(aiImageUrl, 'AI Layout Visualization — Option 1 (Premium)');
+    }
+    if (budgetImageUrl) {
+      await addImageToPDF(budgetImageUrl, 'AI Layout Visualization — Option 2 (Budget)');
     }
 
     // Footer
