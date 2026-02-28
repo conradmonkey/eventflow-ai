@@ -405,7 +405,7 @@ export default function OutdoorLayoutPlanner() {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
           {/* Controls Panel */}
-          <div className="lg:col-span-1 space-y-3 overflow-y-auto max-h-[calc(100vh-200px)]">
+          <div className="lg:col-span-1 space-y-3 flex flex-col">
             {/* Image Upload & Scale */}
             <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
               <div>
