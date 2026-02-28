@@ -305,6 +305,15 @@ export default function OutdoorLayoutPlanner() {
       return;
     }
 
+    base44.analytics.track({
+      eventName: 'tent_layout_pdf_exported',
+      properties: {
+        project_name: projectName,
+        item_count: items.length,
+        has_ai_images: !!(aiGeneratedImageUrl || aiBudgetImageUrl)
+      }
+    });
+
     console.log('Export PDF - Using cached images:', { aiImageUrl: aiGeneratedImageUrl, budgetImageUrl: aiBudgetImageUrl });
 
     // Build layout context for AI calls
