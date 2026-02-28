@@ -411,6 +411,38 @@ export default function OutdoorLayoutPlanner() {
       pdf.addImage(canvasImage, 'PNG', margin, yPos, imgWidth, imgHeight);
     }
 
+    // AI Generated Layout Image
+    if (aiImageUrl) {
+      pdf.addPage();
+      yPos = margin;
+
+      pdf.setFontSize(14);
+      pdf.setTextColor(0, 0, 0);
+      pdf.text('AI Layout Visualization', margin, yPos);
+      yPos += 10;
+
+      // Load image and add to PDF
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = resolve;
+        img.src = aiImageUrl;
+      });
+
+      if (img.complete && img.naturalWidth > 0) {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = img.naturalWidth;
+        tempCanvas.height = img.naturalHeight;
+        const ctx = tempCanvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const imgData = tempCanvas.toDataURL('image/png');
+        const aiImgWidth = pageWidth - 2 * margin;
+        const aiImgHeight = (img.naturalHeight * aiImgWidth) / img.naturalWidth;
+        pdf.addImage(imgData, 'PNG', margin, yPos, aiImgWidth, Math.min(aiImgHeight, pageHeight - yPos - margin));
+      }
+    }
+
     // Footer
     const totalPages = pdf.internal.pages.length - 1;
     for (let i = 1; i <= totalPages; i++) {
