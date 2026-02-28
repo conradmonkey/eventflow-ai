@@ -391,7 +391,7 @@ export default function OutdoorLayoutPlanner() {
     }
 
     // Canvas Drawing
-    if (canvasRef.current) {
+    if (canvasImageData) {
       pdf.addPage();
       yPos = margin;
 
@@ -399,11 +399,10 @@ export default function OutdoorLayoutPlanner() {
       pdf.text('Layout Drawing', margin, yPos);
       yPos += 10;
 
-      const canvasImage = canvasRef.current.toDataURL('image/png');
       const imgWidth = pageWidth - 2 * margin;
       const imgHeight = (canvasRef.current.height * imgWidth) / canvasRef.current.width;
 
-      pdf.addImage(canvasImage, 'PNG', margin, yPos, imgWidth, imgHeight);
+      pdf.addImage(canvasImageData, 'PNG', margin, yPos, imgWidth, imgHeight);
     }
 
     // Footer
