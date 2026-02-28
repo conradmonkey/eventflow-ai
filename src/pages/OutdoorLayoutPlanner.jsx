@@ -352,35 +352,6 @@ export default function OutdoorLayoutPlanner() {
       yPos += 5;
     }
 
-    // Cost Breakdown
-    const priceData = calculatePrice();
-    if (Object.keys(priceData.details).length > 0) {
-      if (yPos > pageHeight - 50) {
-        pdf.addPage();
-        yPos = margin;
-      }
-
-      pdf.setFontSize(14);
-      pdf.text('Cost Breakdown', margin, yPos);
-      yPos += 8;
-
-      pdf.setFontSize(10);
-      Object.entries(priceData.details).forEach(([name, data]) => {
-        if (yPos > pageHeight - 20) {
-          pdf.addPage();
-          yPos = margin;
-        }
-        pdf.text(`${name}: $${data.price.toLocaleString()}`, margin, yPos);
-        yPos += 6;
-      });
-
-      yPos += 5;
-      pdf.setFontSize(12);
-      pdf.setTextColor(59, 130, 246);
-      pdf.text(`Total: $${priceData.total.toLocaleString()}`, margin, yPos);
-      pdf.setTextColor(0, 0, 0);
-    }
-
     // Canvas Drawing
     if (canvasRef.current) {
       pdf.addPage();
