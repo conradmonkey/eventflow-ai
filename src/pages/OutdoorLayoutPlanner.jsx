@@ -290,6 +290,8 @@ export default function OutdoorLayoutPlanner() {
       return;
     }
 
+    console.log('Export PDF - Using cached images:', { aiImageUrl: aiGeneratedImageUrl, budgetImageUrl: aiBudgetImageUrl });
+
     // Build layout context for AI calls
     const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height || item.width}` : ''}`).join(', ');
     const attendeeEstimate = (() => {
