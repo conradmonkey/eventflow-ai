@@ -505,25 +505,6 @@ export default function OutdoorLayoutPlanner() {
 
             {/* Render Controls */}
             <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
-              <div className="grid grid-cols-2 gap-2">
-                <Button
-                  variant="outline"
-                  className="h-8 text-xs"
-                  onClick={() => handleZoom('in')}
-                >
-                  <ZoomIn className="w-3 h-3 mr-1" />
-                  Zoom In
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-8 text-xs"
-                  onClick={() => handleZoom('out')}
-                >
-                  <ZoomOut className="w-3 h-3 mr-1" />
-                  Zoom Out
-                </Button>
-              </div>
-
               {items.length > 0 && (
                 <Button
                   variant="outline"
