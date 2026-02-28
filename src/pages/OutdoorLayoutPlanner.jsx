@@ -254,10 +254,21 @@ export default function OutdoorLayoutPlanner() {
     }
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!isSubscribed) {
       setShowSubscriptionModal(true);
       return;
+    }
+
+    // Generate AI image silently (not displayed on screen)
+    let aiImageUrl = null;
+    try {
+      const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height}` : ''}`).join(', ');
+      const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
+      const result = await base44.integrations.Core.GenerateImage({ prompt });
+      aiImageUrl = result.url;
+    } catch (e) {
+      // If AI image fails, continue without it
     }
 
     const pdf = new jsPDF('p', 'mm', 'a4');
