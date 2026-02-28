@@ -188,14 +188,6 @@ export default function OutdoorLayoutPlanner() {
     }
 
     try {
-      base44.analytics.track({
-        eventName: 'tent_layout_saved',
-        properties: {
-          project_name: projectName,
-          item_count: items.length,
-          is_update: !!currentProjectId
-        }
-      });
       let bgImageUrl = '';
 
       // Upload background image to file storage if it's a local base64 blob
@@ -243,13 +235,6 @@ export default function OutdoorLayoutPlanner() {
 
   const handleGetAISuggestions = async () => {
     setAILoading(true);
-    base44.analytics.track({
-      eventName: 'tent_layout_ai_suggestions_requested',
-      properties: {
-        project_name: projectName,
-        item_count: items.length
-      }
-    });
     try {
       const itemTypes = items.map(item => `${item.quantity} x ${item.type}`).join(', ');
       const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height || item.width}` : ''}`).join(', ');
@@ -304,15 +289,6 @@ export default function OutdoorLayoutPlanner() {
       setShowSubscriptionModal(true);
       return;
     }
-
-    base44.analytics.track({
-      eventName: 'tent_layout_pdf_exported',
-      properties: {
-        project_name: projectName,
-        item_count: items.length,
-        has_ai_images: !!(aiGeneratedImageUrl || aiBudgetImageUrl)
-      }
-    });
 
     console.log('Export PDF - Using cached images:', { aiImageUrl: aiGeneratedImageUrl, budgetImageUrl: aiBudgetImageUrl });
 
