@@ -320,7 +320,6 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
       })
     ]);
 
-    const aiImageUrl = aiImageResult.status === 'fulfilled' ? aiImageResult.value : null;
     const lightingSoundSuggestions = lightingSoundResult.status === 'fulfilled'
       ? lightingSoundResult.value
       : {
