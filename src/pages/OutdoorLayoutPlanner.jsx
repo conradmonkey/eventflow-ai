@@ -243,6 +243,13 @@ export default function OutdoorLayoutPlanner() {
 
   const handleGetAISuggestions = async () => {
     setAILoading(true);
+    base44.analytics.track({
+      eventName: 'tent_layout_ai_suggestions_requested',
+      properties: {
+        project_name: projectName,
+        item_count: items.length
+      }
+    });
     try {
       const itemTypes = items.map(item => `${item.quantity} x ${item.type}`).join(', ');
       const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height || item.width}` : ''}`).join(', ');
