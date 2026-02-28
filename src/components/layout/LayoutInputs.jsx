@@ -175,23 +175,24 @@ export default function LayoutInputs({ onAddItems }) {
       }
     });
 
-    const stageToAdd = Math.max(0, inputs.stage.count - previousInputs.stage.count);
-    for (let i = 0; i < stageToAdd; i++) {
+    // Add all stages (each with its own dimensions)
+    stages.forEach(stage => {
       newItems.push({
         type: 'stage',
-        width: inputs.stage.width,
-        length: inputs.stage.length,
+        width: stage.width,
+        length: stage.length,
         x: Math.random() * 300,
         y: Math.random() * 300,
         rotation: 0
       });
-    }
+    });
 
     onAddItems(newItems);
     
-    // Clear video walls and custom items after adding
+    // Clear video walls, custom items, and stages after adding
     setVideoWalls([]);
     setCustomItems([]);
+    setStages([]);
     
     // Update previous inputs to current values
     setPreviousInputs({
@@ -206,7 +207,7 @@ export default function LayoutInputs({ onAddItems }) {
       toilet: inputs.toilet,
       handwash: inputs.handwash,
       sink: inputs.sink,
-      stage: { ...inputs.stage },
+      stage: { count: 0, width: 16, length: 20 },
     });
   };
 
