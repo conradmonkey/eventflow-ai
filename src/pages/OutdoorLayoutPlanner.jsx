@@ -552,24 +552,7 @@ export default function OutdoorLayoutPlanner() {
                   Zoom Out
                 </Button>
               </div>
-              {items.length > 0 && (
-                <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    variant="outline"
-                    className="h-8 text-xs bg-purple-50 hover:bg-purple-100"
-                    onClick={() => setShow3D(true)}
-                  >
-                    3D Render
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-8 text-xs bg-green-50 hover:bg-green-100"
-                    onClick={() => setShowGearList(true)}
-                  >
-                    Gear List
-                  </Button>
-                </div>
-              )}
+
               {items.length > 0 && (
                 <Button
                   variant="outline"
