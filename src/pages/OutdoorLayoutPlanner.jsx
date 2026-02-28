@@ -273,23 +273,16 @@ export default function OutdoorLayoutPlanner() {
     const eventContext = `Event: ${projectName || 'outdoor event'}, estimated ${attendeeEstimate} attendees, layout includes: ${itemSummary || 'general outdoor setup'}.`;
 
     // Run AI image generation and AI suggestions in parallel
-    let aiImageUrl = null;
-    let lightingSoundSuggestions = null;
-
-    await Promise.all([
+    const [aiImageResult, lightingSoundResult] = await Promise.allSettled([
       // AI Image
       (async () => {
-        try {
-          const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
-          const result = await base44.integrations.Core.GenerateImage({ prompt });
-          aiImageUrl = result.url;
-        } catch (e) { /* continue without image */ }
+        const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
+        const result = await base44.integrations.Core.GenerateImage({ prompt });
+        return result.url;
       })(),
       // AI Lighting & Sound Suggestions
-      (async () => {
-        try {
-          const result = await base44.integrations.Core.InvokeLLM({
-            prompt: `You are an expert event production consultant. Based on the following event details, provide two sets of lighting and sound suggestions.
+      base44.integrations.Core.InvokeLLM({
+        prompt: `You are an expert event production consultant. Based on the following event details, provide two sets of lighting and sound suggestions.
 
 ${eventContext}
 
@@ -303,54 +296,50 @@ OPTION 2 - BUDGET (cost-effective alternative to Option 1, still professional):
 - Sound: 4-6 specific budget-friendly sound recommendations
 
 Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K12.2 powered speakers"). Keep each recommendation concise (1-2 sentences max).`,
-            response_json_schema: {
-              type: 'object',
-              properties: {
-                option1_lighting: { type: 'array', items: { type: 'string' } },
-                option1_sound: { type: 'array', items: { type: 'string' } },
-                option2_lighting: { type: 'array', items: { type: 'string' } },
-                option2_sound: { type: 'array', items: { type: 'string' } },
-              }
-            }
-          });
-          console.log('Lighting/Sound AI result:', result);
-          lightingSoundSuggestions = result;
-        } catch (e) {
-          console.error('Lighting/Sound AI error:', e);
-          // Fallback generic suggestions
-          lightingSoundSuggestions = {
-            option1_lighting: [
-              '6x LED moving head wash lights for dynamic color washes across the tent.',
-              '4x LED PAR cans for general stage and area illumination.',
-              '2x follow spotlights for performers or speakers.',
-              'String/fairy light canopy overhead for atmosphere.',
-              'DMX lighting controller for full programmable show control.',
-            ],
-            option1_sound: [
-              '4x line-array speaker cabinets for even coverage across the entire venue.',
-              '2x 18" subwoofers for low-end reinforcement.',
-              'Digital mixing console (e.g., Yamaha CL5) for advanced control.',
-              '4x stage monitor wedges for performers.',
-              'Wireless microphone system (4 channels).',
-              'Stage snake and professional cabling for clean setup.',
-            ],
-            option2_lighting: [
-              '4x LED PAR cans for general illumination.',
-              'String lights/fairy lights for ambiance at low cost.',
-              '2x LED uplights for tent poles or perimeter.',
-              'Basic DMX controller or pre-programmed light show.',
-            ],
-            option2_sound: [
-              '2x powered PA speakers (e.g., QSC K12.2) on stands.',
-              '1x powered subwoofer for bass reinforcement.',
-              'Compact digital mixer (e.g., Behringer X32 Compact).',
-              '2x vocal microphones with stands.',
-              'Bluetooth or DJ media player as source.',
-            ],
-          };
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            option1_lighting: { type: 'array', items: { type: 'string' } },
+            option1_sound: { type: 'array', items: { type: 'string' } },
+            option2_lighting: { type: 'array', items: { type: 'string' } },
+            option2_sound: { type: 'array', items: { type: 'string' } },
+          }
         }
-      })()
+      })
     ]);
+
+    const aiImageUrl = aiImageResult.status === 'fulfilled' ? aiImageResult.value : null;
+    const lightingSoundSuggestions = lightingSoundResult.status === 'fulfilled'
+      ? lightingSoundResult.value
+      : {
+          option1_lighting: [
+            '6x LED moving head wash lights for dynamic color washes across the tent.',
+            '4x LED PAR cans for general stage and area illumination.',
+            '2x follow spotlights for performers or speakers.',
+            'String/fairy light canopy overhead for atmosphere.',
+            'DMX lighting controller for full programmable show control.',
+          ],
+          option1_sound: [
+            '4x line-array speaker cabinets for even coverage across the entire venue.',
+            '2x 18" subwoofers for low-end reinforcement.',
+            'Digital mixing console (e.g., Yamaha CL5) for advanced control.',
+            '4x stage monitor wedges for performers.',
+            'Wireless microphone system (4 channels).',
+          ],
+          option2_lighting: [
+            '4x LED PAR cans for general illumination.',
+            'String lights/fairy lights for ambiance at low cost.',
+            '2x LED uplights for tent poles or perimeter.',
+            'Basic DMX controller or pre-programmed light show.',
+          ],
+          option2_sound: [
+            '2x powered PA speakers (e.g., QSC K12.2) on stands.',
+            '1x powered subwoofer for bass reinforcement.',
+            'Compact digital mixer (e.g., Behringer X32 Compact).',
+            '2x vocal microphones with stands.',
+            'Bluetooth or DJ media player as source.',
+          ],
+        };
 
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
