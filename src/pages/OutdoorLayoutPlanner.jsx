@@ -188,6 +188,14 @@ export default function OutdoorLayoutPlanner() {
     }
 
     try {
+      base44.analytics.track({
+        eventName: 'tent_layout_saved',
+        properties: {
+          project_name: projectName,
+          item_count: items.length,
+          is_update: !!currentProjectId
+        }
+      });
       let bgImageUrl = '';
 
       // Upload background image to file storage if it's a local base64 blob
