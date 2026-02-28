@@ -206,7 +206,7 @@ export default function LayoutInputs({ onAddItems }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md flex flex-col" style={{ maxHeight: '22rem' }}>
+    <div className="bg-white rounded-lg shadow-md flex flex-col" style={{ maxHeight: '60vh' }}>
       <div className="overflow-y-auto flex-1">
         <div className="p-3 space-y-2">
       <h3 className="font-semibold text-xs mb-1">Items to Add</h3>
