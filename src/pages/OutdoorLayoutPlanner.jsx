@@ -296,18 +296,9 @@ export default function OutdoorLayoutPlanner() {
     })();
     const eventContext = `Event: ${projectName || 'outdoor event'}, estimated ${attendeeEstimate} attendees, layout includes: ${itemSummary || 'general outdoor setup'}.`;
 
-    // Use cached AI image only — do NOT regenerate
+    // Use cached AI images only — no regeneration at export time
     const aiImageUrl = aiGeneratedImageUrl || null;
-
-    // Generate Option 2 (budget) image based on the cached AI image + layout items
-    let budgetImageUrl = null;
-    if (aiImageUrl) {
-      const budgetImageResult = await base44.integrations.Core.GenerateImage({
-        prompt: `A budget-friendly version of this outdoor event layout. Keep the EXACT same layout and items as shown in the reference image: ${itemSummary || 'tents and stages'}. Use simpler, more affordable equipment — basic pop-up canopy tents instead of marquee tents, simple folding tables if present, no premium decor. Same top-down blueprint style. Do NOT add any items that are not in the reference image.`,
-        existing_image_urls: [aiImageUrl]
-      }).catch(() => null);
-      if (budgetImageResult?.url) budgetImageUrl = budgetImageResult.url;
-    }
+    const budgetImageUrl = aiBudgetImageUrl || null;
 
     // Run only lighting/sound suggestions
     const [lightingSoundResult] = await Promise.allSettled([
