@@ -386,9 +386,11 @@ export default function LayoutInputs({ onAddItems }) {
 
         </div>
       </div>
-      <Button onClick={handleAddItems} className="w-full h-8 text-sm bg-green-600 hover:bg-green-700">
-        Add Items
-      </Button>
+      <div className="p-3 border-t border-slate-100">
+        <Button onClick={handleAddItems} className="w-full h-8 text-sm bg-green-600 hover:bg-green-700">
+          Add Items
+        </Button>
+      </div>
     </div>
   );
 }
