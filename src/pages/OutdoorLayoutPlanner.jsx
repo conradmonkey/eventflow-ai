@@ -260,16 +260,63 @@ export default function OutdoorLayoutPlanner() {
       return;
     }
 
-    // Generate AI image silently (not displayed on screen)
+    // Build layout context for AI calls
+    const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height || item.width}` : ''}`).join(', ');
+    const attendeeEstimate = (() => {
+      let count = 0;
+      items.forEach(i => {
+        if (i.type?.includes('tent')) count += 50;
+        if (i.type === 'stage') count += 200;
+      });
+      return count > 0 ? count : 100;
+    })();
+    const eventContext = `Event: ${projectName || 'outdoor event'}, estimated ${attendeeEstimate} attendees, layout includes: ${itemSummary || 'general outdoor setup'}.`;
+
+    // Run AI image generation and AI suggestions in parallel
     let aiImageUrl = null;
-    try {
-      const itemSummary = items.map(item => `${item.type}${item.width ? ` ${item.width}x${item.length || item.height}` : ''}`).join(', ');
-      const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
-      const result = await base44.integrations.Core.GenerateImage({ prompt });
-      aiImageUrl = result.url;
-    } catch (e) {
-      // If AI image fails, continue without it
-    }
+    let lightingSoundSuggestions = null;
+
+    await Promise.all([
+      // AI Image
+      (async () => {
+        try {
+          const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
+          const result = await base44.integrations.Core.GenerateImage({ prompt });
+          aiImageUrl = result.url;
+        } catch (e) { /* continue without image */ }
+      })(),
+      // AI Lighting & Sound Suggestions
+      (async () => {
+        try {
+          const result = await base44.integrations.Core.InvokeLLM({
+            prompt: `You are an expert event production consultant. Based on the following event details, provide two sets of lighting and sound suggestions.
+
+${eventContext}
+
+Provide:
+OPTION 1 - PREMIUM (best quality, full professional setup):
+- Lighting: 4-6 specific, actionable lighting recommendations tailored to this event
+- Sound: 4-6 specific, actionable sound system recommendations tailored to this event
+
+OPTION 2 - BUDGET (cost-effective alternative to Option 1, still professional):
+- Lighting: 4-6 specific budget-friendly lighting recommendations
+- Sound: 4-6 specific budget-friendly sound recommendations
+
+Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K12.2 powered speakers"). Keep each recommendation concise (1-2 sentences max).`,
+            response_json_schema: {
+              type: 'object',
+              properties: {
+                option1_lighting: { type: 'array', items: { type: 'string' } },
+                option1_sound: { type: 'array', items: { type: 'string' } },
+                option2_lighting: { type: 'array', items: { type: 'string' } },
+                option2_sound: { type: 'array', items: { type: 'string' } },
+              }
+            }
+          });
+          lightingSoundSuggestions = result;
+        } catch (e) { /* continue without suggestions */ }
+      })()
+    ]);
 
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
