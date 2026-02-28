@@ -53,6 +53,7 @@ export default function TentDesignAssistant() {
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const canvasRef = useRef(null);
   const canvasSectionRef = useRef(null);
+  const exportButtonRef = useRef(null);
 
   const handleExportPDF = async () => {
     setGeneratingPDF(true);
