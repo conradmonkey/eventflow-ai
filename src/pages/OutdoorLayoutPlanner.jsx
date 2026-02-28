@@ -254,16 +254,10 @@ export default function OutdoorLayoutPlanner() {
     }
   };
 
-  const handleExportPDF = async () => {
+  const handleExportPDF = () => {
     if (!isSubscribed) {
       setShowSubscriptionModal(true);
       return;
-    }
-
-    // Capture canvas data URL upfront before building PDF (prevents any visible flash)
-    let canvasImageData = null;
-    if (canvasRef.current) {
-      canvasImageData = canvasRef.current.toDataURL('image/png');
     }
 
     const pdf = new jsPDF('p', 'mm', 'a4');
@@ -391,7 +385,7 @@ export default function OutdoorLayoutPlanner() {
     }
 
     // Canvas Drawing
-    if (canvasImageData) {
+    if (canvasRef.current) {
       pdf.addPage();
       yPos = margin;
 
@@ -399,10 +393,11 @@ export default function OutdoorLayoutPlanner() {
       pdf.text('Layout Drawing', margin, yPos);
       yPos += 10;
 
+      const canvasImage = canvasRef.current.toDataURL('image/png');
       const imgWidth = pageWidth - 2 * margin;
       const imgHeight = (canvasRef.current.height * imgWidth) / canvasRef.current.width;
 
-      pdf.addImage(canvasImageData, 'PNG', margin, yPos, imgWidth, imgHeight);
+      pdf.addImage(canvasImage, 'PNG', margin, yPos, imgWidth, imgHeight);
     }
 
     // Footer
