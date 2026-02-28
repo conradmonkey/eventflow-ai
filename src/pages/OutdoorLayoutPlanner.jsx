@@ -288,31 +288,63 @@ export default function OutdoorLayoutPlanner() {
     pdf.text(`Total Items: ${items.length}`, margin, yPos);
     yPos += 10;
 
-    // Color Legend
-    pdf.setFontSize(14);
-    pdf.text('Color Legend', margin, yPos);
-    yPos += 8;
+    // Color Legend - only include types actually on the canvas
+    const ITEM_COLORS = {
+      tent_8x8: { color: [59, 130, 246], label: '8x8 Tent' },
+      tent_10x10: { color: [59, 130, 246], label: '10x10 Tent' },
+      tent_10x20: { color: [59, 130, 246], label: '10x20 Tent' },
+      tent_15x15: { color: [59, 130, 246], label: '15x15 Tent' },
+      tent_20x20: { color: [59, 130, 246], label: '20x20 Tent' },
+      tent_20x30: { color: [59, 130, 246], label: '20x30 Tent' },
+      tent_30x30: { color: [59, 130, 246], label: '30x30 Tent' },
+      frame_tent: { color: [37, 99, 235], label: 'Frame Tent' },
+      stage: { color: [239, 68, 68], label: 'Stage' },
+      video_wall: { color: [30, 144, 255], label: 'Video Wall' },
+      toilet: { color: [0, 0, 0], label: 'Toilet' },
+      handwash: { color: [65, 105, 225], label: 'Handwash' },
+      sink: { color: [32, 178, 170], label: 'Sink' },
+    };
 
-    const legend = [
-      { color: [59, 130, 246], label: 'Popup Tents' },
-      { color: [59, 130, 246], label: 'Marquee Tents' },
-      { color: [37, 99, 235], label: 'Frame Tents' },
-      { color: [239, 68, 68], label: 'Stage' },
-      { color: [30, 144, 255], label: 'Video Wall' },
-      { color: [0, 0, 0], label: 'Toilet' },
-      { color: [65, 105, 225], label: 'Handwash' },
-      { color: [32, 178, 170], label: 'Sink' }
-    ];
-
-    pdf.setFontSize(10);
-    legend.forEach(item => {
-      pdf.setFillColor(...item.color);
-      pdf.rect(margin, yPos - 3, 4, 4, 'F');
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(item.label, margin + 6, yPos);
-      yPos += 6;
+    const seen = new Map();
+    items.forEach(item => {
+      const info = ITEM_COLORS[item.type];
+      if (info && !seen.has(info.label)) {
+        // Use item's custom color if set
+        const hexColor = item.color;
+        let color = info.color;
+        if (hexColor && hexColor.startsWith('#')) {
+          const r = parseInt(hexColor.slice(1, 3), 16);
+          const g = parseInt(hexColor.slice(3, 5), 16);
+          const b = parseInt(hexColor.slice(5, 7), 16);
+          color = [r, g, b];
+        }
+        seen.set(info.label, { color, label: item.type === 'custom' ? (item.name || 'Custom') : info.label });
+      } else if (item.type === 'custom' && !seen.has(item.name || 'Custom')) {
+        const hexColor = item.color || '#808080';
+        const r = parseInt(hexColor.slice(1, 3), 16);
+        const g = parseInt(hexColor.slice(3, 5), 16);
+        const b = parseInt(hexColor.slice(5, 7), 16);
+        seen.set(item.name || 'Custom', { color: [r, g, b], label: item.name || 'Custom' });
+      }
     });
-    yPos += 5;
+
+    const legend = Array.from(seen.values());
+
+    if (legend.length > 0) {
+      pdf.setFontSize(14);
+      pdf.text('Color Legend', margin, yPos);
+      yPos += 8;
+
+      pdf.setFontSize(10);
+      legend.forEach(item => {
+        pdf.setFillColor(...item.color);
+        pdf.rect(margin, yPos - 3, 4, 4, 'F');
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(item.label, margin + 6, yPos);
+        yPos += 6;
+      });
+      yPos += 5;
+    }
 
     // Items Summary
     if (items.length > 0) {
