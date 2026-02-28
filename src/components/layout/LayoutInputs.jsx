@@ -80,14 +80,18 @@ export default function LayoutInputs({ onAddItems }) {
     setCustomItems(customItems.filter((_, i) => i !== index));
   };
 
-  const handleStageChange = (field, value) => {
-    setInputs(prev => ({
-      ...prev,
-      stage: {
-        ...prev.stage,
-        [field]: field === 'count' ? Math.max(0, parseInt(value) || 0) : parseFloat(value) || 0
-      }
-    }));
+  const addStage = () => {
+    setStages([...stages, { width: 16, length: 20 }]);
+  };
+
+  const updateStage = (index, field, value) => {
+    const updated = [...stages];
+    updated[index] = { ...updated[index], [field]: parseFloat(value) || 0 };
+    setStages(updated);
+  };
+
+  const removeStage = (index) => {
+    setStages(stages.filter((_, i) => i !== index));
   };
 
   const handleFrameTentChange = (field, value) => {
