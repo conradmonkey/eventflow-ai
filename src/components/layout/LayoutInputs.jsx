@@ -39,6 +39,9 @@ export default function LayoutInputs({ onAddItems }) {
   const [videoWalls, setVideoWalls] = useState([]);
   const [customItems, setCustomItems] = useState([]);
   const [stages, setStages] = useState([]);
+  const [attendees, setAttendees] = useState('');
+  const [seatingArrangement, setSeatingArrangement] = useState('seated_dinner');
+  const [suggestedTent, setSuggestedTent] = useState(null);
 
   const handleTentChange = (tentType, value) => {
     setInputs(prev => ({
