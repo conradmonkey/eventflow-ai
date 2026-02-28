@@ -592,22 +592,38 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
 
       const img = new Image();
       img.crossOrigin = 'anonymous';
+      let loadSuccess = false;
+      
       await new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve;
+        img.onload = () => {
+          loadSuccess = true;
+          resolve();
+        };
+        img.onerror = () => {
+          console.log('Failed to load image:', imageUrl);
+          resolve();
+        };
         img.src = imageUrl;
       });
 
-      if (img.complete && img.naturalWidth > 0) {
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = img.naturalWidth;
-        tempCanvas.height = img.naturalHeight;
-        const ctx = tempCanvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        const imgData = tempCanvas.toDataURL('image/png');
-        const aiImgWidth = pageWidth - 2 * margin;
-        const aiImgHeight = (img.naturalHeight * aiImgWidth) / img.naturalWidth;
-        pdf.addImage(imgData, 'PNG', margin, yPos, aiImgWidth, Math.min(aiImgHeight, pageHeight - yPos - margin));
+      if (loadSuccess && img.naturalWidth > 0) {
+        try {
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = img.naturalWidth;
+          tempCanvas.height = img.naturalHeight;
+          const ctx = tempCanvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const imgData = tempCanvas.toDataURL('image/png');
+          const aiImgWidth = pageWidth - 2 * margin;
+          const aiImgHeight = (img.naturalHeight * aiImgWidth) / img.naturalWidth;
+          pdf.addImage(imgData, 'PNG', margin, yPos, aiImgWidth, Math.min(aiImgHeight, pageHeight - yPos - margin));
+        } catch (err) {
+          console.log('Error adding image to PDF:', err);
+        }
+      } else {
+        pdf.setFontSize(10);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text('[Image could not be loaded]', margin, yPos + 10);
       }
     };
 
