@@ -338,8 +338,9 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
       })
     ]);
 
+    console.log('Lighting/Sound result:', lightingSoundResult);
     const lightingSoundSuggestions = lightingSoundResult.status === 'fulfilled'
-      ? lightingSoundResult.value.data
+      ? (lightingSoundResult.value.data || lightingSoundResult.value)
       : {
           option1_lighting: [
             '6x LED moving head wash lights for dynamic color washes across the tent.',
