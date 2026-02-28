@@ -442,6 +442,77 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
       yPos += 5;
     }
 
+    // Lighting & Sound Suggestions
+    if (lightingSoundSuggestions) {
+      const addSuggestionsSection = (title, lightingItems, soundItems, color) => {
+        if (yPos > pageHeight - 60) { pdf.addPage(); yPos = margin; }
+
+        // Section header
+        pdf.setFillColor(...color);
+        pdf.rect(margin, yPos - 4, pageWidth - 2 * margin, 8, 'F');
+        pdf.setFontSize(12);
+        pdf.setTextColor(255, 255, 255);
+        pdf.text(title, margin + 3, yPos + 1);
+        yPos += 12;
+
+        // Lighting
+        pdf.setFontSize(11);
+        pdf.setTextColor(...color);
+        pdf.text('Lighting Recommendations', margin, yPos);
+        yPos += 6;
+        pdf.setFontSize(9);
+        pdf.setTextColor(50, 50, 50);
+        (lightingItems || []).forEach(rec => {
+          if (yPos > pageHeight - 15) { pdf.addPage(); yPos = margin; }
+          const lines = pdf.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin - 8);
+          pdf.text(lines, margin + 4, yPos);
+          yPos += lines.length * 5 + 2;
+        });
+        yPos += 4;
+
+        // Sound
+        if (yPos > pageHeight - 40) { pdf.addPage(); yPos = margin; }
+        pdf.setFontSize(11);
+        pdf.setTextColor(...color);
+        pdf.text('Sound Recommendations', margin, yPos);
+        yPos += 6;
+        pdf.setFontSize(9);
+        pdf.setTextColor(50, 50, 50);
+        (soundItems || []).forEach(rec => {
+          if (yPos > pageHeight - 15) { pdf.addPage(); yPos = margin; }
+          const lines = pdf.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin - 8);
+          pdf.text(lines, margin + 4, yPos);
+          yPos += lines.length * 5 + 2;
+        });
+        yPos += 8;
+      };
+
+      pdf.addPage();
+      yPos = margin;
+      pdf.setFontSize(16);
+      pdf.setTextColor(30, 30, 30);
+      pdf.text('Lighting & Sound Recommendations', pageWidth / 2, yPos, { align: 'center' });
+      yPos += 6;
+      pdf.setFontSize(9);
+      pdf.setTextColor(120, 120, 120);
+      pdf.text(eventContext, margin, yPos, { maxWidth: pageWidth - 2 * margin });
+      yPos += 12;
+
+      addSuggestionsSection(
+        'OPTION 1 — Premium Setup',
+        lightingSoundSuggestions.option1_lighting,
+        lightingSoundSuggestions.option1_sound,
+        [59, 130, 246]
+      );
+
+      addSuggestionsSection(
+        'OPTION 2 — Budget-Friendly Setup',
+        lightingSoundSuggestions.option2_lighting,
+        lightingSoundSuggestions.option2_sound,
+        [22, 163, 74]
+      );
+    }
+
     // Canvas Drawing
     if (canvasRef.current) {
       pdf.addPage();
