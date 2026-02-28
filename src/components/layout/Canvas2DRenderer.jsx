@@ -280,45 +280,33 @@ export default function Canvas2DRenderer({
       </div>
       
       {/* Color Legend */}
-      {showLegend && (
-        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-slate-200">
-        <h4 className="font-semibold text-xs mb-2 text-slate-700">Legend</h4>
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3B82F6' }}></div>
-            <span className="text-xs text-slate-600">Popup Tents</span>
+      {showLegend && items.length > 0 && (() => {
+        // Build legend from actual items on canvas
+        const seen = new Map();
+        items.forEach(item => {
+          const size = ITEM_SIZES[item.type];
+          if (!size) return;
+          const color = item.color || size.color;
+          const label = item.type === 'custom' ? (item.name || 'Custom') : size.label;
+          const key = `${label}|${color}`;
+          if (!seen.has(key)) seen.set(key, { color, label });
+        });
+        const entries = Array.from(seen.values());
+        if (entries.length === 0) return null;
+        return (
+          <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-slate-200">
+            <h4 className="font-semibold text-xs mb-2 text-slate-700">Legend</h4>
+            <div className="space-y-1.5">
+              {entries.map(({ color, label }) => (
+                <div key={`${label}|${color}`} className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border border-slate-300" style={{ backgroundColor: color }}></div>
+                  <span className="text-xs text-slate-600">{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3B82F6' }}></div>
-            <span className="text-xs text-slate-600">Marquee Tents</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#2563EB' }}></div>
-            <span className="text-xs text-slate-600">Frame Tents</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#EF4444' }}></div>
-            <span className="text-xs text-slate-600">Stage</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#1E90FF' }}></div>
-            <span className="text-xs text-slate-600">Video Wall</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#000000' }}></div>
-            <span className="text-xs text-slate-600">Toilet</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#4169E1' }}></div>
-            <span className="text-xs text-slate-600">Handwash</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#20B2AA' }}></div>
-            <span className="text-xs text-slate-600">Sink</span>
-          </div>
-        </div>
-      </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
