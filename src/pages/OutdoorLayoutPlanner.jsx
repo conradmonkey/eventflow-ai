@@ -570,39 +570,7 @@ export default function OutdoorLayoutPlanner() {
               )}
             </div>
 
-            {/* Items List */}
-            {items.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-3">
-                <h3 className="font-semibold text-xs mb-2">Items ({items.length})</h3>
-                <div className="space-y-1 max-h-96 overflow-y-auto">
-                  {items.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className={`p-1.5 rounded text-xs cursor-pointer transition-colors ${
-                        selectedItem === idx
-                          ? 'bg-blue-100 border-l-2 border-blue-500'
-                          : 'bg-slate-50 hover:bg-slate-100'
-                      }`}
-                      onClick={() => setSelectedItem(idx)}
-                    >
-                      <div className="flex justify-between items-start">
-                        <span className="font-medium text-xs">{item.type}</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteItem(idx);
-                          }}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                      <p className="text-slate-600 text-xs">Qty: {item.quantity}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+
           </div>
 
           {/* Canvas Area */}
