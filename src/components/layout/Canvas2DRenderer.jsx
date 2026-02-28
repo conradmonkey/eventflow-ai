@@ -180,6 +180,8 @@ export default function Canvas2DRenderer({
       setDraggingItem(itemIdx);
       setDragStart({ x, y, itemX: items[itemIdx].x ?? 100, itemY: items[itemIdx].y ?? 100 });
       if (onSelectItem) onSelectItem(itemIdx);
+    } else {
+      if (onSelectItem) onSelectItem(null);
     }
   };
 
