@@ -430,20 +430,7 @@ export default function OutdoorLayoutPlanner() {
             </Link>
           </div>
         </div>
-        <div className="flex justify-end items-center mb-8">
-          <div className="flex gap-2">
-            {items.length > 0 && (
-              <Button
-                id="export-btn"
-                onClick={handleExportPDF}
-                className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'}`}
-              >
-                <FileDown className="w-4 h-4" />
-                Export PDF {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
-              </Button>
-            )}
-          </div>
-        </div>
+
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
           {/* Controls Panel */}
