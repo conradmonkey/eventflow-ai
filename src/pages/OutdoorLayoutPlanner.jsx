@@ -287,14 +287,16 @@ export default function OutdoorLayoutPlanner() {
     })();
     const eventContext = `Event: ${projectName || 'outdoor event'}, estimated ${attendeeEstimate} attendees, layout includes: ${itemSummary || 'general outdoor setup'}.`;
 
-    // Run AI image generation and AI suggestions in parallel
+    // Run AI lighting/sound suggestions only (use cached image from AI designer if available)
     const [aiImageResult, lightingSoundResult] = await Promise.allSettled([
-      // AI Image
-      (async () => {
-        const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
-        const result = await base44.integrations.Core.GenerateImage({ prompt });
-        return result.url;
-      })(),
+      // Use cached AI image from "AI Designer" button, or generate a new one if not available
+      aiGeneratedImageUrl
+        ? Promise.resolve(aiGeneratedImageUrl)
+        : (async () => {
+            const prompt = `A professional aerial-view illustration of an outdoor event layout with the following elements: ${itemSummary || 'tents and stages'}. Clean, top-down blueprint style, showing the arrangement of items in an outdoor venue. Professional event planning diagram.`;
+            const result = await base44.integrations.Core.GenerateImage({ prompt });
+            return result.url;
+          })(),
       // AI Lighting & Sound Suggestions
       base44.integrations.Core.InvokeLLM({
         prompt: `You are an expert event production consultant. Based on the following event details, provide two sets of lighting and sound suggestions.
