@@ -239,6 +239,54 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="p-3 space-y-2">
       <h3 className="font-semibold text-xs mb-1">Items to Add</h3>
 
+      {/* Attendee & Seating Calculator */}
+      <div className="bg-blue-50 border border-blue-200 rounded p-2 space-y-2">
+        <h4 className="text-xs font-semibold text-blue-900">Tent Size Calculator</h4>
+        <div>
+          <Label htmlFor="attendees" className="text-xs">Number of Attendees</Label>
+          <Input 
+            id="attendees"
+            type="number" 
+            value={attendees} 
+            onChange={(e) => setAttendees(e.target.value)} 
+            placeholder="e.g. 150" 
+            min="0"
+            className="h-7 text-xs"
+          />
+        </div>
+        <div>
+          <Label htmlFor="seating" className="text-xs">Seating Arrangement</Label>
+          <Select value={seatingArrangement} onValueChange={setSeatingArrangement}>
+            <SelectTrigger id="seating" className="h-7 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="presentation">Theater (Chairs Only)</SelectItem>
+              <SelectItem value="standing">Cocktail (Standing)</SelectItem>
+              <SelectItem value="seated_dinner">Banquet (Rectangular Tables)</SelectItem>
+              <SelectItem value="seated_6ft">Banquet (Round Tables)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {suggestedTent && (
+          <div className="bg-white rounded p-2 space-y-1">
+            <p className="text-xs text-slate-600">
+              <span className="font-semibold">Recommended:</span> {suggestedTent.recommended.width}x{suggestedTent.recommended.length} tent
+            </p>
+            <p className="text-xs text-slate-500">
+              Space needed: {suggestedTent.requiredSqFt} sq ft ({suggestedTent.spacePerPerson.min}-{suggestedTent.spacePerPerson.max} sq ft/person)
+            </p>
+            <Button 
+              onClick={applySuggestedTent}
+              size="sm"
+              className="w-full h-6 text-xs bg-blue-600 hover:bg-blue-700"
+            >
+              Add Suggested Tent
+            </Button>
+          </div>
+        )}
+      </div>
+
       {/* Tents */}
       <div className="space-y-1.5">
         <h4 className="text-xs font-semibold text-slate-600">Popup Tents</h4>
