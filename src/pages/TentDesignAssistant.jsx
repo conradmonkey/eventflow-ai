@@ -1099,6 +1099,7 @@ High-quality event photography, realistic styling, professional setup, authentic
                   <p className="text-xs text-amber-600 text-center">Run A.I. Designer before Export PDF</p>
                 )}
                 <Button
+                  ref={exportButtonRef}
                   variant="outline"
                   onClick={handleExportPDF}
                   disabled={items.length === 0 || generatingRealistic || !aiDesignerRan || generatingPDF}
