@@ -374,20 +374,27 @@ export default function LayoutInputs({ onAddItems }) {
       {/* Stages */}
       <div className="space-y-1.5">
         <h4 className="text-xs font-semibold text-slate-600">Stages</h4>
-        <div>
-          <Label htmlFor="stage_count" className="text-xs">Quantity</Label>
-          <Input type="number" id="stage_count" value={inputs.stage.count} onChange={(e) => handleStageChange('count', e.target.value)} min="0" className="h-8 text-sm w-16" />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label htmlFor="stage_width" className="text-xs">Width (ft)</Label>
-            <Input type="number" id="stage_width" value={inputs.stage.width} onChange={(e) => handleStageChange('width', e.target.value)} min="1" className="h-8 text-sm w-16" />
+        <Button onClick={addStage} variant="outline" className="w-full h-7 text-xs">
+          + Add Stage
+        </Button>
+        {stages.map((stage, idx) => (
+          <div key={idx} className="border border-slate-200 rounded p-2 space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-medium">Stage {idx + 1}</span>
+              <button onClick={() => removeStage(idx)} className="text-red-500 text-xs hover:text-red-700">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label className="text-xs">Width (ft)</Label>
+                <Input type="number" value={stage.width} onChange={(e) => updateStage(idx, 'width', e.target.value)} min="1" step="1" className="h-7 text-xs" />
+              </div>
+              <div>
+                <Label className="text-xs">Length (ft)</Label>
+                <Input type="number" value={stage.length} onChange={(e) => updateStage(idx, 'length', e.target.value)} min="1" step="1" className="h-7 text-xs" />
+              </div>
+            </div>
           </div>
-          <div>
-            <Label htmlFor="stage_length" className="text-xs">Length (ft)</Label>
-            <Input type="number" id="stage_length" value={inputs.stage.length} onChange={(e) => handleStageChange('length', e.target.value)} min="1" className="h-8 text-sm w-16" />
-          </div>
-        </div>
+        ))}
       </div>
 
         </div>
