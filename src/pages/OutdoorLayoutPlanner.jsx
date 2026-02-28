@@ -254,10 +254,16 @@ export default function OutdoorLayoutPlanner() {
     }
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!isSubscribed) {
       setShowSubscriptionModal(true);
       return;
+    }
+
+    // Capture canvas data URL upfront before building PDF (prevents any visible flash)
+    let canvasImageData = null;
+    if (canvasRef.current) {
+      canvasImageData = canvasRef.current.toDataURL('image/png');
     }
 
     const pdf = new jsPDF('p', 'mm', 'a4');
