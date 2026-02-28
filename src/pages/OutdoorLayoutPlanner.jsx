@@ -62,6 +62,7 @@ export default function OutdoorLayoutPlanner() {
   const [aiSuggestions, setAISuggestions] = useState('');
   const [aiLoading, setAILoading] = useState(false);
   const [aiGeneratedImageUrl, setAiGeneratedImageUrl] = useState(null);
+  const [aiBudgetImageUrl, setAiBudgetImageUrl] = useState(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
   const exportBtnRef = useRef(null);
