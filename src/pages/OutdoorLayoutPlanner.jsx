@@ -428,36 +428,17 @@ export default function OutdoorLayoutPlanner() {
         </div>
         <div className="flex justify-end items-center mb-8">
           <div className="flex gap-2">
-          <div className="flex gap-2">
-            <Button
-              onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowLoadModal(true)}
-              variant="outline"
-              className={`gap-2 ${!isSubscribed ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : ''}`}
-            >
-              <FolderOpen className="w-4 h-4" />
-              Load {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
-            </Button>
             {items.length > 0 && (
-              <>
-                <Button
-                  onClick={() => !isSubscribed ? setShowSubscriptionModal(true) : setShowSaveModal(true)}
-                  className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
-                >
-                  <Save className="w-4 h-4" />
-                  Save {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
-                </Button>
-                <Button
-                  id="export-btn"
-                  onClick={handleExportPDF}
-                  className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'}`}
-                >
-                  <FileDown className="w-4 h-4" />
-                  Export PDF {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
-                </Button>
-              </>
+              <Button
+                id="export-btn"
+                onClick={handleExportPDF}
+                className={`gap-2 ${!isSubscribed ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'}`}
+              >
+                <FileDown className="w-4 h-4" />
+                Export PDF {!isSubscribed && <Lock className="w-3 h-3 ml-1" />}
+              </Button>
             )}
           </div>
-        </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
