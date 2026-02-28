@@ -463,17 +463,8 @@ export default function OutdoorLayoutPlanner() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
           {/* Controls Panel */}
           <div className="lg:col-span-1 space-y-3 overflow-y-auto max-h-[calc(100vh-200px)]">
-            {/* Project Name & Image Upload */}
+            {/* Image Upload & Scale */}
             <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
-              <div>
-                <Label className="text-xs font-semibold">Project Name</Label>
-                <Input
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                  placeholder="e.g., Summer Festival 2026"
-                  className="h-8 text-sm mt-1"
-                />
-              </div>
               <div>
                 <Label className="text-xs font-semibold">Background Image</Label>
                 <input
