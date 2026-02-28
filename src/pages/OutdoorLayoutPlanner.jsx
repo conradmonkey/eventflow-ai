@@ -313,8 +313,42 @@ Be specific with equipment types (e.g., "4x moving head wash lights", "2x QSC K1
               }
             }
           });
+          console.log('Lighting/Sound AI result:', result);
           lightingSoundSuggestions = result;
-        } catch (e) { /* continue without suggestions */ }
+        } catch (e) {
+          console.error('Lighting/Sound AI error:', e);
+          // Fallback generic suggestions
+          lightingSoundSuggestions = {
+            option1_lighting: [
+              '6x LED moving head wash lights for dynamic color washes across the tent.',
+              '4x LED PAR cans for general stage and area illumination.',
+              '2x follow spotlights for performers or speakers.',
+              'String/fairy light canopy overhead for atmosphere.',
+              'DMX lighting controller for full programmable show control.',
+            ],
+            option1_sound: [
+              '4x line-array speaker cabinets for even coverage across the entire venue.',
+              '2x 18" subwoofers for low-end reinforcement.',
+              'Digital mixing console (e.g., Yamaha CL5) for advanced control.',
+              '4x stage monitor wedges for performers.',
+              'Wireless microphone system (4 channels).',
+              'Stage snake and professional cabling for clean setup.',
+            ],
+            option2_lighting: [
+              '4x LED PAR cans for general illumination.',
+              'String lights/fairy lights for ambiance at low cost.',
+              '2x LED uplights for tent poles or perimeter.',
+              'Basic DMX controller or pre-programmed light show.',
+            ],
+            option2_sound: [
+              '2x powered PA speakers (e.g., QSC K12.2) on stands.',
+              '1x powered subwoofer for bass reinforcement.',
+              'Compact digital mixer (e.g., Behringer X32 Compact).',
+              '2x vocal microphones with stands.',
+              'Bluetooth or DJ media player as source.',
+            ],
+          };
+        }
       })()
     ]);
 
