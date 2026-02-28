@@ -586,6 +586,16 @@ export default function OutdoorLayoutPlanner() {
               canvasRef={canvasRef}
               showLegend={false}
             />
+            {selectedItem !== null && (
+              <Button
+                variant="outline"
+                className="w-full h-8 text-xs text-red-600 border-red-300 hover:bg-red-50"
+                onClick={() => handleDeleteItem(selectedItem)}
+              >
+                <Trash2 className="w-3 h-3 mr-1" />
+                Delete Selected Item
+              </Button>
+            )}
             <Button
               ref={exportBtnRef}
               id="export-btn"
