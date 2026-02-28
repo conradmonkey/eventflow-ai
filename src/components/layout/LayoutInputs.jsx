@@ -265,6 +265,23 @@ export default function LayoutInputs({ onAddItems }) {
         <div className="p-3 space-y-2">
       <h3 className="font-semibold text-xs mb-1">Items to Add</h3>
 
+      {/* Attendee Suggester */}
+      <div className="bg-blue-50 border border-blue-200 rounded p-2.5 space-y-2 mb-2">
+        <Label htmlFor="attendees" className="text-xs font-semibold text-blue-900">Expected Attendees</Label>
+        <Input
+          id="attendees"
+          type="number"
+          value={attendees}
+          onChange={(e) => handleAttendeeChange(e.target.value)}
+          placeholder="Enter attendee count"
+          min="0"
+          className="h-8 text-sm"
+        />
+        {attendees > 0 && (
+          <p className="text-xs text-blue-700">💡 Auto-suggested tent sizes for {attendees} people</p>
+        )}
+      </div>
+
       {/* Tents */}
       <div className="space-y-1.5">
         <h4 className="text-xs font-semibold text-slate-600">Popup Tents</h4>
