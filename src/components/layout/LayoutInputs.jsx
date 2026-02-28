@@ -5,7 +5,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function LayoutInputs({ onAddItems }) {
-  const [attendees, setAttendees] = useState(0);
   const [inputs, setInputs] = useState({
     tent_8x8: 0,
     tent_10x10: 0,
@@ -20,53 +19,6 @@ export default function LayoutInputs({ onAddItems }) {
     sink: 0,
     stage: { count: 0, width: 16, length: 20 },
   });
-
-  const calculateTentSuggestion = (count) => {
-    // Each person needs ~15 sq ft for seated dinner, ~10 sq ft for standing
-    const sqFtPerPerson = 15;
-    const totalSqFt = count * sqFtPerPerson;
-
-    const tents = {
-      tent_10x10: 100,
-      tent_10x20: 200,
-      tent_15x15: 225,
-      tent_20x20: 400,
-      tent_20x30: 600,
-      tent_30x30: 900,
-    };
-
-    // Greedy algorithm: use largest tents first
-    const sortedTents = Object.entries(tents)
-      .sort(([, sizeA], [, sizeB]) => sizeB - sizeA);
-
-    const suggestion = {};
-    let remainingSqFt = totalSqFt;
-
-    for (const [tentType, size] of sortedTents) {
-      suggestion[tentType] = Math.floor(remainingSqFt / size);
-      remainingSqFt -= suggestion[tentType] * size;
-    }
-
-    return suggestion;
-  };
-
-  const handleAttendeeChange = (value) => {
-    const count = Math.max(0, parseInt(value) || 0);
-    setAttendees(count);
-
-    if (count > 0) {
-      const suggestion = calculateTentSuggestion(count);
-      setInputs(prev => ({
-        ...prev,
-        tent_10x10: suggestion.tent_10x10 || 0,
-        tent_10x20: suggestion.tent_10x20 || 0,
-        tent_15x15: suggestion.tent_15x15 || 0,
-        tent_20x20: suggestion.tent_20x20 || 0,
-        tent_20x30: suggestion.tent_20x30 || 0,
-        tent_30x30: suggestion.tent_30x30 || 0,
-      }));
-    }
-  };
 
   const [previousInputs, setPreviousInputs] = useState({
     tent_8x8: 0,
@@ -264,23 +216,6 @@ export default function LayoutInputs({ onAddItems }) {
       <div className="overflow-y-auto flex-1">
         <div className="p-3 space-y-2">
       <h3 className="font-semibold text-xs mb-1">Items to Add</h3>
-
-      {/* Attendee Suggester */}
-      <div className="bg-blue-50 border border-blue-200 rounded p-2.5 space-y-2 mb-2">
-        <Label htmlFor="attendees" className="text-xs font-semibold text-blue-900">Expected Attendees</Label>
-        <Input
-          id="attendees"
-          type="number"
-          value={attendees}
-          onChange={(e) => handleAttendeeChange(e.target.value)}
-          placeholder="Enter attendee count"
-          min="0"
-          className="h-8 text-sm"
-        />
-        {attendees > 0 && (
-          <p className="text-xs text-blue-700">💡 Auto-suggested tent sizes for {attendees} people</p>
-        )}
-      </div>
 
       {/* Tents */}
       <div className="space-y-1.5">
