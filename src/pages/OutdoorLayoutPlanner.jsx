@@ -63,6 +63,7 @@ export default function OutdoorLayoutPlanner() {
   const [aiLoading, setAILoading] = useState(false);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
+  const exportBtnRef = useRef(null);
 
   useEffect(() => {
     window.onDeleteSelectedItem = (index) => {
