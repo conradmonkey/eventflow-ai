@@ -206,7 +206,8 @@ export default function LayoutInputs({ onAddItems }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-3 space-y-2 max-h-96 overflow-y-auto">
+    <div className="bg-white rounded-lg shadow-md flex flex-col" style={{ maxHeight: '24rem' }}>
+      <div className="p-3 pb-0 overflow-y-auto flex-1 space-y-2">
       <h3 className="font-semibold text-xs mb-1">Items to Add</h3>
 
       {/* Tents */}
