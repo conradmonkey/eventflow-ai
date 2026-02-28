@@ -535,24 +535,7 @@ export default function OutdoorLayoutPlanner() {
               <LayoutInputs onAddItems={handleAddItems} />
             </div>
 
-            {/* Render Controls */}
-            <div className="bg-white rounded-lg shadow-md p-3 space-y-2">
-              {items.length > 0 && (
-                <Button
-                  variant="outline"
-                  className="w-full h-8 text-xs bg-blue-50 hover:bg-blue-100"
-                  onClick={handleGetAISuggestions}
-                  disabled={aiLoading}
-                >
-                  {aiLoading ? (
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                  ) : (
-                    <Lightbulb className="w-3 h-3 mr-1" />
-                  )}
-                  AI Suggestions
-                </Button>
-              )}
-            </div>
+
 
 
           </div>
