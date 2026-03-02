@@ -262,6 +262,14 @@ export default function OutdoorLayoutPlanner() {
       if (imageResult.status === 'fulfilled') {
         const option1Url = imageResult.value.url;
         setAiGeneratedImageUrl(option1Url);
+        base44.analytics.track({
+          eventName: 'ai_image_generated',
+          properties: {
+            designer: 'outdoor_planner',
+            option: 'premium',
+            image_url: option1Url
+          }
+        });
         
         // Generate budget version based on Option 1 and wait for it
         try {
