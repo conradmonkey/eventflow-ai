@@ -262,14 +262,15 @@ export default function OutdoorLayoutPlanner() {
       if (imageResult.status === 'fulfilled') {
         const option1Url = imageResult.value.url;
         setAiGeneratedImageUrl(option1Url);
-        base44.analytics.track({
-          eventName: 'ai_image_generated',
-          properties: {
-            designer: 'outdoor_planner',
-            option: 'premium',
-            image_url: option1Url
-          }
-        });
+
+        // Log Option 1 image
+        base44.entities.AIImageLog.create({
+          designer: 'OutdoorPlanner',
+          project_name: projectName || 'Untitled',
+          image_url: option1Url,
+          image_type: 'Option1-Premium',
+          prompt_summary: itemSummary || 'outdoor layout'
+        }).catch(() => {});
         
         // Generate budget version based on Option 1 and wait for it
         try {
@@ -279,6 +280,15 @@ export default function OutdoorLayoutPlanner() {
           });
           if (budgetResult?.url) {
             setAiBudgetImageUrl(budgetResult.url);
+
+            // Log Option 2 image
+            base44.entities.AIImageLog.create({
+              designer: 'OutdoorPlanner',
+              project_name: projectName || 'Untitled',
+              image_url: budgetResult.url,
+              image_type: 'Option2-Budget',
+              prompt_summary: itemSummary || 'outdoor layout'
+            }).catch(() => {});
           }
         } catch (err) {
           console.log('Budget image generation skipped');
