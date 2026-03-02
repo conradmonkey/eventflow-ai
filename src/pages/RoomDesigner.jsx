@@ -199,6 +199,15 @@ Camera & Presentation:
 Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.replace('_', ' ') : 'luxury event'}, contextually appropriate design, high-end production value, ultra detailed.`;
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
+
+      base44.analytics.track({
+        eventName: 'ai_image_generated',
+        properties: {
+          designer: 'room_designer',
+          event_type: formData.event_type || 'unknown',
+          image_url: response.url
+        }
+      });
       
       const renderData = {
         url: response.url,
