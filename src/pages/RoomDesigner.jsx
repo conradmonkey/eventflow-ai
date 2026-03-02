@@ -200,14 +200,14 @@ Style: Photorealistic 3D render, ${formData.event_type ? formData.event_type.rep
 
       const response = await base44.integrations.Core.GenerateImage({ prompt });
 
-      base44.analytics.track({
-        eventName: 'ai_image_generated',
-        properties: {
-          designer: 'room_designer',
-          event_type: formData.event_type || 'unknown',
-          image_url: response.url
-        }
-      });
+      // Log generated image
+      base44.entities.AIImageLog.create({
+        designer: 'RoomDesigner',
+        project_name: formData.project_name || 'Untitled',
+        image_url: response.url,
+        image_type: '3D-Render',
+        prompt_summary: `${formData.event_type || 'event'}, ${formData.room_length}x${formData.room_width} room`
+      }).catch(() => {});
       
       const renderData = {
         url: response.url,
