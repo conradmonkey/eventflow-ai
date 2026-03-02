@@ -61,6 +61,7 @@ import TentDesignAssistant from './pages/TentDesignAssistant';
 import VenueScouting from './pages/VenueScouting';
 import VideoWallDesign from './pages/VideoWallDesign';
 import VideoWallDrawing from './pages/VideoWallDrawing';
+import AdminLogs from './pages/AdminLogs';
 
 
 export const PAGES = {
@@ -78,6 +79,7 @@ export const PAGES = {
     "VenueScouting": VenueScouting,
     "VideoWallDesign": VideoWallDesign,
     "VideoWallDrawing": VideoWallDrawing,
+    "AdminLogs": AdminLogs,
 }
 
 export const pagesConfig = {
