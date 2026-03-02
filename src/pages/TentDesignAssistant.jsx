@@ -436,6 +436,15 @@ High-quality event photography, realistic styling, professional setup, authentic
         layout: generateLayoutSuggestions(itemCounts, tentConfig, seatingArrangement, attendees)
       };
 
+      // Log generated image
+      base44.entities.AIImageLog.create({
+        designer: 'TentDesign',
+        project_name: projectName || 'Untitled',
+        image_url: response.url,
+        image_type: 'Option1-Premium',
+        prompt_summary: `${eventType || 'event'}, ${tentConfig.width}x${tentConfig.length} ${tentStyle}, ${attendees} attendees`
+      }).catch(() => {});
+
       setRealisticImage({ 
         url: response.url,
         suggestions 
