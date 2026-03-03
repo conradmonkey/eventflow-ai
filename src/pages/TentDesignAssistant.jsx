@@ -445,6 +445,14 @@ High-quality event photography, realistic styling, professional setup, authentic
         }
       });
 
+      base44.entities.AIImageLog.create({
+        designer: 'TentDesign',
+        project_name: projectName || 'Untitled',
+        image_url: response.url,
+        image_type: 'Option1-Premium',
+        prompt_summary: `${eventType || 'event'}, ${tentConfig.width}x${tentConfig.length} tent, ${attendees} attendees`
+      }).catch(() => {});
+
       setRealisticImage({ 
         url: response.url,
         suggestions 
