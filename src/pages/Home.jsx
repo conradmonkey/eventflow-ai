@@ -38,12 +38,7 @@ const services = [
     description: "Find perfect venues tailored to your event type, capacity, location, and budget requirements.",
     href: "VenueScouting",
   },
-  {
-    icon: Grid3x3,
-    title: "Outdoor Event Planner",
-    description: "Perfect for planning outdoor festivals—design 2D and 3D layouts with tents, stages, video walls, and more.",
-    href: "OutdoorLayoutPlanner",
-  },
+
 ];
 
 export default function Home() {
