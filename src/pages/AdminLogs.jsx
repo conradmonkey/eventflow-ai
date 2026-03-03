@@ -27,6 +27,25 @@ export default function AdminLogs() {
     queryFn: () => base44.entities.AIImageLog.list("-created_date", 200),
   });
 
+  // Build chart data: last 14 days in 24h intervals
+  const chartData = (() => {
+    const days = 14;
+    const now = new Date();
+    return Array.from({ length: days }, (_, i) => {
+      const d = new Date(now);
+      d.setDate(now.getDate() - (days - 1 - i));
+      d.setHours(0, 0, 0, 0);
+      const next = new Date(d);
+      next.setDate(d.getDate() + 1);
+      const label = d.toLocaleDateString([], { month: "short", day: "numeric" });
+      const count = logs.filter((log) => {
+        const t = new Date(log.created_date).getTime();
+        return t >= d.getTime() && t < next.getTime();
+      }).length;
+      return { date: label, count };
+    });
+  })();
+
   const filtered = logs.filter((log) => {
     const matchesSearch =
       !search ||
