@@ -84,6 +84,26 @@ export default function AdminLogs() {
           <span className="text-zinc-500 text-sm self-center">{filtered.length} images</span>
         </div>
 
+        {/* Chart */}
+        {!isLoading && logs.length > 0 && (
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-8">
+            <h2 className="text-white font-semibold mb-4">Images Generated (Last 14 Days)</h2>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
+                <XAxis dataKey="date" tick={{ fill: "#a1a1aa", fontSize: 11 }} />
+                <YAxis allowDecimals={false} tick={{ fill: "#a1a1aa", fontSize: 11 }} width={30} />
+                <Tooltip
+                  contentStyle={{ background: "#18181b", border: "1px solid #3f3f46", color: "#fff", borderRadius: 8 }}
+                  labelStyle={{ color: "#f4f4f5" }}
+                  cursor={{ fill: "#27272a" }}
+                />
+                <Bar dataKey="count" fill="#f59e0b" radius={[4, 4, 0, 0]} name="Images" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
         {isLoading ? (
           <p className="text-zinc-400">Loading...</p>
         ) : filtered.length === 0 ? (
