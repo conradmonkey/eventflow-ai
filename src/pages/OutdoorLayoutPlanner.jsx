@@ -294,6 +294,13 @@ export default function OutdoorLayoutPlanner() {
                 image_url: budgetResult.url
               }
             });
+            base44.entities.AIImageLog.create({
+              designer: 'OutdoorPlanner',
+              project_name: projectName || 'Untitled',
+              image_url: budgetResult.url,
+              image_type: 'Option2-Budget',
+              prompt_summary: itemSummary || 'outdoor layout'
+            }).catch(() => {});
           }
         } catch (err) {
           console.log('Budget image generation skipped');
