@@ -270,6 +270,13 @@ export default function OutdoorLayoutPlanner() {
             image_url: option1Url
           }
         });
+        base44.entities.AIImageLog.create({
+          designer: 'OutdoorPlanner',
+          project_name: projectName || 'Untitled',
+          image_url: option1Url,
+          image_type: 'Option1-Premium',
+          prompt_summary: itemSummary || 'outdoor layout'
+        }).catch(() => {});
         
         // Generate budget version based on Option 1 and wait for it
         try {
